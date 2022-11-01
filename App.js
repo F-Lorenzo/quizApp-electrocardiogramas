@@ -1,14 +1,13 @@
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Inicio from "./screens/Inicio";
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function MyStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="inicio">
       <Stack.Screen name="Inicio" component={Inicio} />
     </Stack.Navigator>
   );

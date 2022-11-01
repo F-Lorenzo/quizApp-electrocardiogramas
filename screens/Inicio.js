@@ -1,16 +1,31 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import touchLogo from "../assets/touchLogo.png";
 
 function Inicio() {
   return (
     <View>
-      <Text style={Styles.text}>Pantalla de inicio</Text>
+      <View style={Styles.container}>
+        <Image style={Styles.image} source={touchLogo} />
+      </View>
     </View>
   );
 }
 
 const Styles = StyleSheet.create({
-  text: {
-    color: red,
+  container: {
+    flex: 1,
+    backgroundColor: "black",
+    alignItems: "center",
+  },
+  image: {
+    width: 100,
+    height: 100,
+  },
+  button: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#87B140",
   },
 });
 
