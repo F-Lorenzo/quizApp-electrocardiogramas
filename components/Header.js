@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import touchLogo from "../assets/touchLogo.png";
+import LogoApp from "../assets/LogoApp.png";
 
 function Header() {
   return (
     <View style={Styles.container}>
-      <Image style={Styles.image} source={touchLogo} />
+      <Image style={Styles.image} source={LogoApp} />
     </View>
   );
 }

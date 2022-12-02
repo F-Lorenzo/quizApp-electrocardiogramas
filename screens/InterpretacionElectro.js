@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-import InterpretacionLogo from "../assets/interpretacionLogo.png";
+import { View, Text, Image, FlatList, StyleSheet } from "react-native";
+import Ejercicios from "../assets/ejercicios.png";
 import Header from "../components/Header";
 
 function InterpretacionElectro() {
-  const [isSelected, setisSelected] = useState(false);
   return (
     <View
       style={{
@@ -14,18 +13,55 @@ function InterpretacionElectro() {
       }}
     >
       <Header />
-      <View style={{ flex: 1, flexDirection: "column", height: "80%" }}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: "column",
+          height: "80%",
+          justifyContent: "center",
+        }}
+      >
         <View style={Styles.title}>
-          <Image style={Styles.image} source={InterpretacionLogo} />
+          <Image style={Styles.image} source={Ejercicios} />
           <Text style={Styles.text}>Interpretacion de electrocardiograma</Text>
         </View>
-        <View></View>
+        <View
+          style={{
+            height: "50%",
+            marginLeft: 15,
+            marginRight: 15,
+            backgroundColor: "blue",
+          }}
+        >
+          <FlatList
+            data={[
+              { key: "Devin" },
+              { key: "Dan" },
+              { key: "Dominic" },
+              { key: "Jackson" },
+              { key: "James" },
+              { key: "Joel" },
+              { key: "John" },
+              { key: "Jillian" },
+              { key: "Jimmy" },
+              { key: "Julie" },
+            ]}
+            renderItem={({ item }) => (
+              <Text style={Styles.text}>{item.key}</Text>
+            )}
+          />
+        </View>
       </View>
     </View>
   );
 }
 
 const Styles = StyleSheet.create({
+  label: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "white",
+  },
   header: {
     height: "20%",
   },

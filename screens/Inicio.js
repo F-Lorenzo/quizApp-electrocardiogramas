@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import InterpretacionLogo from "../assets/interpretacionLogo.png";
-import ChoiceLogo from "../assets/choiceLogo.png";
-import SerchLogo from "../assets/serchLogo.png";
+import Ejercicios from "../assets/ejercicios.png";
+import Completar from "../assets/completar.png";
+import MultipleChoice from "../assets/multiple-choice.png";
 import Header from "../components/Header";
 
 function Inicio({ navigation }) {
@@ -14,22 +14,22 @@ function Inicio({ navigation }) {
         style={Styles.container1}
         onPress={() => navigation.navigate("InterpretacionElectro")}
       >
-        <Image style={Styles.image} source={InterpretacionLogo} />
+        <Image style={Styles.image} source={Ejercicios} />
         <Text style={Styles.text}>Interpretacion de electrocardiograma</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.container2}>
-        <Image style={Styles.image} source={InterpretacionLogo} />
+        <Image style={Styles.image} source={Completar} />
         <Text style={Styles.text}>Complete los Casilleros</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.container1}>
-        <Image style={Styles.image} source={ChoiceLogo} />
+        <Image style={Styles.image} source={MultipleChoice} />
         <Text style={Styles.text}>Multiple choice</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.container2}>
-        <Image style={Styles.image} source={SerchLogo} />
+        <Image style={Styles.image} source={MultipleChoice} />
         <Text style={Styles.text}>Consideraciones Clinicas</Text>
       </TouchableOpacity>
     </View>
@@ -42,14 +42,14 @@ const Styles = StyleSheet.create({
     height: 18,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#B0B0B0",
+    backgroundColor: "#3b3a3a",
   },
   container2: {
     flex: 1,
     height: 18,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#616161",
+    backgroundColor: "#5c5a5a",
   },
   header: {
     height: 10,
