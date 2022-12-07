@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import LogoApp from "../assets/LogoApp.png";
+import LogoApp from "../assets/images/LogoApp.png";
 
 function Header() {
   return (
@@ -14,12 +14,13 @@ const Styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#87B140",
+    backgroundColor: "lightgrey",
     flexDirection: "row",
+    height: 60,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
   },
 });
 

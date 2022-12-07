@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, Image, FlatList, StyleSheet } from "react-native";
-import Ejercicios from "../assets/ejercicios.png";
+import Ejercicios from "../assets/images/ejercicios.png";
 import Header from "../components/Header";
 
 function InterpretacionElectro() {

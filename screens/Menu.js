@@ -1,11 +1,12 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
-import Ejercicios from "../assets/ejercicios.png";
-import Completar from "../assets/completar.png";
-import MultipleChoice from "../assets/multiple-choice.png";
+import Ejercicios from "../assets/images/ejercicios.png";
+import Completar from "../assets/images/completar.png";
+import MultipleChoice from "../assets/images/multiple-choice.png";
+import concideracionesClinicas from "../assets/images/consideraciones_clinicas.png";
 import Header from "../components/Header";
 
-function Inicio({ navigation }) {
+function Menu() {
   return (
     <View style={{ flex: 1, flexDirection: "column" }}>
       <Header />
@@ -29,7 +30,7 @@ function Inicio({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.container2}>
-        <Image style={Styles.image} source={MultipleChoice} />
+        <Image style={Styles.image} source={concideracionesClinicas} />
         <Text style={Styles.text}>Consideraciones Clinicas</Text>
       </TouchableOpacity>
     </View>
@@ -43,6 +44,7 @@ const Styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#3b3a3a",
+    fontFamily: "Monserrat-Regular",
   },
   container2: {
     flex: 1,
