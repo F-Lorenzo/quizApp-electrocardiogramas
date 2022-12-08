@@ -6,7 +6,7 @@ import MultipleChoice from "../assets/images/multiple-choice.png";
 import concideracionesClinicas from "../assets/images/consideraciones_clinicas.png";
 import Header from "../components/Header";
 
-function Menu() {
+function Menu({ navigation }) {
   return (
     <View style={{ flex: 1, flexDirection: "column" }}>
       <Header />
@@ -15,23 +15,31 @@ function Menu() {
         style={Styles.container1}
         onPress={() => navigation.navigate("InterpretacionElectro")}
       >
-        <Image style={Styles.image} source={Ejercicios} />
-        <Text style={Styles.text}>Interpretacion de electrocardiograma</Text>
+        <View style={Styles.buttonContainer}>
+          <Image style={Styles.image} source={Ejercicios} />
+          <Text style={Styles.text}>Interpretacion de electrocardiograma</Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.container2}>
-        <Image style={Styles.image} source={Completar} />
-        <Text style={Styles.text}>Complete los Casilleros</Text>
+        <View style={Styles.buttonContainer}>
+          <Image style={Styles.image} source={Completar} />
+          <Text style={Styles.text}>Complete los Casilleros</Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.container1}>
-        <Image style={Styles.image} source={MultipleChoice} />
-        <Text style={Styles.text}>Multiple choice</Text>
+        <View style={Styles.buttonContainer}>
+          <Image style={Styles.image} source={MultipleChoice} />
+          <Text style={Styles.text}>Multiple choice</Text>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity style={Styles.container2}>
-        <Image style={Styles.image} source={concideracionesClinicas} />
-        <Text style={Styles.text}>Consideraciones Clinicas</Text>
+        <View style={Styles.buttonContainer}>
+          <Image style={Styles.image} source={concideracionesClinicas} />
+          <Text style={Styles.text}>Consideraciones Clinicas</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -44,7 +52,6 @@ const Styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#3b3a3a",
-    fontFamily: "Monserrat-Regular",
   },
   container2: {
     flex: 1,
@@ -62,14 +69,14 @@ const Styles = StyleSheet.create({
     fontSize: 14,
   },
   buttonContainer: {
-    flex: 1,
-    backgroundColor: "black",
+    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
-    height: "20%",
+    marginLeft: 15,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 70,
+    height: 70,
   },
   button: {
     flex: 1,
@@ -80,4 +87,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default Inicio;
+export default Menu;
