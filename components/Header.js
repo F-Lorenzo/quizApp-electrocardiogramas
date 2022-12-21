@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import LogoApp from "../assets/images/LogoApp.png";
 
-function Header() {
+function Header({ navigation }) {
   return (
-    <View style={Styles.container}>
+    <View
+      onPress={() => navigation.navigate("Inicio")}
+      style={Styles.container}
+    >
       <Image style={Styles.image} source={LogoApp} />
     </View>
   );

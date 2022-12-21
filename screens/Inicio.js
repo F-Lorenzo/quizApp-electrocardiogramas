@@ -25,7 +25,7 @@ function Inicio({ navigation }) {
       <View style={Styles.container2}>
         <TouchableOpacity
           style={Styles.manual}
-          onPress={() => navigation.navigate()}
+          onPress={() => navigation.navigate("Manual")}
         >
           <Image style={Styles.imageManual} source={manual} />
           <Text style={Styles.manualText}>Manual</Text>

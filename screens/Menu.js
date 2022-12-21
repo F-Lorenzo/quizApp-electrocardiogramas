@@ -21,21 +21,30 @@ function Menu({ navigation }) {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={Styles.container2}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("CompleteCasilleros")}
+        style={Styles.container2}
+      >
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={Completar} />
           <Text style={Styles.text}>Complete los Casilleros</Text>
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={Styles.container1}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("MultipleChoice")}
+        style={Styles.container1}
+      >
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={MultipleChoice} />
           <Text style={Styles.text}>Multiple choice</Text>
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={Styles.container2}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("ConcideracionesClinicas")}
+        style={Styles.container2}
+      >
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={concideracionesClinicas} />
           <Text style={Styles.text}>Consideraciones Clinicas</Text>

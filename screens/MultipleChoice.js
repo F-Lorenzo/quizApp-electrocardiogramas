@@ -11,12 +11,6 @@ import ejerciciosTest from "../db/ejerciciosTest.json";
 import Ejercicios from "../assets/images/ejercicios.png";
 import actividades from "../assets/images/actividades.png";
 import candado from "../assets/images/candado.png";
-import level1Img from "../assets/images/ejercicios-nivel1.png";
-import level2Img from "../assets/images/ejercicios-nivel2.png";
-import level3Img from "../assets/images/ejercicios-nivel3.png";
-import level1Activo from "../assets/images/ejercicios-nivel1-activo.png";
-import level2Activo from "../assets/images/ejercicios-nivel2-activo.png";
-import level3Activo from "../assets/images/ejercicios-nivel3-activo.png";
 import todosImg from "../assets/images/ejercicios-todos.png";
 import noRealizadosImg from "../assets/images/ejercicios-sin-realizar.png";
 import realizadosImg from "../assets/images/ejercicios-realizados.png";
@@ -30,10 +24,7 @@ import resueltosActivo from "../assets/images/ejercicios-ok-activo.png";
 import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
 
-function InterpretacionElectro({ navigation }) {
-  const [level1, setLevel1] = useState(true);
-  const [level2, setLevel2] = useState(false);
-  const [level3, setLevel3] = useState(false);
+function MultipleChoice({ navigation }) {
   const [todos, setTodos] = useState(true);
   const [noRealizados, setNoRealizados] = useState(false);
   const [realizados, setRealizados] = useState(false);
@@ -41,21 +32,6 @@ function InterpretacionElectro({ navigation }) {
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
 
-  const activeHandlerLevel1 = () => {
-    setLevel1(true);
-    setLevel2(false);
-    setLevel3(false);
-  };
-  const activeHandlerLevel2 = () => {
-    setLevel1(false);
-    setLevel2(true);
-    setLevel3(false);
-  };
-  const activeHandlerLevel3 = () => {
-    setLevel1(false);
-    setLevel2(false);
-    setLevel3(true);
-  };
   const activeHandlerTodos = () => {
     setTodos(!todos);
   };
@@ -99,41 +75,9 @@ function InterpretacionElectro({ navigation }) {
       >
         <View style={Styles.title}>
           <Image style={Styles.image} source={Ejercicios} />
-          <Text style={Styles.text}>Interpretacion de electrocardiograma</Text>
+          <Text style={Styles.text}>Multiple choice</Text>
         </View>
         <View style={Styles.filtersContainer}>
-          <View style={Styles.levelFilters}>
-            <TouchableOpacity
-              onPress={activeHandlerLevel1}
-              style={Styles.levelButton}
-            >
-              {level1 === true ? (
-                <Image style={Styles.imageLevel} source={level1Activo} />
-              ) : (
-                <Image style={Styles.imageLevel} source={level1Img} />
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={activeHandlerLevel2}
-              style={Styles.levelButton}
-            >
-              {level2 === true ? (
-                <Image style={Styles.imageLevel} source={level2Activo} />
-              ) : (
-                <Image style={Styles.imageLevel} source={level2Img} />
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={activeHandlerLevel3}
-              style={Styles.levelButton}
-            >
-              {level3 === true ? (
-                <Image style={Styles.imageLevel} source={level3Activo} />
-              ) : (
-                <Image style={Styles.imageLevel} source={level3Img} />
-              )}
-            </TouchableOpacity>
-          </View>
           <View style={Styles.typeFilters}>
             <TouchableOpacity
               onPress={activeHandlerTodos}
@@ -199,7 +143,7 @@ function InterpretacionElectro({ navigation }) {
         </View>
         <View
           style={{
-            height: "35%",
+            height: "60%",
             marginLeft: 15,
             marginRight: 15,
             backgroundColor: "#3b3a3a",
@@ -247,17 +191,8 @@ const Styles = StyleSheet.create({
     alignItems: "center",
   },
   filtersContainer: {
-    height: 200,
+    height: 80,
     border: "1px solid white",
-  },
-  levelFilters: {
-    height: 100,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  levelButton: {
-    margin: 3,
   },
   typeFilters: {
     height: 100,
@@ -306,4 +241,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default InterpretacionElectro;
+export default MultipleChoice;
