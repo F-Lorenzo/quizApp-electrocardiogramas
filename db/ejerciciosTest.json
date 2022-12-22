@@ -1,7 +1,7 @@
 [
     {
         "key":"001",
-        "nivel":1,
+        "nivel":"1",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "enunciado":"",
         "respuesta":{
@@ -12,13 +12,13 @@
         },
         "realizado":false,
         "destacado":false,
-        "bienResuelto":false,
+        "bienResuelto":true,
         "malResuelto":false,
         "disponible":true
     },
     {
         "key":"002",
-        "nivel":1,
+        "nivel":"1",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "enunciado":"",
         "respuesta":{
@@ -28,14 +28,14 @@
             "comentarios":""
         },
         "realizado":false,
-        "destacado":false,
+        "destacado":true,
         "bienResuelto":false,
         "malResuelto":false,
         "disponible":true
     },
     {
         "key":"003",
-        "nivel":1,
+        "nivel":"1",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "enunciado":"",
         "respuesta":{
@@ -47,12 +47,12 @@
         "realizado":false,
         "destacado":false,
         "bienResuelto":false,
-        "malResuelto":false,
+        "malResuelto":true,
         "disponible":true
     },
     {
         "key":"004",
-        "nivel":2,
+        "nivel":"2",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "enunciado":"",
         "respuesta":{
@@ -61,7 +61,7 @@
             "ejeElectrico":"",
             "comentarios":""
         },
-        "realizado":false,
+        "realizado":true,
         "destacado":false,
         "bienResuelto":false,
         "malResuelto":false,
@@ -69,7 +69,7 @@
     },
     {
         "key":"005",
-        "nivel":2,
+        "nivel":"2",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "enunciado":"",
         "respuesta":{
@@ -86,7 +86,7 @@
     },
     {
         "key":"006",
-        "nivel":2,
+        "nivel":"2",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "enunciado":"",
         "respuesta":{
@@ -103,7 +103,7 @@
     },
     {
         "key":"007",
-        "nivel":3,
+        "nivel":"3",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "enunciado":"",
         "respuesta":{
@@ -120,7 +120,7 @@
     },
     {
         "key":"008",
-        "nivel":3,
+        "nivel":"3",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "enunciado":"",
         "respuesta":{

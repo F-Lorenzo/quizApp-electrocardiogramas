@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import ejerciciosTest from "../db/ejerciciosTest.json";
-import Ejercicios from "../assets/images/ejercicios.png";
+
 import actividades from "../assets/images/actividades.png";
 import candado from "../assets/images/candado.png";
-
+import completar from "../assets/images/completar.png";
 import todosImg from "../assets/images/ejercicios-todos.png";
 import noRealizadosImg from "../assets/images/ejercicios-sin-realizar.png";
 import realizadosImg from "../assets/images/ejercicios-realizados.png";
@@ -32,25 +32,79 @@ function CompleteCasilleros({ navigation }) {
   const [destacados, setDestacados] = useState(false);
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
+  const [ejercicios, setEjercicios] = useState(ejerciciosTest);
 
   const activeHandlerTodos = () => {
     setTodos(!todos);
+    if (todos === false) {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = [];
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerNoRealizados = () => {
     setNoRealizados(!noRealizados);
+    if (noRealizados === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.realizado === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerRealizados = () => {
     setRealizados(!realizados);
+    if (realizados === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.realizado === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerDestacados = () => {
     setDestacados(!destacados);
+    if (destacados === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.destacado === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerResueltos = () => {
     setResueltos(!resueltos);
+    if (resueltos === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.resuelto === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerMalResueltos = () => {
     setMalResueltos(!malResueltos);
+    if (malResueltos === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.resuelto === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
+
   return (
     <View
       style={{
@@ -75,7 +129,7 @@ function CompleteCasilleros({ navigation }) {
         }}
       >
         <View style={Styles.title}>
-          <Image style={Styles.image} source={Ejercicios} />
+          <Image style={Styles.image} source={completar} />
           <Text style={Styles.text}>Complete los casilleros</Text>
         </View>
         <View style={Styles.filtersContainer}>
@@ -151,7 +205,7 @@ function CompleteCasilleros({ navigation }) {
           }}
         >
           <FlatList
-            data={ejerciciosTest}
+            data={ejercicios}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => navigation.navigate("PlantillaInterpretacion")}

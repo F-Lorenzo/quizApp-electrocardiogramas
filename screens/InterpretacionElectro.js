@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -40,40 +40,110 @@ function InterpretacionElectro({ navigation }) {
   const [destacados, setDestacados] = useState(false);
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
+  const [ejercicios, setEjercicios] = useState(ejerciciosTest);
 
+  console.log(ejercicios, "ejercicios");
   const activeHandlerLevel1 = () => {
     setLevel1(true);
     setLevel2(false);
     setLevel3(false);
+    let ejercicio = ejerciciosTest.filter(
+      (ejercicio) => ejercicio.nivel === "1"
+    );
+    setEjercicios(ejercicio);
+    console.log(ejercicios, "1");
   };
   const activeHandlerLevel2 = () => {
     setLevel1(false);
     setLevel2(true);
     setLevel3(false);
+    let ejercicio = ejerciciosTest.filter(
+      (ejercicio) => ejercicio.nivel === "2"
+    );
+    setEjercicios(ejercicio);
+    console.log(ejercicios, "2");
   };
   const activeHandlerLevel3 = () => {
     setLevel1(false);
     setLevel2(false);
     setLevel3(true);
+    let ejercicio = ejerciciosTest.filter(
+      (ejercicio) => ejercicio.nivel === "3"
+    );
+    setEjercicios(ejercicio);
+    console.log(ejercicios, "3");
   };
   const activeHandlerTodos = () => {
     setTodos(!todos);
+    if (todos === false) {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = [];
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerNoRealizados = () => {
     setNoRealizados(!noRealizados);
+    if (noRealizados === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.realizado === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerRealizados = () => {
     setRealizados(!realizados);
+    if (realizados === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.realizado === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerDestacados = () => {
     setDestacados(!destacados);
+    if (destacados === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.destacado === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerResueltos = () => {
     setResueltos(!resueltos);
+    if (resueltos === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.resuelto === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
   const activeHandlerMalResueltos = () => {
     setMalResueltos(!malResueltos);
+    if (malResueltos === false) {
+      let ejercicio = ejercicios.filter(
+        (ejercicio) => ejercicio.resuelto === true
+      );
+      setEjercicios(ejercicio);
+    } else {
+      let ejercicio = ejerciciosTest;
+      setEjercicios(ejercicio);
+    }
   };
+
   return (
     <View
       style={{
@@ -206,10 +276,14 @@ function InterpretacionElectro({ navigation }) {
           }}
         >
           <FlatList
-            data={ejerciciosTest}
+            data={ejercicios}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("PlantillaInterpretacion")}
+                onPress={() =>
+                  navigation.navigate("PlantillaInterpretacion", {
+                    key: item.key,
+                  })
+                }
                 style={Styles.ejerciciosContainer}
               >
                 <Text style={Styles.text}>{item.key}</Text>
