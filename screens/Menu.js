@@ -9,7 +9,7 @@ import Header from "../components/Header";
 function Menu({ navigation }) {
   return (
     <View style={{ flex: 1, flexDirection: "column" }}>
-      <Header />
+      <Header style={{ paddignTop: 10 }} />
 
       <TouchableOpacity
         style={Styles.container1}

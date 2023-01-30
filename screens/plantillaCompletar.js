@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import * as ScreenOrientation from "expo-screen-orientation";
 import ejerciciosTest from "../db/ejerciciosTest.json";
 import realizado from "../assets/images/ejercicios-realizados.png";
 import destacado from "../assets/images/ejercicios-destacados.png";
@@ -23,16 +22,7 @@ import LogoApp from "../assets/images/LogoApp.png";
 import actividades from "../assets/images/actividades.png";
 import ejercicios from "../assets/images/ejercicios.png";
 
-function PlantillaInterpretacion({ route, navigation }) {
-  useEffect(() => {
-    // Bloquea la orientación de la pantalla en "landscape"
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
-
-    // Desbloquea la orientación de la pantalla cuando el componente se desmonte
-    return () => {
-      ScreenOrientation.unlockAsync();
-    };
-  }, []);
+function PlantillaCompletar({ route, navigation }) {
   const { key } = route.params;
   const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === key);
 
@@ -95,16 +85,16 @@ function PlantillaInterpretacion({ route, navigation }) {
           </Text> */}
         </View>
         <ScrollView horizontal={true} style={Styles.ejercicio}>
-          <View style={Styles.plantillaContainer}>
+          <View>
+            <View style={Styles.respuestaContainer}>
+              <Text style={Styles.respuestaText}>Su respuesta:</Text>
+              <TextInput style={Styles.respuestaUsuario}> </TextInput>
+            </View>
             <View style={Styles.imagenEjercicioContainer}>
               <Image
                 style={Styles.imagenEjercicio}
                 source={electrocardiogramaTest}
               />
-            </View>
-            <View style={Styles.respuestaContainer}>
-              <Text style={Styles.respuestaText}>Su respuesta:</Text>
-              <TextInput style={Styles.respuestaInput}></TextInput>
             </View>
           </View>
         </ScrollView>
@@ -119,12 +109,13 @@ const Styles = StyleSheet.create({
   },
   nav: {
     height: 60,
-    backgroundColor: "#3b3a3a",
+    backgroundColor: "transparent",
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
   },
   title: {
+    rotation: 90,
     marginBottom: 30,
     flexDirection: "row",
   },
@@ -165,11 +156,8 @@ const Styles = StyleSheet.create({
     width: 550,
     rotation: 90,
   },
-  plantillaContainer: {
-    flexDirection: "column",
-    marginTop: 55,
-  },
   respuestaContainer: {
+    rotation: 90,
     backgroundColor: "red",
     flexDirection: "row",
     height: 100,
@@ -178,11 +166,6 @@ const Styles = StyleSheet.create({
   respuestaText: {
     backgroundColor: "#fff",
     marginleft: 100,
-  },
-  respuestaInput: {
-    backgroundColor: "#ff4",
-    height: 100,
-    width: 515,
   },
   stateImage: {
     height: 30,
@@ -196,4 +179,4 @@ const Styles = StyleSheet.create({
   },
 });
 
-export default PlantillaInterpretacion;
+export default PlantillaCompletar;

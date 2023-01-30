@@ -7,6 +7,7 @@ import CompleteCasilleros from "./screens/CompleteCasilleros";
 import MultipleChoice from "./screens/MultipleChoice";
 import ConcideracionesClinicas from "./screens/ConcideracionesClinicas";
 import PlantillaInterpretacion from "./screens/PlantillaInterpretacion";
+import PlantillaCompletar from "./screens/plantillaCompletar";
 import Inicio from "./screens/Inicio";
 import Manual from "./screens/Manual";
 
@@ -15,32 +16,50 @@ const Stack = createNativeStackNavigator();
 function MyStack() {
   return (
     <Stack.Navigator initialRouteName="Inicio">
-      <Stack.Screen name="Inicio" component={Inicio} />
-      <Stack.Screen name="Menu" component={Menu} />
-      <Stack.Screen name="Manual" component={Manual} />
+      <Stack.Screen
+        name="Inicio"
+        component={Inicio}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Menu"
+        component={Menu}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Manual"
+        component={Manual}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="InterpretacionElectro"
         component={InterpretacionElectro}
-        options={{ title: "Interpretacion electrocardiograma" }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="CompleteCasilleros"
         component={CompleteCasilleros}
-        options={{ title: "Complete Casilleros" }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="MultipleChoice"
         component={MultipleChoice}
-        options={{ title: "Multiple Choice" }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ConcideracionesClinicas"
         component={ConcideracionesClinicas}
-        options={{ title: "Concideraciones clinicas" }}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="PlantillaInterpretacion"
         component={PlantillaInterpretacion}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PlantillaCompletar"
+        component={PlantillaCompletar}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

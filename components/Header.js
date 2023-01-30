@@ -15,11 +15,12 @@ function Header({ navigation }) {
 
 const Styles = StyleSheet.create({
   container: {
+    paddingTop: 15,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "lightgrey",
     flexDirection: "row",
-    height: 60,
+    height: 80,
   },
   image: {
     width: 50,
