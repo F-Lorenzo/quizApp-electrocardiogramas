@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import * as Font from "expo-font";
+import { Montserrat_400Regular } from "@expo-google-fonts/montserrat";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import Ejercicios from "../assets/images/ejercicios.png";
 import Completar from "../assets/images/completar.png";
@@ -7,6 +9,23 @@ import concideracionesClinicas from "../assets/images/consideraciones_clinicas.p
 import Header from "../components/Header";
 
 function Menu({ navigation }) {
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFont = async () => {
+      await Font.loadAsync({
+        MontserratRegular: Montserrat_400Regular,
+      });
+
+      setFontLoaded(true);
+    };
+
+    loadFont();
+  }, []);
+
+  if (!fontLoaded) {
+    return <Text> font don't charge</Text>;
+  }
   return (
     <View style={{ flex: 1, flexDirection: "column" }}>
       <Header style={{ paddignTop: 10 }} />
@@ -74,8 +93,8 @@ const Styles = StyleSheet.create({
   },
   text: {
     color: "#FFFFFF",
-    fontWeight: "bold",
     fontSize: 14,
+    fontFamily: "MontserratRegular",
   },
   buttonContainer: {
     flexDirection: "row",

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import * as Font from "expo-font";
+import { Montserrat_400Regular } from "@expo-google-fonts/montserrat";
 import {
   View,
   Text,
@@ -41,6 +43,23 @@ function InterpretacionElectro({ navigation }) {
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState(ejerciciosTest);
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadFont = async () => {
+      await Font.loadAsync({
+        MontserratRegular: Montserrat_400Regular,
+      });
+
+      setFontLoaded(true);
+    };
+
+    loadFont();
+  }, []);
+
+  if (!fontLoaded) {
+    return <Text> font don't charge</Text>;
+  }
 
   console.log(ejercicios, "ejercicios");
   const activeHandlerLevel1 = () => {
@@ -286,7 +305,7 @@ function InterpretacionElectro({ navigation }) {
                 }
                 style={Styles.ejerciciosContainer}
               >
-                <Text style={Styles.text}>{item.key}</Text>
+                <Text style={Styles.numbers}>{item.key}</Text>
                 <TouchableOpacity style={Styles.candado}>
                   <Image style={Styles.imageCandado} source={candado} />
                 </TouchableOpacity>
@@ -321,17 +340,18 @@ const Styles = StyleSheet.create({
     alignItems: "center",
   },
   filtersContainer: {
+    marginTop: 20,
     height: 200,
     border: "1px solid white",
   },
   levelFilters: {
-    height: 100,
+    height: 60,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
   },
   levelButton: {
-    margin: 3,
+    margin: 5,
   },
   typeFilters: {
     height: 100,
@@ -354,8 +374,14 @@ const Styles = StyleSheet.create({
   },
   text: {
     color: "#FFFFFF",
-    fontWeight: "thin",
-    fontSize: 16,
+    fontFamily: "MontserratRegular",
+    fontSize: 20,
+    marginBottom: 5,
+  },
+  numbers: {
+    color: "#FFFFFF",
+    fontFamily: "MontserratRegular",
+    fontSize: 14,
     margin: 5,
   },
   image: {

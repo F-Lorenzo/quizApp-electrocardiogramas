@@ -41,20 +41,26 @@ function PlantillaInterpretacion({ route, navigation }) {
   return (
     <View style={Styles.container}>
       <View style={Styles.nav}>
-        <TouchableOpacity onPress={() => navigation.navigate("Inicio")}>
-          <Image style={Styles.imageNav} source={ejercicios} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
-          <Image style={Styles.imageNav} source={actividades} />
-        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate("InterpretacionElectro")}
         >
+          <Image style={Styles.imageNav} source={ejercicios} />
+        </TouchableOpacity>
+        <View style={Styles.linea}></View>
+        <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
+          <Image style={Styles.imageNav} source={actividades} />
+        </TouchableOpacity>
+        <View style={Styles.linea}></View>
+        <TouchableOpacity onPress={() => navigation.navigate("Inicio")}>
           <Image style={Styles.imageNav} source={LogoApp} />
         </TouchableOpacity>
       </View>
       <View style={Styles.body}>
         <View style={Styles.bodyHeader}>
+          <Text style={Styles.consigna}>
+            Describa en el siguiente elctrocardiograma ritmo,frecuencia cardiaca
+            y eje electrico del complejo QRS
+          </Text>
           <View style={Styles.title}>
             <Text style={Styles.titleTextMain}>N{ejercicio.nivel}-</Text>
             <Text style={Styles.titleTextEjercicio}>{ejercicio.key}</Text>
@@ -89,12 +95,8 @@ function PlantillaInterpretacion({ route, navigation }) {
               )}
             </TouchableOpacity>
           </View>
-          {/* <Text style={Styles.consigna}>
-            Describa en el siguiente elctrocardiograma ritmo,frecuencia cardiaca
-            y eje electrico del complejo QRS
-          </Text> */}
         </View>
-        <ScrollView horizontal={true} style={Styles.ejercicio}>
+        <ScrollView vertical={true} style={Styles.ejercicio}>
           <View style={Styles.plantillaContainer}>
             <View style={Styles.imagenEjercicioContainer}>
               <Image
@@ -115,84 +117,67 @@ function PlantillaInterpretacion({ route, navigation }) {
 
 const Styles = StyleSheet.create({
   container: {
-    flexDirection: "column",
+    flexDirection: "row",
   },
   nav: {
-    height: 60,
     backgroundColor: "#3b3a3a",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    width: 80,
+    height: "100%",
     alignItems: "center",
-  },
-  title: {
-    marginBottom: 30,
-    flexDirection: "row",
-  },
-  titleTextMain: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  titleTextEjercicio: {
-    color: "#fff",
-  },
-  // consigna: {
-  //   rotation: 90,
-  //   width: 200,
-  //   height: 100,
-  // },
-  body: {
-    flexDirection: "row",
-  },
-  bodyHeader: {
-    height: 607,
-    width: 50,
-    position: "absolute",
-    flexDirection: "column",
-    alignItems: "center",
-    paddingTop: 30,
-    right: 0,
-    backgroundColor: "#3b3a3a",
-  },
-  ejercicio: {
-    height: 700,
-    width: 500,
-    position: "relative",
-    right: 50,
-    flexDirection: "row",
-  },
-  imagenEjercicio: {
-    height: 500,
-    width: 550,
-    rotation: 90,
-  },
-  plantillaContainer: {
-    flexDirection: "column",
-    marginTop: 55,
-  },
-  respuestaContainer: {
-    backgroundColor: "red",
-    flexDirection: "row",
-    height: 100,
-    width: 200,
-  },
-  respuestaText: {
-    backgroundColor: "#fff",
-    marginleft: 100,
-  },
-  respuestaInput: {
-    backgroundColor: "#ff4",
-    height: 100,
-    width: 515,
-  },
-  stateImage: {
-    height: 30,
-    width: 30,
-    rotation: 90,
   },
   imageNav: {
-    height: 50,
     width: 50,
-    rotation: 90,
+    height: 50,
+    marginVertical: 30,
+  },
+  linea: {
+    width: 30,
+    height: 1,
+    backgroundColor: "#fff",
+    margin: 10,
+  },
+  body: {
+    flexDirection: "column",
+    width: "100%",
+    height: "100%",
+  },
+  bodyHeader: {
+    backgroundColor: "#3b3a3a",
+    paddingTop: 10,
+    flexDirection: "row",
+    height: 60,
+    alignItems: "center",
+  },
+  consigna: {
+    width: 400,
+  },
+  state: {
+    flexDirection: "row",
+  },
+  stateImage: {
+    width: 30,
+    height: 30,
+  },
+  ejercicio: {
+    width: "100%",
+  },
+  imagenEjercicioContainer: {
+    width: "100%",
+    height: 200,
+  },
+  imagenEjercicio: {
+    height: 300,
+    width: "90%",
+  },
+  respuestaContainer: {
+    width: "90%",
+    backgroundColor: "#3b3a3a",
+    flexDirection: "row",
+  },
+  respuestaInput: {
+    height: 100,
+    width: "90%",
+    backgroundColor: "#333",
   },
 });
 

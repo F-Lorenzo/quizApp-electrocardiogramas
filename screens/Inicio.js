@@ -19,7 +19,7 @@ function Inicio({ navigation }) {
         MontserratRegular: Montserrat_400Regular,
       });
       await Font.loadAsync({
-        MonserratMedium: Montserrat_500Medium,
+        MontserratMedium: Montserrat_500Medium,
       });
 
       setFontLoaded(true);
