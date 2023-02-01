@@ -7,7 +7,7 @@ import CompleteCasilleros from "./screens/CompleteCasilleros";
 import MultipleChoice from "./screens/MultipleChoice";
 import ConcideracionesClinicas from "./screens/ConcideracionesClinicas";
 import PlantillaInterpretacion from "./screens/PlantillaInterpretacion";
-import PlantillaCompletar from "./screens/plantillaCompletar";
+import plantillaCompletar from "./screens/plantillaCompletar";
 import Inicio from "./screens/Inicio";
 import Manual from "./screens/Manual";
 
@@ -57,8 +57,8 @@ function MyStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="PlantillaCompletar"
-        component={PlantillaCompletar}
+        name="plantillaCompletar"
+        component={plantillaCompletar}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

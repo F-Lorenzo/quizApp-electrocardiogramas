@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import ejerciciosTest from "../db/ejerciciosTest.json";
-
 import actividades from "../assets/images/actividades.png";
 import candado from "../assets/images/candado.png";
 import completar from "../assets/images/completar.png";
@@ -208,7 +207,7 @@ function CompleteCasilleros({ navigation }) {
             data={ejercicios}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("PlantillaCompletar")}
+                onPress={() => navigation.navigate("plantillaCompletar")}
                 style={Styles.ejerciciosContainer}
               >
                 <Text style={Styles.text}>{item.key}</Text>
