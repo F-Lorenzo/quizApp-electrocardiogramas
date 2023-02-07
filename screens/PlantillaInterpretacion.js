@@ -32,6 +32,7 @@ import ejercicios from "../assets/images/ejercicios.png";
 
 function PlantillaInterpretacion({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
+  const [respuesta, setRespuesta] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
@@ -144,19 +145,54 @@ function PlantillaInterpretacion({ route, navigation }) {
             </View>
           </View>
         </View>
-        <ScrollView vertical={true} style={Styles.ejercicio}>
-          <View style={Styles.plantillaContainer}>
-            <View style={Styles.imagenEjercicioContainer}>
-              <Image
-                style={Styles.imagenEjercicio}
-                source={electrocardiogramaTest}
-              />
-            </View>
-            <View style={Styles.respuestaContainer}>
-              <Text style={Styles.respuestaText}>Su respuesta:</Text>
-              <TextInput style={Styles.respuestaInput}></TextInput>
-            </View>
+        <ScrollView style={Styles.ejercicio}>
+          <View style={Styles.imagenEjercicioContainer}>
+            <Image
+              style={Styles.imagenEjercicio}
+              source={electrocardiogramaTest}
+            />
           </View>
+          <View style={Styles.respuestaContainer}>
+            <Text style={Styles.respuestaText}>Su respuesta:</Text>
+            <TextInput
+              multiline={true}
+              style={Styles.respuestaInput}
+            ></TextInput>
+          </View>
+          <TouchableOpacity
+            style={Styles.respuestaButton}
+            onPress={() => {
+              setRespuesta(!respuesta);
+            }}
+          >
+            {respuesta === false ? (
+              <Text
+                style={{
+                  color: "#fff",
+                  fontFamily: "MontserratRegular",
+                  fontSize: 14,
+                  margin: "2%",
+                  height: 80,
+                }}
+              >
+                VER RESPUESTA CORRECTA
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  color: "#fff",
+                  fontFamily: "MontserratRegular",
+                  fontSize: 14,
+                  margin: "2%",
+                }}
+              >
+                OCULTAR RESPUESTA CORRECTA
+              </Text>
+            )}
+          </TouchableOpacity>
+          {respuesta && (
+            <Text style={Styles.respuestaFinal}>{ejercicio.respuesta}</Text>
+          )}
         </ScrollView>
       </View>
     </View>
@@ -234,14 +270,19 @@ const Styles = StyleSheet.create({
     height: 30,
   },
   ejercicio: {
-    width: "100%",
+    height: "100%",
+    flexDirection: "column",
+  },
+  plantillaContainer: {
+    flexDirection: "column",
+    height: "100%",
   },
   imagenEjercicioContainer: {
     width: "100%",
     height: 200,
   },
   imagenEjercicio: {
-    height: 300,
+    height: "100%",
     width: "90%",
   },
   respuestaContainer: {
@@ -254,11 +295,31 @@ const Styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "MontserratRegular",
     paddingHorizontal: "2%",
+    height: 80,
   },
   respuestaInput: {
-    height: 100,
-    width: "90%",
+    height: "100%",
+    width: 550,
     backgroundColor: "#333",
+    color: "#fff",
+    fontFamily: "MontserratRegular",
+    fontSize: 14,
+  },
+  respuestaButton: {
+    width: "90%",
+    alignItems: "center",
+    backgroundColor: "#77bf02",
+  },
+  respuestaFinal: {
+    width: "90%",
+    height: 100,
+    backgroundColor: "#66a303",
+    fontFamily: "MontserratRegular",
+    fontSize: 14,
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    justifyContent: "center",
   },
 });
 

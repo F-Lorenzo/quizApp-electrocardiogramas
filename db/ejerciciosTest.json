@@ -4,12 +4,7 @@
         "nivel":"1",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "consigna":"Hombre de 28 años, que acude a la consulta por dolor precordial atípico de 3 meses de evolución, que no ha modificado sus características a lo largo del tiempo. Practica tenis 2 veces por semana. Tiene el antecedente personal de dislipemia moderada no tratada.",
-        "respuesta":{
-            "ritmo":"",
-            "frecuencia":"",
-            "ejeElectrico":"",
-            "comentarios":""
-        },
+        "respuesta":"Repolarización precoz.",
         "realizado":false,
         "destacado":false,
         "bienResuelto":true,
@@ -21,12 +16,7 @@
         "nivel":"1",
         "imagen":"../assets/images/electrocardiogramaTest.png",
         "consigna":"",
-        "respuesta":{
-            "ritmo":"",
-            "frecuencia":"",
-            "ejeElectrico":"",
-            "comentarios":""
-        },
+        "respuesta":"",
         "realizado":false,
         "destacado":true,
         "bienResuelto":false,
