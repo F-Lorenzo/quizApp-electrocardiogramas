@@ -67,7 +67,7 @@ function PlantillaConcideraciones({ route, navigation }) {
     <View style={Styles.container}>
       <View style={Styles.nav}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("InterpretacionElectro")}
+          onPress={() => navigation.navigate("ConcideracionesClinicas")}
         >
           <Image style={Styles.imageNav} source={ejercicios} />
         </TouchableOpacity>

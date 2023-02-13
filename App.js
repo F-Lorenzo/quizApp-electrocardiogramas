@@ -12,6 +12,8 @@ import PlantillaChoice from "./screens/PlantillaChoice";
 import PlantillaConcideraciones from "./screens/PlantillaConcideraciones";
 import Inicio from "./screens/Inicio";
 import Manual from "./screens/Manual";
+import Perfil from "./screens/Perfil";
+import Estadisticas from "./screens/Estadisticas";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +25,17 @@ function MyStack() {
         component={Inicio}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="Estadisticas"
+        component={Estadisticas}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Perfil"
+        component={Perfil}
+        options={{ headerShown: false }}
+      />
+
       <Stack.Screen
         name="Menu"
         component={Menu}

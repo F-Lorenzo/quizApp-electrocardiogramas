@@ -9,6 +9,8 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 function ConsignaChoice({ consigna }) {
   const [fontLoaded, setFontLoaded] = useState(false);
 
+  const respuestas = consigna;
+
   useEffect(() => {
     const loadFont = async () => {
       await Font.loadAsync({
@@ -30,19 +32,19 @@ function ConsignaChoice({ consigna }) {
   return (
     <View style={Styles.consignaExtendida}>
       <TouchableOpacity style={Styles.opciones1}>
-        <Text>A- {consigna.a}</Text>
+        <Text>A- {respuestas.a}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={Styles.opciones2}>
-        <Text>B- {consigna.b}</Text>
+        <Text>B- {respuestas.b}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={Styles.opciones1}>
-        <Text>C- {consigna.c}</Text>
+        <Text>C- {respuestas.c}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={Styles.opciones2}>
-        <Text>D-{consigna.d}</Text>
+        <Text>D-{respuestas.d}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={Styles.opciones1}>
-        <Text>E- {consigna.e}</Text>
+        <Text>E- {respuestas.e}</Text>
       </TouchableOpacity>
     </View>
   );

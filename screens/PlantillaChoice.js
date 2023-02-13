@@ -14,7 +14,7 @@ import {
   TextInput,
 } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
-import ejerciciosTest from "../db/ejerciciosTest.json";
+import ejerciciosTest from "../db/ejerciciosTestChoice.json";
 import ConsignaChoice from "../components/ConsignaChoice";
 import flecha from "../assets/images/flecha-hacia-abajo-para-navegar.png";
 import realizado from "../assets/images/ejercicios-realizados.png";
@@ -32,8 +32,13 @@ import ejercicios from "../assets/images/ejercicios.png";
 
 function PlantillaChoice({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
-  const [respuesta, setRespuesta] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [backgroundColor1, setBackgroudColor1] = useState(
+    "rgba(71, 71, 71, 0.5)"
+  );
+  const [backgroundColor2, setBackgroudColor2] = useState(
+    "rgba(135, 135, 135, 0.5)"
+  );
 
   useEffect(() => {
     const loadFont = async () => {
@@ -58,17 +63,17 @@ function PlantillaChoice({ route, navigation }) {
   }
   const { key } = route.params;
   const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === key);
+  const respuestas = ejercicio.consigna;
 
   const handlerRealizado = () => {};
   const handleConsigna = () => {
     setConsignaLoaded(!consignaLoaded);
   };
+
   return (
     <View style={Styles.container}>
       <View style={Styles.nav}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("InterpretacionElectro")}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("MultipleChoice")}>
           <Image style={Styles.imageNav} source={ejercicios} />
         </TouchableOpacity>
         <View style={Styles.linea}></View>
@@ -102,10 +107,127 @@ function PlantillaChoice({ route, navigation }) {
                 <Image source={flecha} />
               </View>
             ) : (
-              <ConsignaChoice
-                consigna={ejercicio.consigna}
-                style={Styles.consignaExtendida}
-              />
+              <View style={Styles.consignaExtendida}>
+                <TouchableOpacity
+                  // onPress={setBackgroudColor1(
+                  //   respuestas.a.correcta === "true" ? "#29ba13" : "#c27c04"
+                  // )}
+                  style={{
+                    color: "#fff",
+                    fontFamily: "MontserratRegular",
+                    backgroundColor: backgroundColor1,
+                    height: 60,
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    padding: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontFamily: "MontserratRegular",
+                    }}
+                  >
+                    A -
+                  </Text>
+                  <Text style={Styles.respuestas}>{respuestas.a.texto}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    color: "#fff",
+                    fontFamily: "MontserratRegular",
+                    backgroundColor: backgroundColor2,
+                    height: 60,
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    padding: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontFamily: "MontserratRegular",
+                    }}
+                  >
+                    B -
+                  </Text>
+                  <Text style={Styles.respuestas}> {respuestas.b.texto}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  // onPress={setBackgroudColor1(
+                  //   respuestas.c.correcta === true ? "#29ba13" : "#c27c04"
+                  // )}
+                  style={{
+                    color: "#fff",
+                    fontFamily: "MontserratRegular",
+                    backgroundColor: backgroundColor1,
+                    height: 60,
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    padding: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontFamily: "MontserratRegular",
+                    }}
+                  >
+                    C -
+                  </Text>
+                  <Text style={Styles.respuestas}> {respuestas.c.texto}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    color: "#fff",
+                    fontFamily: "MontserratRegular",
+                    backgroundColor: backgroundColor2,
+                    height: 60,
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    padding: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontFamily: "MontserratRegular",
+                    }}
+                  >
+                    D -
+                  </Text>
+                  <Text style={Styles.respuestas}>{respuestas.d.texto}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  // onPress={setBackgroudColor1(
+                  //   respuestas.e.correcta === true ? "#29ba13" : "#c27c04"
+                  // )}
+                  style={{
+                    color: "#fff",
+                    fontFamily: "MontserratRegular",
+                    backgroundColor: backgroundColor1,
+                    height: 60,
+                    justifyContent: "center",
+                    flexDirection: "row",
+                    padding: 10,
+                    alignItems: "center",
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontFamily: "MontserratRegular",
+                    }}
+                  >
+                    E -
+                  </Text>
+                  <Text style={Styles.respuestas}> {respuestas.e.texto}</Text>
+                </TouchableOpacity>
+              </View>
             )}
           </TouchableOpacity>
           <View style={Styles.rightBlock}>
@@ -243,6 +365,39 @@ const Styles = StyleSheet.create({
   imagenEjercicio: {
     height: "100%",
     width: "90%",
+  },
+  consignaExtendida: {
+    width: 400,
+    height: 100,
+    color: "#fff",
+    padding: "0.5%",
+    borderTopRightRadius: 30,
+    marginTop: 130,
+  },
+  // opciones1: {
+  //   color: "#fff",
+  //   fontFamily: "MontserratRegular",
+  //   backgroundColor,
+  //   height: 60,
+  //   justifyContent: "center",
+  //   flexDirection: "row",
+  //   padding: 10,
+  //   alignItems: "center",
+  // },
+  // opciones2: {
+  //   color: "#fff",
+  //   fontFamily: "MontserratRegular",
+  //   backgroundColor: backgroundColor2,
+  //   height: 60,
+  //   justifyContent: "center",
+  //   flexDirection: "row",
+  //   padding: 10,
+  //   alignItems: "center",
+  // },
+  respuestas: {
+    color: "#fff",
+    fontFamily: "MontserratRegular",
+    fontSize: 10,
   },
 });
 

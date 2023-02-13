@@ -67,7 +67,7 @@ function PlantillaCompletar({ route, navigation }) {
     <View style={Styles.container}>
       <View style={Styles.nav}>
         <TouchableOpacity
-          onPress={() => navigation.navigate("InterpretacionElectro")}
+          onPress={() => navigation.navigate("CompleteCasilleros")}
         >
           <Image style={Styles.imageNav} source={ejercicios} />
         </TouchableOpacity>

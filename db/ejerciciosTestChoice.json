@@ -4,11 +4,26 @@
       "key": "001",
       "imagen": "../assets/images/electrocardiogramaTest.png",
       "consigna":{
-        "a":"sadasdsad",
-        "b":"dsaasdsd",
-        "c":"sadasdsd",
-        "d":"sdasdasd",
-        "e":"ddsasadsad"
+        "a":{
+            "texto":"sadasdsadasdddddddddddddddddddddddddddddddasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddasddddddddddddddddddddd",
+            "correcta":"true"    
+        },
+        "b":{
+            "texto":"dsaasdsd",
+            "correcta":false
+        },
+        "c":{
+            "texto":"dsaasdsd",
+            "correcta":false
+        },
+        "d":{
+            "texto":"dsaasdsd",
+            "correcta":false
+        },
+        "e":{
+            "texto":"dsaasdsd",
+            "correcta":false
+        }
         },
       "realizado": false,
       "destacado": false,

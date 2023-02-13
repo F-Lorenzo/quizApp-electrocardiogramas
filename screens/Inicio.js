@@ -50,7 +50,7 @@ function Inicio({ navigation }) {
       </View>
       <TouchableOpacity
         style={Styles.perfil}
-        onPress={() => navigation.navigate()}
+        onPress={() => navigation.navigate("Perfil")}
       >
         <Image style={Styles.imagePerfil} source={usuario} />
       </TouchableOpacity>
