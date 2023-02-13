@@ -14,7 +14,7 @@ import {
   TextInput,
 } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
-import ejerciciosTest from "../db/ejerciciosTest.json";
+import ejerciciosTest from "../db/ejerciciosTestInterpretacion.json";
 import ConsignaInterpretacion from "../components/ConsignaInterpretacion";
 import flecha from "../assets/images/flecha-hacia-abajo-para-navegar.png";
 import realizado from "../assets/images/ejercicios-realizados.png";
@@ -191,7 +191,33 @@ function PlantillaInterpretacion({ route, navigation }) {
             )}
           </TouchableOpacity>
           {respuesta && (
-            <Text style={Styles.respuestaFinal}>{ejercicio.respuesta}</Text>
+            <View style={Styles.respuestaFinal}>
+              <View style={Styles.parametros}>
+                <Text style={Styles.parametro}>{ejercicio.ritmo}</Text>
+                <Text style={Styles.parametro}>{ejercicio.frecuencia}</Text>
+                <Text style={Styles.parametro}>{ejercicio.eje}</Text>
+              </View>
+              <View style={Styles.comentario}>
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontFamily: "MontserratRegular",
+                    fontSize: 12,
+                  }}
+                >
+                  COMENTARIO
+                </Text>
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontFamily: "MontserratRegular",
+                    fontSize: 12,
+                  }}
+                >
+                  {ejercicio.comentario}
+                </Text>
+              </View>
+            </View>
           )}
         </ScrollView>
       </View>
@@ -312,14 +338,27 @@ const Styles = StyleSheet.create({
   },
   respuestaFinal: {
     width: "90%",
-    height: 100,
+    height: 200,
+    flexDirection: "row",
     backgroundColor: "#66a303",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  comentario: {
+    width: "60%",
     fontFamily: "MontserratRegular",
-    fontSize: 14,
+    color: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+  },
+  parametros: {
+    padding: 10,
+  },
+  parametro: {
     color: "#fff",
     fontWeight: "bold",
-    textAlign: "center",
-    justifyContent: "center",
+    fontFamily: "MontserratRegular",
   },
 });
 

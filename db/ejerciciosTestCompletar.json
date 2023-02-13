@@ -1,0 +1,128 @@
+[
+  {
+    "key": "001",
+    "imagen": "../assets/images/electrocardiogramaTest.png",
+    "ritmo": "sinusal",
+    "frecuencia": "60 (58-62)",
+    "eje": "-10°",
+    "realizado": false,
+    "destacado": false,
+    "bienResuelto": true,
+    "malResuelto": false,
+    "disponible": true
+  },
+  {
+      "key":"002",
+      "nivel":"1",
+      "imagen":"../assets/images/electrocardiogramaTest.png",
+      "consigna":"",
+      "respuesta":"",
+      "realizado":false,
+      "destacado":true,
+      "bienResuelto":false,
+      "malResuelto":false,
+      "disponible":true
+  },
+  {
+      "key":"003",
+      "nivel":"1",
+      "imagen":"../assets/images/electrocardiogramaTest.png",
+      "consigna":"",
+      "respuesta":{
+          "ritmo":"",
+          "frecuencia":"",
+          "ejeElectrico":"",
+          "comentarios":""
+      },
+      "realizado":false,
+      "destacado":false,
+      "bienResuelto":false,
+      "malResuelto":true,
+      "disponible":true
+  },
+  {
+      "key":"004",
+      "nivel":"2",
+      "imagen":"../assets/images/electrocardiogramaTest.png",
+      "consigna":"",
+      "respuesta":{
+          "ritmo":"",
+          "frecuencia":"",
+          "ejeElectrico":"",
+          "comentarios":""
+      },
+      "realizado":true,
+      "destacado":false,
+      "bienResuelto":false,
+      "malResuelto":false,
+      "disponible":true
+  },
+  {
+      "key":"005",
+      "nivel":"2",
+      "imagen":"../assets/images/electrocardiogramaTest.png",
+      "consigna":"",
+      "respuesta":{
+          "ritmo":"",
+          "frecuencia":"",
+          "ejeElectrico":"",
+          "comentarios":""
+      },
+      "realizado":false,
+      "destacado":false,
+      "bienResuelto":false,
+      "malResuelto":false,
+      "disponible":true
+  },
+  {
+      "key":"006",
+      "nivel":"2",
+      "imagen":"../assets/images/electrocardiogramaTest.png",
+      "consigna":"",
+      "respuesta":{
+          "ritmo":"",
+          "frecuencia":"",
+          "ejeElectrico":"",
+          "comentarios":""
+      },
+      "realizado":false,
+      "destacado":false,
+      "bienResuelto":false,
+      "malResuelto":false,
+      "disponible":true
+  },
+  {
+      "key":"007",
+      "nivel":"3",
+      "imagen":"../assets/images/electrocardiogramaTest.png",
+      "consigna":"",
+      "respuesta":{
+          "ritmo":"",
+          "frecuencia":"",
+          "ejeElectrico":"",
+          "comentarios":""
+      },
+      "realizado":false,
+      "destacado":false,
+      "bienResuelto":false,
+      "malResuelto":false,
+      "disponible":true
+  },
+  {
+      "key":"008",
+      "nivel":"3",
+      "imagen":"../assets/images/electrocardiogramaTest.png",
+      "consigna":"",
+      "respuesta":{
+          "ritmo":"",
+          "frecuencia":"",
+          "ejeElectrico":"",
+          "comentarios":""
+      },
+      "realizado":false,
+      "destacado":false,
+      "bienResuelto":false,
+      "malResuelto":false,
+      "disponible":true
+  }
+]

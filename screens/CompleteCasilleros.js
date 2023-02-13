@@ -207,7 +207,9 @@ function CompleteCasilleros({ navigation }) {
             data={ejercicios}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("plantillaCompletar")}
+                onPress={() =>
+                  navigation.navigate("plantillaCompletar", { key: item.key })
+                }
                 style={Styles.ejerciciosContainer}
               >
                 <Text style={Styles.text}>{item.key}</Text>

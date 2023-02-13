@@ -208,7 +208,11 @@ function ConcideracionesClinicas({ navigation }) {
             data={ejercicios}
             renderItem={({ item }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("PlantillaInterpretacion")}
+                onPress={() =>
+                  navigation.navigate("PlantillaConcideraciones", {
+                    key: item.key,
+                  })
+                }
                 style={Styles.ejerciciosContainer}
               >
                 <Text style={Styles.text}>{item.key}</Text>

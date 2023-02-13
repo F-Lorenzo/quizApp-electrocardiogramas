@@ -8,6 +8,8 @@ import MultipleChoice from "./screens/MultipleChoice";
 import ConcideracionesClinicas from "./screens/ConcideracionesClinicas";
 import PlantillaInterpretacion from "./screens/PlantillaInterpretacion";
 import plantillaCompletar from "./screens/plantillaCompletar";
+import PlantillaChoice from "./screens/PlantillaChoice";
+import PlantillaConcideraciones from "./screens/PlantillaConcideraciones";
 import Inicio from "./screens/Inicio";
 import Manual from "./screens/Manual";
 
@@ -59,6 +61,16 @@ function MyStack() {
       <Stack.Screen
         name="plantillaCompletar"
         component={plantillaCompletar}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PlantillaChoice"
+        component={PlantillaChoice}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="PlantillaConcideraciones"
+        component={PlantillaConcideraciones}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

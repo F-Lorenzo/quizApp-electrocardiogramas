@@ -14,7 +14,7 @@ import {
   TextInput,
 } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
-import ejerciciosTest from "../db/ejerciciosTestCompletar.json";
+import ejerciciosTest from "../db/ejerciciosTest.json";
 import ConsignaInterpretacion from "../components/ConsignaInterpretacion";
 import flecha from "../assets/images/flecha-hacia-abajo-para-navegar.png";
 import realizado from "../assets/images/ejercicios-realizados.png";
@@ -30,7 +30,7 @@ import LogoApp from "../assets/images/LogoApp.png";
 import actividades from "../assets/images/actividades.png";
 import ejercicios from "../assets/images/ejercicios.png";
 
-function PlantillaCompletar({ route, navigation }) {
+function PlantillaConcideraciones({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
   const [respuesta, setRespuesta] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -83,19 +83,34 @@ function PlantillaCompletar({ route, navigation }) {
       <View style={Styles.body}>
         <View style={Styles.bodyHeader}>
           <TouchableOpacity style={Styles.consigna} onPress={handleConsigna}>
-            <Text
-              style={{
-                color: "#fff",
-                fontFamily: "MontserratRegular",
-                fontSize: 12,
-              }}
-            >
-              Complete los casilleros
-            </Text>
+            {consignaLoaded === false ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontFamily: "MontserratRegular",
+                    fontSize: 12,
+                  }}
+                >
+                  Describa en el siguiente elctrocardiograma segun consigna
+                </Text>
+                <Image source={flecha} />
+              </View>
+            ) : (
+              <ConsignaInterpretacion
+                consigna={ejercicio.consigna}
+                style={Styles.consignaExtendida}
+              />
+            )}
           </TouchableOpacity>
           <View style={Styles.rightBlock}>
             <View style={Styles.title}>
-              <Text style={Styles.titleTextMain}>C-</Text>
+              <Text style={Styles.titleTextMain}>CC-</Text>
               <Text style={Styles.titleTextEjercicio}>{ejercicio.key}</Text>
             </View>
             <View style={Styles.state}>
@@ -138,29 +153,11 @@ function PlantillaCompletar({ route, navigation }) {
             />
           </View>
           <View style={Styles.respuestaContainer}>
-            <View style={Styles.respuestaSubContainers}>
-              <Text style={Styles.respuestaText}>Ritmo</Text>
-              <TextInput style={Styles.respuestaInput}></TextInput>
-            </View>
-            <View style={Styles.respuestaSubContainers}>
-              <Text style={Styles.respuestaText}>FC</Text>
-              <TextInput style={Styles.respuestaInput}></TextInput>
-            </View>
-            <View style={Styles.respuestaSubContainers}>
-              <Text style={Styles.respuestaText}>Eje QRS cercano a</Text>
-              <TextInput style={Styles.respuestaInput}></TextInput>
-            </View>
-            <View style={Styles.respuestaSubContainers}>
-              <TextInput style={Styles.respuestaInput}></TextInput>
-              <TextInput style={Styles.respuestaInput}></TextInput>
-              <Text style={Styles.respuestaText}>monofocal</Text>
-            </View>
-            <View style={Styles.respuestaSubContainers}>
-              <Text style={Styles.respuestaText}>Necrosis</Text>
-              <TextInput style={Styles.respuestaInput}></TextInput>
-              <Text style={Styles.respuestaText}>versus rotación</Text>
-              <TextInput style={Styles.respuestaInput}></TextInput>
-            </View>
+            <Text style={Styles.respuestaText}>Su respuesta:</Text>
+            <TextInput
+              multiline={true}
+              style={Styles.respuestaInput}
+            ></TextInput>
           </View>
           <TouchableOpacity
             style={Styles.respuestaButton}
@@ -194,21 +191,7 @@ function PlantillaCompletar({ route, navigation }) {
             )}
           </TouchableOpacity>
           {respuesta && (
-            <View style={Styles.respuestaFinalContainer}>
-              <Text style={Styles.respuestaFinal}>Ritmo {ejercicio.ritmo}</Text>
-              <Text style={Styles.respuestaFinal}>
-                FC {ejercicio.frecuencia}
-              </Text>
-              <Text style={Styles.respuestaFinal}>
-                Eje QRS cercano a {ejercicio.eje}
-              </Text>
-              <Text style={Styles.respuestaFinal}>
-                Extrasistolia ventricular monofocal
-              </Text>
-              <Text style={Styles.respuestaFinal}>
-                Necrocis septal versus rotación horaria
-              </Text>
-            </View>
+            <Text style={Styles.respuestaFinal}>{ejercicio.respuesta}</Text>
           )}
         </ScrollView>
       </View>
@@ -304,45 +287,40 @@ const Styles = StyleSheet.create({
   },
   respuestaContainer: {
     width: "90%",
-    height: 300,
     backgroundColor: "#3b3a3a",
-    padding: 10,
-  },
-  respuestaSubContainers: {
     flexDirection: "row",
-    height: 40,
   },
   respuestaText: {
+    textAlignVertical: "center",
     color: "#fff",
     fontFamily: "MontserratRegular",
-    margin: 10,
+    paddingHorizontal: "2%",
+    height: 80,
   },
   respuestaInput: {
-    height: 30,
-    width: 180,
+    height: "100%",
+    width: 550,
     backgroundColor: "#333",
     color: "#fff",
     fontFamily: "MontserratRegular",
     fontSize: 14,
-    margin: 10,
   },
   respuestaButton: {
     width: "90%",
     alignItems: "center",
     backgroundColor: "#77bf02",
   },
-  respuestaFinalContainer: {
-    width: "90%",
-    backgroundColor: "#66a303",
-    height: 250,
-  },
   respuestaFinal: {
-    height: 20,
-    margin: 10,
+    width: "90%",
+    height: 100,
+    backgroundColor: "#66a303",
     fontFamily: "MontserratRegular",
     fontSize: 14,
     color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+    justifyContent: "center",
   },
 });
 
-export default PlantillaCompletar;
+export default PlantillaConcideraciones;
