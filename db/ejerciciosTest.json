@@ -119,7 +119,7 @@
             "ejeElectrico":"",
             "comentarios":""
         },
-        "realizado":false,
+        "realizado":true,
         "destacado":false,
         "bienResuelto":false,
         "malResuelto":false,

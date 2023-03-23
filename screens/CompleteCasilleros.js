@@ -32,75 +32,98 @@ function CompleteCasilleros({ navigation }) {
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState(ejerciciosTest);
+  const [ejerciciosAux, setEjerciciosAux ] = useState(ejerciciosTest);
+
+  const resetFilters = () => {
+    setTodos(false);
+    setNoRealizados(false);
+    setRealizados(false);
+    setDestacados(false);
+    setResueltos(false);
+    setMalResueltos(false);
+  }
 
   const activeHandlerTodos = () => {
+    resetFilters();
     setTodos(!todos);
     if (todos === false) {
       let ejercicio = ejerciciosTest;
       setEjercicios(ejercicio);
+      setEjerciciosAux(ejercicio);
     } else {
       let ejercicio = [];
       setEjercicios(ejercicio);
+      setEjerciciosAux(ejercicio);
     }
   };
   const activeHandlerNoRealizados = () => {
+    resetFilters();
     setNoRealizados(!noRealizados);
     if (noRealizados === false) {
-      let ejercicio = ejercicios.filter(
-        (ejercicio) => ejercicio.realizado === true
+      let ejercicio = ejerciciosAux.filter(
+        (ejercicio) => ejercicio.realizado === false
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      //setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
   const activeHandlerRealizados = () => {
+    resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejercicios.filter(
+      let ejercicio = ejerciciosAux.filter(
         (ejercicio) => ejercicio.realizado === true
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      //setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
   const activeHandlerDestacados = () => {
+    resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejercicios.filter(
+      let ejercicio = ejerciciosAux.filter(
         (ejercicio) => ejercicio.destacado === true
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      //setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
   const activeHandlerResueltos = () => {
+    resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejercicios.filter(
-        (ejercicio) => ejercicio.resuelto === true
+      let ejercicio = ejerciciosAux.filter(
+        (ejercicio) => ejercicio.bienResuelto === true
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      //setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
   const activeHandlerMalResueltos = () => {
+    resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejercicios.filter(
-        (ejercicio) => ejercicio.resuelto === true
+      let ejercicio = ejerciciosAux.filter(
+        (ejercicio) => ejercicio.malResuelto === true
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      //setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
 

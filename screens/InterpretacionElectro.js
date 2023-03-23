@@ -33,7 +33,7 @@ import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
 
 function InterpretacionElectro({ navigation }) {
-  const [level1, setLevel1] = useState(true);
+  const [level1, setLevel1] = useState(false);
   const [level2, setLevel2] = useState(false);
   const [level3, setLevel3] = useState(false);
   const [todos, setTodos] = useState(true);
@@ -43,6 +43,7 @@ function InterpretacionElectro({ navigation }) {
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState(ejerciciosTest);
+  const [ejerciciosAux, setEjerciciosAux ] = useState(ejerciciosTest);
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
@@ -62,104 +63,145 @@ function InterpretacionElectro({ navigation }) {
   }
 
   console.log(ejercicios, "ejercicios");
-  const activeHandlerLevel1 = () => {
-    setLevel1(true);
+
+  const resetAllFilters = () => {
+    setLevel1(false);
     setLevel2(false);
     setLevel3(false);
-    let ejercicio = ejerciciosTest.filter(
-      (ejercicio) => ejercicio.nivel === "1"
-    );
-    setEjercicios(ejercicio);
+    setTodos(false);
+    setNoRealizados(false);
+    setRealizados(false);
+    setDestacados(false);
+    setResueltos(false);
+    setMalResueltos(false);
+  }
+
+  const resetFilters = () => {
+    setNoRealizados(false);
+    setRealizados(false);
+    setDestacados(false);
+    setResueltos(false);
+    setMalResueltos(false);
+  }
+
+  const activeHandlerLevel1 = () => {
+    resetAllFilters();
+    setLevel1(!level1);
+    if (!level1) {     
+      let ejercicio = ejerciciosTest.filter(
+        (ejercicio) => ejercicio.nivel === "1"
+      );
+      setEjercicios(ejercicio);
+      setEjerciciosAux(ejercicio);
+    } else {
+      activeHandlerTodos();
+    }
     console.log(ejercicios, "1");
   };
   const activeHandlerLevel2 = () => {
-    setLevel1(false);
-    setLevel2(true);
-    setLevel3(false);
-    let ejercicio = ejerciciosTest.filter(
-      (ejercicio) => ejercicio.nivel === "2"
-    );
-    setEjercicios(ejercicio);
+    resetAllFilters();
+    setLevel2(!level2);
+    if (!level2) {
+      let ejercicio = ejerciciosTest.filter(
+        (ejercicio) => ejercicio.nivel === "2"
+      );
+      setEjercicios(ejercicio);
+      setEjerciciosAux(ejercicio);
+    } else {
+      activeHandlerTodos();
+    }
     console.log(ejercicios, "2");
   };
   const activeHandlerLevel3 = () => {
-    setLevel1(false);
-    setLevel2(false);
-    setLevel3(true);
-    let ejercicio = ejerciciosTest.filter(
-      (ejercicio) => ejercicio.nivel === "3"
-    );
-    setEjercicios(ejercicio);
+    resetAllFilters();
+    setLevel3(!level3);
+    if (!level3) {
+      let ejercicio = ejerciciosTest.filter(
+        (ejercicio) => ejercicio.nivel === "3"
+      );
+      setEjercicios(ejercicio);
+      setEjerciciosAux(ejercicio);
+    } else {
+      activeHandlerTodos();
+    }
     console.log(ejercicios, "3");
   };
   const activeHandlerTodos = () => {
+    resetAllFilters();
     setTodos(!todos);
     if (todos === false) {
       let ejercicio = ejerciciosTest;
       setEjercicios(ejercicio);
+      setEjerciciosAux(ejercicio);
     } else {
       let ejercicio = [];
       setEjercicios(ejercicio);
+      setEjerciciosAux(ejercicio);
     }
   };
   const activeHandlerNoRealizados = () => {
+    resetFilters();
     setNoRealizados(!noRealizados);
     if (noRealizados === false) {
-      let ejercicio = ejercicios.filter(
-        (ejercicio) => ejercicio.realizado === true
+      let ejercicio = ejerciciosAux.filter(
+        (ejercicio) => ejercicio.realizado === false
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      setEjercicios(ejerciciosAux);
     }
   };
   const activeHandlerRealizados = () => {
+    resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejercicios.filter(
+      let ejercicio = ejerciciosAux.filter(
         (ejercicio) => ejercicio.realizado === true
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      setEjercicios(ejerciciosAux);
     }
   };
   const activeHandlerDestacados = () => {
+    resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejercicios.filter(
+      let ejercicio = ejerciciosAux.filter(
         (ejercicio) => ejercicio.destacado === true
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      setEjercicios(ejerciciosAux);
     }
   };
   const activeHandlerResueltos = () => {
+    resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejercicios.filter(
-        (ejercicio) => ejercicio.resuelto === true
+      let ejercicio = ejerciciosAux.filter(
+        (ejercicio) => ejercicio.bienResuelto === true
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      setEjercicios(ejerciciosAux);
     }
   };
   const activeHandlerMalResueltos = () => {
+    resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejercicios.filter(
-        (ejercicio) => ejercicio.resuelto === true
+      let ejercicio = ejerciciosAux.filter(
+        (ejercicio) => ejercicio.malResuelto === true
       );
       setEjercicios(ejercicio);
     } else {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
+      //let ejercicio = ejerciciosTest;
+      setEjercicios(ejerciciosAux);
     }
   };
 
