@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import * as Font from "expo-font";
 import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
 import {
@@ -18,11 +18,12 @@ import Completar from "../assets/images/completar.png";
 import MultipleChoice from "../assets/images/multiple-choice.png";
 import concideracionesClinicas from "../assets/images/consideraciones_clinicas.png";
 import ejerciciosConcideraciones from "../db/ejerciciosTest.json";
+import { useSelector } from "react-redux";
 
 function Perfil({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
-
-  const [usuarioLogueado, setUsuarioLogueado] = useState(false);
+  const user = useSelector((state) => state.user);
+  console.log(user);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -46,7 +47,7 @@ function Perfil({ navigation }) {
   return (
     <View style={Styles.principalContainer}>
       <Header />
-      {usuarioLogueado ? (
+      {user ? (
         <ScrollView>
           <View style={Styles.perfil}>
             <View style={Styles.perfilHeader}>

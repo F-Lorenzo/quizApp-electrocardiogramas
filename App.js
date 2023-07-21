@@ -16,6 +16,8 @@ import Perfil from "./screens/Perfil";
 import Estadisticas from "./screens/Estadisticas";
 import RegistrarUsuario from "./screens/RegistrarUsuario";
 import Login from "./screens/Login";
+import { Provider } from "react-redux";
+import store from "./redux/store";
 
 const Stack = createNativeStackNavigator();
 
@@ -80,8 +82,10 @@ function MyStack() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <MyStack />
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <MyStack />
+      </NavigationContainer>
+    </Provider>
   );
 }
