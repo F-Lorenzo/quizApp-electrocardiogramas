@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
-import {
-  Montserrat_400Regular,
-  Montserrat_500Medium,
-} from "@expo-google-fonts/montserrat";
+import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
 import {
   View,
   Text,
@@ -25,6 +22,8 @@ import ejerciciosConcideraciones from "../db/ejerciciosTest.json";
 function Perfil({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
 
+  const [usuarioLogueado, setUsuarioLogueado] = useState(false);
+
   useEffect(() => {
     const loadFont = async () => {
       await Font.loadAsync({
@@ -43,116 +42,126 @@ function Perfil({ navigation }) {
   if (!fontLoaded) {
     return <Text> font don't charge</Text>;
   }
+
   return (
-    <View>
+    <View style={Styles.principalContainer}>
       <Header />
-      <ScrollView>
-        <View style={Styles.perfil}>
-          <View style={Styles.perfilHeader}>
-            <Image style={Styles.imagePerfil} source={usuario} />
-            <View style={Styles.linea}></View>
-            <Text style={Styles.texto}>MI PERFIL</Text>
+      {usuarioLogueado ? (
+        <ScrollView>
+          <View style={Styles.perfil}>
+            <View style={Styles.perfilHeader}>
+              <Image style={Styles.imagePerfil} source={usuario} />
+              <View style={Styles.linea}></View>
+              <Text style={Styles.texto}>MI PERFIL</Text>
+            </View>
+            <View style={Styles.datos}>
+              <View style={Styles.celdas}>
+                <Text style={Styles.label}>Nombre</Text>
+                <TextInput style={Styles.input}></TextInput>
+              </View>
+              <View style={Styles.celdas}>
+                <Text style={Styles.label}>Apellido</Text>
+                <TextInput style={Styles.input}></TextInput>
+              </View>
+              <View style={Styles.celdas}>
+                <Text style={Styles.label}>E-Mail</Text>
+                <TextInput style={Styles.input}></TextInput>
+              </View>
+              <View style={Styles.celdas}>
+                <Text style={Styles.label}>Contraseña</Text>
+                <TextInput style={Styles.input}></TextInput>
+              </View>
+            </View>
+            <TouchableOpacity style={Styles.botonModificar}>
+              <Text style={Styles.textoBoton}>MODIFICAR DATOS</Text>
+            </TouchableOpacity>
           </View>
-          <View style={Styles.datos}>
-            <View style={Styles.celdas}>
-              <Text style={Styles.label}>Nombre</Text>
-              <TextInput style={Styles.input}></TextInput>
+          <View style={Styles.estadisticas}>
+            <View style={Styles.perfilHeader}>
+              <Image style={Styles.imgEstadisticas} source={estadisticasImg} />
+              <View style={Styles.linea}></View>
+              <Text style={Styles.texto}>MIS ESTADISTICAS</Text>
             </View>
-            <View style={Styles.celdas}>
-              <Text style={Styles.label}>Apellido</Text>
-              <TextInput style={Styles.input}></TextInput>
-            </View>
-            <View style={Styles.celdas}>
-              <Text style={Styles.label}>E-Mail</Text>
-              <TextInput style={Styles.input}></TextInput>
-            </View>
-            <View style={Styles.celdas}>
-              <Text style={Styles.label}>Contraseña</Text>
-              <TextInput style={Styles.input}></TextInput>
-            </View>
+            <TouchableOpacity
+              style={Styles.container}
+              onPress={() =>
+                navigation.navigate("Estadisticas", {
+                  img: Ejercicios,
+                  title: "Interpretacion de electrocardiograma",
+                  ejercicios: ejerciciosConcideraciones,
+                })
+              }>
+              <View style={Styles.buttonContainer}>
+                <Image style={Styles.image} source={Ejercicios} />
+                <Text style={Styles.texto}>Interpretacion de electrocardiograma</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Estadisticas", {
+                  img: Completar,
+                  title: "Complete los Casilleros",
+                  ejercicios: ejerciciosConcideraciones,
+                })
+              }
+              style={Styles.container}>
+              <View style={Styles.buttonContainer}>
+                <Image style={Styles.image} source={Completar} />
+                <Text style={Styles.texto}>Complete los Casilleros</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Estadisticas", {
+                  img: MultipleChoice,
+                  title: "Multiple choice",
+                  ejercicios: ejerciciosConcideraciones,
+                })
+              }
+              style={Styles.container}>
+              <View style={Styles.buttonContainer}>
+                <Image style={Styles.image} source={MultipleChoice} />
+                <Text style={Styles.texto}>Multiple choice</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Estadisticas", {
+                  img: concideracionesClinicas,
+                  title: "Consideraciones Clinicas",
+                  ejercicios: ejerciciosConcideraciones,
+                })
+              }
+              style={Styles.container}>
+              <View style={Styles.buttonContainer}>
+                <Image style={Styles.image} source={concideracionesClinicas} />
+                <Text style={Styles.texto}>Consideraciones Clinicas</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={Styles.botonModificar}>
-            <Text style={Styles.textoBoton}>MODIFICAR DATOS</Text>
+        </ScrollView>
+      ) : (
+        <View style={Styles.notLoggedView}>
+          <TouchableOpacity style={Styles.buttons} onPress={() => navigation.navigate("Registrar")}>
+            <Text style={Styles.textoBoton}>REGISTRARME</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={Styles.buttons} onPress={() => navigation.navigate("Login")}>
+            <Text style={Styles.textoBoton}>INICIAR SESIÓN</Text>
           </TouchableOpacity>
         </View>
-        <View style={Styles.estadisticas}>
-          <View style={Styles.perfilHeader}>
-            <Image style={Styles.imgEstadisticas} source={estadisticasImg} />
-            <View style={Styles.linea}></View>
-            <Text style={Styles.texto}>MIS ESTADISTICAS</Text>
-          </View>
-          <TouchableOpacity
-            style={Styles.container}
-            onPress={() =>
-              navigation.navigate("Estadisticas", {
-                img: Ejercicios,
-                title: "Interpretacion de electrocardiograma",
-                ejercicios: ejerciciosConcideraciones,
-              })
-            }
-          >
-            <View style={Styles.buttonContainer}>
-              <Image style={Styles.image} source={Ejercicios} />
-              <Text style={Styles.texto}>
-                Interpretacion de electrocardiograma
-              </Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Estadisticas", {
-                img: Completar,
-                title: "Complete los Casilleros",
-                ejercicios: ejerciciosConcideraciones,
-              })
-            }
-            style={Styles.container}
-          >
-            <View style={Styles.buttonContainer}>
-              <Image style={Styles.image} source={Completar} />
-              <Text style={Styles.texto}>Complete los Casilleros</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Estadisticas", {
-                img: MultipleChoice,
-                title: "Multiple choice",
-                ejercicios: ejerciciosConcideraciones,
-              })
-            }
-            style={Styles.container}
-          >
-            <View style={Styles.buttonContainer}>
-              <Image style={Styles.image} source={MultipleChoice} />
-              <Text style={Styles.texto}>Multiple choice</Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("Estadisticas", {
-                img: concideracionesClinicas,
-                title: "Consideraciones Clinicas",
-                ejercicios: ejerciciosConcideraciones,
-              })
-            }
-            style={Styles.container}
-          >
-            <View style={Styles.buttonContainer}>
-              <Image style={Styles.image} source={concideracionesClinicas} />
-              <Text style={Styles.texto}>Consideraciones Clinicas</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      )}
     </View>
   );
 }
 
 const Styles = StyleSheet.create({
+  principalContainer: {
+    flex: 1,
+    backgroundColor: "#3b3a3a",
+  },
   perfil: {
     backgroundColor: "#3b3a3a",
     height: 500,
@@ -242,6 +251,23 @@ const Styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  notLoggedView: {
+    flexGrow: 0.9,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttons: {
+    shadowColor: "#000",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.8,
+    shadowRadius: 3,
+    elevation: 5,
+    backgroundColor: "#77bf02",
+    width: 150,
+    padding: 5,
+    alignItems: "center",
+    margin: 10,
   },
 });
 

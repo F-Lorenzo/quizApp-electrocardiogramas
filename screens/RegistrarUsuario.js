@@ -39,7 +39,7 @@ function RegistrarUsuario() {
     <>
       <Header />
       <View style={Styles.container}>
-        <ScrollView>
+        <ScrollView contentContainerStyle={Styles.scrollView}>
           <View style={Styles.perfil}>
             <View style={Styles.perfilHeader}>
               <Image style={Styles.imagePerfil} source={usuario} />

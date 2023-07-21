@@ -22,42 +22,18 @@ const Stack = createNativeStackNavigator();
 function MyStack() {
   return (
     <Stack.Navigator initialRouteName="Inicio">
-      <Stack.Screen
-        name="Inicio"
-        component={Inicio}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Estadisticas"
-        component={Estadisticas}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Perfil"
-        component={Perfil}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Inicio" component={Inicio} options={{ headerShown: false }} />
+      <Stack.Screen name="Estadisticas" component={Estadisticas} options={{ headerShown: false }} />
+      <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }} />
       <Stack.Screen
         name="Registrar"
         component={RegistrarUsuario}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
-      <Stack.Screen
-        name="Menu"
-        component={Menu}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Manual"
-        component={Manual}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+      <Stack.Screen name="Manual" component={Manual} options={{ headerShown: false }} />
       <Stack.Screen
         name="InterpretacionElectro"
         component={InterpretacionElectro}
