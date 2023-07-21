@@ -14,6 +14,8 @@ import Inicio from "./screens/Inicio";
 import Manual from "./screens/Manual";
 import Perfil from "./screens/Perfil";
 import Estadisticas from "./screens/Estadisticas";
+import RegistrarUsuario from "./screens/RegistrarUsuario";
+import Login from "./screens/Login";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +35,16 @@ function MyStack() {
       <Stack.Screen
         name="Perfil"
         component={Perfil}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Registrar"
+        component={RegistrarUsuario}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
         options={{ headerShown: false }}
       />
 
