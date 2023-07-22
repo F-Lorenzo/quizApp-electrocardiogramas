@@ -16,6 +16,11 @@ import usuario from "../assets/images/usuario.png";
 function RegistrarUsuario() {
   const [fontLoaded, setFontLoaded] = useState(false);
 
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   useEffect(() => {
     const loadFont = async () => {
       await Font.loadAsync({
@@ -35,6 +40,8 @@ function RegistrarUsuario() {
     return <Text> font doesn't charge </Text>;
   }
 
+  const registrarse = () => {};
+
   return (
     <>
       <Header />
@@ -49,22 +56,30 @@ function RegistrarUsuario() {
             <View style={Styles.datos}>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>Nombre</Text>
-                <TextInput style={Styles.input}></TextInput>
+                <TextInput
+                  style={Styles.input}
+                  onChangeText={(nombre) => setNombre(nombre)}></TextInput>
               </View>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>Apellido</Text>
-                <TextInput style={Styles.input}></TextInput>
+                <TextInput
+                  style={Styles.input}
+                  onChangeText={(apellido) => setApellido(apellido)}></TextInput>
               </View>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>E-Mail</Text>
-                <TextInput style={Styles.input}></TextInput>
+                <TextInput
+                  style={Styles.input}
+                  onChangeText={(email) => setEmail(email)}></TextInput>
               </View>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>Contraseña</Text>
-                <TextInput style={Styles.input}></TextInput>
+                <TextInput
+                  style={Styles.input}
+                  onChangeText={(password) => setPassword(password)}></TextInput>
               </View>
             </View>
-            <TouchableOpacity style={Styles.botonRegistrar}>
+            <TouchableOpacity style={Styles.botonRegistrar} onPress={registrarse}>
               <Text style={Styles.textoBoton}>REGISTRARSE</Text>
             </TouchableOpacity>
           </View>
