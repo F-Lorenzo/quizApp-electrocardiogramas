@@ -1,12 +1,23 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, updateDoc } from "firebase/firestore";
+import { addDoc, getDoc, getFirestore, updateDoc, doc, collection } from "firebase/firestore";
+import { app, auth } from "../../config/firebase.config";
+import { UserModel } from "../../common/models/user.model";
 
-export const login = (email, pwd) => {
+const db = getFirestore(app);
+
+export const authenticate = (email, pwd) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const authenticated = await signInWithEmailAndPassword(email, pwd);
+      const authenticated = await signInWithEmailAndPassword(auth, email, pwd);
       if (authenticated.user) {
-        resolve(true);
+        const userRef = doc(db, `Users/${authenticated.user.uid}`);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          resolve(userSnap.data());
+        } else {
+          resolve(null);
+        }
       }
     } catch (error) {
       reject(error);
@@ -14,14 +25,14 @@ export const login = (email, pwd) => {
   });
 };
 
-export const register = (email, pwd, user) => {
+export const createAccount = (email, pwd, user) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const authenticated = await createUserWithEmailAndPassword(email, pwd);
+      const authenticated = await createUserWithEmailAndPassword(auth, email, pwd);
       if (authenticated.user) {
-        const createdUserInfo = createExtraInformation(user);
+        const createdUserInfo = await createExtraInformation(user);
         if (createdUserInfo) {
-          resolve(true);
+          resolve(authenticated.user.uid);
         }
       }
     } catch (error) {
@@ -51,7 +62,7 @@ export const update = (user) => {
 const createExtraInformation = (user) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const userSnapshot = await addDoc("Users", {
+      const userSnapshot = await addDoc(collection(db, "Users"), {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
