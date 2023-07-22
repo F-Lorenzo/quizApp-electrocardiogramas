@@ -9,15 +9,22 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import Header from "../components/Header";
 import usuario from "../assets/images/usuario.png";
+import { createAccount } from "../api/services/user.service";
+import { UserModel } from "../common/models/user.model";
+import { UserTypes } from "../common/utils/userType.enum";
+import store from "../redux/store";
+import { updateUser } from "../redux/reducers/user.reducer";
 
 function RegistrarUsuario() {
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [creatingAcc, setCreatingAcc] = useState(false);
 
-  const [nombre, setNombre] = useState("");
-  const [apellido, setApellido] = useState("");
+  const [firstName, setFirstname] = useState("");
+  const [lastName, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -40,7 +47,29 @@ function RegistrarUsuario() {
     return <Text> font doesn't charge </Text>;
   }
 
-  const registrarse = () => {};
+  const register = async () => {
+    try {
+      if (firstName.length && lastName.length && email.length && password.length) {
+        setCreatingAcc(true);
+        const newuser = {
+          id: "",
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          type: UserTypes.USUARIO,
+        };
+        const userCreated = await createAccount(email, password, newuser);
+        if (userCreated) {
+          newuser.id = userCreated;
+          store.dispatch(updateUser(newuser));
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setCreatingAcc(false);
+    }
+  };
 
   return (
     <>
@@ -51,20 +80,20 @@ function RegistrarUsuario() {
             <View style={Styles.perfilHeader}>
               <Image style={Styles.imagePerfil} source={usuario} />
               <View style={Styles.linea}></View>
-              <Text style={Styles.texto}>REGISTRARSE</Text>
+              <Text style={Styles.texto}>REGISTRAR NUEVA CUENTA</Text>
             </View>
             <View style={Styles.datos}>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>Nombre</Text>
                 <TextInput
                   style={Styles.input}
-                  onChangeText={(nombre) => setNombre(nombre)}></TextInput>
+                  onChangeText={(firstName) => setFirstname(firstName)}></TextInput>
               </View>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>Apellido</Text>
                 <TextInput
                   style={Styles.input}
-                  onChangeText={(apellido) => setApellido(apellido)}></TextInput>
+                  onChangeText={(lastName) => setLastname(lastName)}></TextInput>
               </View>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>E-Mail</Text>
@@ -79,8 +108,13 @@ function RegistrarUsuario() {
                   onChangeText={(password) => setPassword(password)}></TextInput>
               </View>
             </View>
-            <TouchableOpacity style={Styles.botonRegistrar} onPress={registrarse}>
-              <Text style={Styles.textoBoton}>REGISTRARSE</Text>
+            <TouchableOpacity
+              style={Styles.botonRegistrar}
+              onPress={register}
+              disabled={creatingAcc}>
+              <Text style={Styles.textoBoton}>
+                {creatingAcc ? <ActivityIndicator color="white" /> : "REGISTRAR"}
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

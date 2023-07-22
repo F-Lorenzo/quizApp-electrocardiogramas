@@ -12,6 +12,9 @@ import {
 } from "react-native";
 import Header from "../components/Header";
 import usuario from "../assets/images/usuario.png";
+import { authenticate } from "../api/services/user.service";
+import store from "../redux/store";
+import { updateUser } from "../redux/reducers/user.reducer";
 
 function Login() {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -38,7 +41,19 @@ function Login() {
     return <Text> font doesn't charge </Text>;
   }
 
-  const login = () => {};
+  const login = async () => {
+    try {
+      const userAuthenticated = await authenticate(email, password);
+      if (userAuthenticated) {
+        store.dispatch(updateUser(userAuthenticated));
+        console.log(userAuthenticated);
+      } else {
+        console.log("user information could not be found");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
