@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Menu from "./screens/Menu";
@@ -18,6 +18,10 @@ import RegistrarUsuario from "./screens/RegistrarUsuario";
 import Login from "./screens/Login";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import { auth } from "./config/firebase.config";
+import { findUserById } from "./api/services/user.service";
+import { updateUser } from "./redux/reducers/user.reducer";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 const Stack = createNativeStackNavigator();
 
@@ -81,11 +85,25 @@ function MyStack() {
 }
 
 export default function App() {
+  useEffect(() => {
+    auth.onAuthStateChanged(async (userSigned) => {
+      if (userSigned) {
+        const tokenResult = await userSigned.getIdTokenResult();
+        if (tokenResult.token) {
+          const user = await findUserById(userSigned.uid);
+          store.dispatch(updateUser(user));
+        }
+      }
+    });
+  }, []);
+
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <MyStack />
-      </NavigationContainer>
-    </Provider>
+    <RootSiblingParent>
+      <Provider store={store}>
+        <NavigationContainer>
+          <MyStack />
+        </NavigationContainer>
+      </Provider>
+    </RootSiblingParent>
   );
 }

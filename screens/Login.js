@@ -9,15 +9,18 @@ import {
   StyleSheet,
   ScrollView,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import Header from "../components/Header";
 import usuario from "../assets/images/usuario.png";
 import { authenticate } from "../api/services/user.service";
 import store from "../redux/store";
 import { updateUser } from "../redux/reducers/user.reducer";
+import Toast from "react-native-root-toast";
 
-function Login() {
+function Login({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -43,15 +46,46 @@ function Login() {
 
   const login = async () => {
     try {
-      const userAuthenticated = await authenticate(email, password);
-      if (userAuthenticated) {
-        store.dispatch(updateUser(userAuthenticated));
-        console.log(userAuthenticated);
-      } else {
-        console.log("user information could not be found");
+      if (email.length && password.length) {
+        setLoading(true);
+        const userAuthenticated = await authenticate(email, password);
+        if (userAuthenticated) {
+          store.dispatch(updateUser(userAuthenticated));
+          Toast.show("Conectado", {
+            duration: 1000,
+            position: 50,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            opacity: 1,
+            backgroundColor: "#15803d",
+            onHidden: () => navigation.navigate("Inicio"),
+          });
+        } else {
+          Toast.show("No se ha encontrado la información del usuario", {
+            duration: Toast.durations.SHORT,
+            position: 50,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            opacity: 1,
+            backgroundColor: "#ef4444",
+          });
+        }
       }
     } catch (error) {
+      Toast.show("No se encontró un usuario con esas credenciales", {
+        duration: Toast.durations.SHORT,
+        position: 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        opacity: 1,
+        backgroundColor: "#ef4444",
+      });
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,8 +114,10 @@ function Login() {
                   onChangeText={(password) => setPassword(password)}></TextInput>
               </View>
             </View>
-            <TouchableOpacity style={Styles.botonLogin} onPress={login}>
-              <Text style={Styles.textoBoton}>INICIAR SESIÓN</Text>
+            <TouchableOpacity style={Styles.botonLogin} onPress={login} disabled={loading}>
+              <Text style={Styles.textoBoton}>
+                {loading ? <ActivityIndicator /> : "INICIAR SESIÓN"}
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

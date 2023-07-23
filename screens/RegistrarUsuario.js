@@ -14,10 +14,10 @@ import {
 import Header from "../components/Header";
 import usuario from "../assets/images/usuario.png";
 import { createAccount } from "../api/services/user.service";
-import { UserModel } from "../common/models/user.model";
 import { UserTypes } from "../common/utils/userType.enum";
 import store from "../redux/store";
 import { updateUser } from "../redux/reducers/user.reducer";
+import Toast from "react-native-root-toast";
 
 function RegistrarUsuario() {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -47,7 +47,7 @@ function RegistrarUsuario() {
     return <Text> font doesn't charge </Text>;
   }
 
-  const register = async () => {
+  const register = async ({ navigation }) => {
     try {
       if (firstName.length && lastName.length && email.length && password.length) {
         setCreatingAcc(true);
@@ -62,6 +62,16 @@ function RegistrarUsuario() {
         if (userCreated) {
           newuser.id = userCreated;
           store.dispatch(updateUser(newuser));
+          Toast.show("Cuenta creada con éxito", {
+            duration: Toast.durations.SHORT,
+            position: 50,
+            shadow: true,
+            animation: true,
+            hideOnPress: true,
+            opacity: 1,
+            backgroundColor: "#15803d",
+            onHidden: () => navigation.navigate("Inicio"),
+          });
         }
       }
     } catch (error) {

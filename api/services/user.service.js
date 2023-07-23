@@ -1,7 +1,18 @@
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, getDoc, getFirestore, updateDoc, doc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  getDoc,
+  getFirestore,
+  updateDoc,
+  doc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { app, auth } from "../../config/firebase.config";
-import { UserModel } from "../../common/models/user.model";
+import store from "../../redux/store";
+import { updateUser } from "../../redux/reducers/user.reducer";
 
 const db = getFirestore(app);
 
@@ -10,12 +21,12 @@ export const authenticate = (email, pwd) => {
     try {
       const authenticated = await signInWithEmailAndPassword(auth, email, pwd);
       if (authenticated.user) {
-        const userRef = doc(db, `Users/${authenticated.user.uid}`);
-        const userSnap = await getDoc(userRef);
+        const user = findUserById(authenticated.user.uid);
 
-        if (userSnap.exists()) {
-          resolve(userSnap.data());
+        if (user) {
+          resolve(user);
         } else {
+          await logout();
           resolve(null);
         }
       }
@@ -30,6 +41,7 @@ export const createAccount = (email, pwd, user) => {
     try {
       const authenticated = await createUserWithEmailAndPassword(auth, email, pwd);
       if (authenticated.user) {
+        user.id = authenticated.user.uid;
         const createdUserInfo = await createExtraInformation(user);
         if (createdUserInfo) {
           resolve(authenticated.user.uid);
@@ -63,6 +75,7 @@ const createExtraInformation = (user) => {
   return new Promise(async (resolve, reject) => {
     try {
       const userSnapshot = await addDoc(collection(db, "Users"), {
+        id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
@@ -72,6 +85,35 @@ const createExtraInformation = (user) => {
       if (userSnapshot.id) {
         resolve(true);
       }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const findUserById = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const userDoc = query(collection(db, "Users"), where("id", "==", id));
+      const userSnap = await getDocs(userDoc);
+
+      if (userSnap.docs.length) {
+        resolve(userSnap.docs[0].data());
+      } else {
+        resolve(null);
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+export const logout = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await auth.signOut();
+      store.dispatch(updateUser(null));
+      resolve(true);
     } catch (error) {
       reject(error);
     }

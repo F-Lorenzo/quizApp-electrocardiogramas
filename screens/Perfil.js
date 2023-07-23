@@ -19,11 +19,12 @@ import MultipleChoice from "../assets/images/multiple-choice.png";
 import concideracionesClinicas from "../assets/images/consideraciones_clinicas.png";
 import ejerciciosConcideraciones from "../db/ejerciciosTest.json";
 import { useSelector } from "react-redux";
+import { AntDesign } from "@expo/vector-icons";
+import { logout } from "../api/services/user.service";
 
 function Perfil({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
   const user = useSelector((state) => state.user);
-  console.log(user);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -44,12 +45,34 @@ function Perfil({ navigation }) {
     return <Text> font don't charge</Text>;
   }
 
+  const signOut = async () => {
+    try {
+      await logout();
+      navigation.navigate("Inicio");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={Styles.principalContainer}>
       <Header />
       {user ? (
         <ScrollView>
           <View style={Styles.perfil}>
+            <View
+              style={{
+                flex: 1,
+                width: "100%",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+              }}>
+              <TouchableOpacity onPress={signOut}>
+                <Text style={Styles.textoSalir}>
+                  <AntDesign name="logout" size={13} color="white" /> Cerrar sesión
+                </Text>
+              </TouchableOpacity>
+            </View>
             <View style={Styles.perfilHeader}>
               <Image style={Styles.imagePerfil} source={usuario} />
               <View style={Styles.linea}></View>
@@ -58,23 +81,25 @@ function Perfil({ navigation }) {
             <View style={Styles.datos}>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>Nombre</Text>
-                <TextInput style={Styles.input}></TextInput>
+                <TextInput style={Styles.input} value={user.firstName}></TextInput>
               </View>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>Apellido</Text>
-                <TextInput style={Styles.input}></TextInput>
+                <TextInput style={Styles.input} value={user.lastName}></TextInput>
               </View>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>E-Mail</Text>
-                <TextInput style={Styles.input}></TextInput>
+                <TextInput style={Styles.input} value={user.email}></TextInput>
               </View>
               <View style={Styles.celdas}>
                 <Text style={Styles.label}>Contraseña</Text>
-                <TextInput style={Styles.input}></TextInput>
+                <TouchableOpacity style={Styles.botonModificar}>
+                  <Text style={Styles.textoBoton}>MODIFICAR</Text>
+                </TouchableOpacity>
               </View>
             </View>
             <TouchableOpacity style={Styles.botonModificar}>
-              <Text style={Styles.textoBoton}>MODIFICAR DATOS</Text>
+              <Text style={Styles.textoBoton}>CONFIRMAR</Text>
             </TouchableOpacity>
           </View>
           <View style={Styles.estadisticas}>
@@ -167,6 +192,7 @@ const Styles = StyleSheet.create({
     backgroundColor: "#3b3a3a",
     height: 500,
     alignItems: "center",
+    paddingBottom: 10,
   },
   perfilHeader: {
     justifyContent: "center",
@@ -186,6 +212,12 @@ const Styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "MontserratRegular",
     fontSize: 12,
+  },
+  textoSalir: {
+    color: "#fff",
+    fontFamily: "MontserratRegular",
+    fontSize: 12,
+    paddingRight: 10,
   },
   datos: {
     justifyContent: "center",
