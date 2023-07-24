@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
-import {
-  Montserrat_400Regular,
-  Montserrat_500Medium,
-} from "@expo-google-fonts/montserrat";
+import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import LogoApp from "../assets/images/LogoApp.png";
 import usuario from "../assets/images/usuario.png";
 import manual from "../assets/images/manual.png";
 import actividades from "../assets/images/actividades.png";
+import { useSelector } from "react-redux";
+import Toast from "react-native-root-toast";
 
 function Inicio({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -32,41 +32,46 @@ function Inicio({ navigation }) {
     return <Text> font don't charge</Text>;
   }
 
+  const handleActivities = () => {
+    try {
+      if (user) {
+        navigation.navigate("Menu");
+      } else {
+        Toast.show("Para navegar a las actividades, debes iniciar sesión o registrar una cuenta", {
+          duration: Toast.durations.LONG,
+          position: 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          backgroundColor: "#ef4444",
+          onShow: () => navigation.navigate("Perfil"),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View style={{ flex: 1, flexDirection: "column" }}>
       <View style={Styles.header}>
         <Image style={Styles.imageHeader} source={LogoApp} />
         <View>
-          <Text style={{ fontFamily: "MontserratMedium", fontSize: 24 }}>
-            ECG STUDIO
-          </Text>
-          <Text style={{ fontFamily: "MontserratRegular" }}>
-            MANUAL INTERACTIVO{" "}
-          </Text>
-          <Text style={{ fontFamily: "MontserratRegular" }}>
-            DE ELECTROCARDIOGRAFIA
-          </Text>
+          <Text style={{ fontFamily: "MontserratMedium", fontSize: 24 }}>ECG STUDIO</Text>
+          <Text style={{ fontFamily: "MontserratRegular" }}>MANUAL INTERACTIVO </Text>
+          <Text style={{ fontFamily: "MontserratRegular" }}>DE ELECTROCARDIOGRAFIA</Text>
         </View>
       </View>
-      <TouchableOpacity
-        style={Styles.perfil}
-        onPress={() => navigation.navigate("Perfil")}
-      >
+      <TouchableOpacity style={Styles.perfil} onPress={() => navigation.navigate("Perfil")}>
         <Image style={Styles.imagePerfil} source={usuario} />
       </TouchableOpacity>
       <View style={Styles.container2}>
-        <TouchableOpacity
-          style={Styles.manual}
-          onPress={() => navigation.navigate("Manual")}
-        >
+        <TouchableOpacity style={Styles.manual} onPress={() => navigation.navigate("Manual")}>
           <Image style={Styles.imageManual} source={manual} />
           <View style={Styles.linea}></View>
           <Text style={Styles.manualText}>Manual</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={Styles.actividades}
-          onPress={() => navigation.navigate("Menu")}
-        >
+        <TouchableOpacity style={Styles.actividades} onPress={handleActivities}>
           <Image style={Styles.imageActividades} source={actividades} />
           <View style={Styles.linea}></View>
           <Text style={Styles.actividadesText}>Actividades</Text>

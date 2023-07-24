@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Menu from "./screens/Menu";
@@ -14,38 +14,32 @@ import Inicio from "./screens/Inicio";
 import Manual from "./screens/Manual";
 import Perfil from "./screens/Perfil";
 import Estadisticas from "./screens/Estadisticas";
+import RegistrarUsuario from "./screens/RegistrarUsuario";
+import Login from "./screens/Login";
+import { Provider } from "react-redux";
+import store from "./redux/store";
+import { auth } from "./config/firebase.config";
+import { findUserById } from "./api/services/user.service";
+import { updateUser } from "./redux/reducers/user.reducer";
+import { RootSiblingParent } from "react-native-root-siblings";
 
 const Stack = createNativeStackNavigator();
 
 function MyStack() {
   return (
     <Stack.Navigator initialRouteName="Inicio">
+      <Stack.Screen name="Inicio" component={Inicio} options={{ headerShown: false }} />
+      <Stack.Screen name="Estadisticas" component={Estadisticas} options={{ headerShown: false }} />
+      <Stack.Screen name="Perfil" component={Perfil} options={{ headerShown: false }} />
       <Stack.Screen
-        name="Inicio"
-        component={Inicio}
+        name="Registrar"
+        component={RegistrarUsuario}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="Estadisticas"
-        component={Estadisticas}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Perfil"
-        component={Perfil}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
-      <Stack.Screen
-        name="Menu"
-        component={Menu}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Manual"
-        component={Manual}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
+      <Stack.Screen name="Manual" component={Manual} options={{ headerShown: false }} />
       <Stack.Screen
         name="InterpretacionElectro"
         component={InterpretacionElectro}
@@ -91,9 +85,25 @@ function MyStack() {
 }
 
 export default function App() {
+  useEffect(() => {
+    auth.onAuthStateChanged(async (userSigned) => {
+      if (userSigned) {
+        const tokenResult = await userSigned.getIdTokenResult();
+        if (tokenResult.token) {
+          const user = await findUserById(userSigned.uid);
+          store.dispatch(updateUser(user));
+        }
+      }
+    });
+  }, []);
+
   return (
-    <NavigationContainer>
-      <MyStack />
-    </NavigationContainer>
+    <RootSiblingParent>
+      <Provider store={store}>
+        <NavigationContainer>
+          <MyStack />
+        </NavigationContainer>
+      </Provider>
+    </RootSiblingParent>
   );
 }

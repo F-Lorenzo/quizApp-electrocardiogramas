@@ -4,10 +4,7 @@ import LogoApp from "../assets/images/LogoApp.png";
 
 function Header({ navigation }) {
   return (
-    <View
-      onPress={() => navigation.navigate("Inicio")}
-      style={Styles.container}
-    >
+    <View onPress={() => navigation.navigate("Inicio")} style={Styles.container}>
       <Image style={Styles.image} source={LogoApp} />
     </View>
   );
