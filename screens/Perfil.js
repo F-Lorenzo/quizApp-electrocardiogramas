@@ -70,7 +70,7 @@ function Perfil({ navigation }) {
                 padding: 10,
               }}>
               <View>
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity onPress={() => navigation.navigate("Administracion")}>
                   <Text style={Styles.texto}>
                     <MaterialIcons name="admin-panel-settings" size={13} color="white" />{" "}
                     Administración
