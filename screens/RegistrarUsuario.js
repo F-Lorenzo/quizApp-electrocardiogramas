@@ -19,7 +19,7 @@ import store from "../redux/store";
 import { updateUser } from "../redux/reducers/user.reducer";
 import Toast from "react-native-root-toast";
 
-function RegistrarUsuario() {
+function RegistrarUsuario({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
   const [creatingAcc, setCreatingAcc] = useState(false);
 
@@ -47,7 +47,7 @@ function RegistrarUsuario() {
     return <Text> font doesn't charge </Text>;
   }
 
-  const register = async ({ navigation }) => {
+  const register = async () => {
     try {
       if (firstName.length && lastName.length && email.length && password.length) {
         setCreatingAcc(true);
