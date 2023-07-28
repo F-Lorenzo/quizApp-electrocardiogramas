@@ -4,13 +4,13 @@ import { getReactNativePersistence } from "firebase/auth/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAgvfdfqg3JS7eROLmDeLJSBjSZ1WZtxX8",
-  authDomain: "quizapp-electrocardiogramas.firebaseapp.com",
-  projectId: "quizapp-electrocardiogramas",
-  storageBucket: "quizapp-electrocardiogramas.appspot.com",
-  messagingSenderId: "748239632161",
-  appId: "1:748239632161:web:6e1a4008a7df9b03833060",
-  measurementId: "G-TVBE0F6ZM4",
+  apiKey: "AIzaSyBlKHBKTzSDP_GZTWSDmSlrORET793N5GY",
+  authDomain: "quizapp-ca661.firebaseapp.com",
+  projectId: "quizapp-ca661",
+  storageBucket: "quizapp-ca661.appspot.com",
+  messagingSenderId: "213854345850",
+  appId: "1:213854345850:web:3ffe141a3c1d7ded3c79c3",
+  measurementId: "G-TCMW7Z59W4",
 };
 
 const app = initializeApp(firebaseConfig);
