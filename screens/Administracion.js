@@ -3,9 +3,13 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Header from "../components/Header";
 import * as Font from "expo-font";
 import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
+import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-web";
+import { getExercises } from "../api/services/exercise.service";
 
 function Administracion() {
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -20,7 +24,19 @@ function Administracion() {
     };
 
     loadFont();
+
+    loadExercises();
   }, []);
+
+  const loadExercises = async () => {
+    try {
+      const exercises = await getExercises();
+      setExercises(exercises);
+      console.log(exercises);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   if (!fontLoaded) {
     return <Text> font doesn't charge </Text>;
@@ -35,9 +51,10 @@ function Administracion() {
         </View>
 
         <View style={Styles.table}>
-          <ScrollView horizontal={true}>
+          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View>
               <View style={Styles.tableColumns}>
+                <View style={Styles.unusedColumn}></View>
                 <View style={Styles.column}>
                   <Text style={Styles.textColumn}>NOMBRE</Text>
                 </View>
@@ -45,40 +62,44 @@ function Administracion() {
                   <Text style={Styles.textColumn}>TIPO</Text>
                 </View>
                 <View style={Styles.column}>
-                  <Text style={Styles.textColumn}>NOMBRE</Text>
+                  <Text style={Styles.textColumn}>TIPO</Text>
                 </View>
                 <View style={Styles.column}>
                   <Text style={Styles.textColumn}>TIPO</Text>
                 </View>
               </View>
 
-              <View style={Styles.rowContainer}>
-                <View style={Styles.row}>
-                  <View style={Styles.field}>
-                    <Text style={Styles.textField}>Repolarización precoz</Text>
-                  </View>
-
-                  <View style={Styles.field}>
-                    <Text style={Styles.textField}>Consideraciones Clinicas</Text>
-                  </View>
-
-                  <View style={Styles.field}>
-                    <Text style={Styles.textField}>Repolarización precoz</Text>
-                  </View>
-
-                  <View style={Styles.field}>
-                    <Text style={Styles.textField}>Consideraciones Clinicas</Text>
+              {exercises.map((exercise) => (
+                <View style={Styles.rowContainer}>
+                  <View style={Styles.row}>
+                    <View style={Styles.actionsfield}>
+                      <View style={Styles.actionButtons}>
+                        <FontAwesome style={Styles.showButton} name="eye" size={15} color="white" />
+                        <FontAwesome5
+                          style={Styles.editButton}
+                          name="edit"
+                          size={15}
+                          color="white"
+                        />
+                      </View>
+                    </View>
+                    <View style={Styles.field}>
+                      <Text style={Styles.textField}>{exercise.name}</Text>
+                    </View>
+                    <View style={Styles.field}>
+                      <Text style={Styles.textField}>{exercise.type}</Text>
+                    </View>
+                    <View style={Styles.field}>
+                      <Text style={Styles.textField}>Consideraciones Clinicas</Text>
+                    </View>
+                    <View style={Styles.field}>
+                      <Text style={Styles.textField}>Consideraciones Clinicas</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
+              ))}
             </View>
           </ScrollView>
-          <View style={Styles.actionsfield}>
-            <View style={Styles.actionButtons}>
-              <Text style={Styles.showButton}>Ver</Text>
-              <Text style={Styles.editButton}>Editar</Text>
-            </View>
-          </View>
         </View>
       </View>
     </>
@@ -111,7 +132,7 @@ const Styles = StyleSheet.create({
     paddingBottom: 10,
   },
   column: {
-    width: 125,
+    width: "22%",
     alignItems: "center",
   },
   textColumn: {
@@ -126,7 +147,7 @@ const Styles = StyleSheet.create({
     flexDirection: "row",
   },
   field: {
-    width: 125,
+    width: "22%",
     alignItems: "center",
     paddingVertical: 5,
     justifyContent: "center",
@@ -136,27 +157,27 @@ const Styles = StyleSheet.create({
     textAlign: "center",
   },
   actionsfield: {
-    width: 125,
+    width: "12%",
     alignItems: "center",
-    justifyContent: "flex-end",
-    marginBottom: 14,
+    justifyContent: "center",
   },
   actionColumn: {
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
   },
   actionButtons: {
     flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
+    alignItems: "center",
+    justifyContent: "center",
   },
   showButton: {
-    color: "#fff",
     marginRight: 8,
   },
   editButton: {
-    color: "#fff",
     marginLeft: 8,
+  },
+  unusedColumn: {
+    width: "12%",
   },
 });
 
