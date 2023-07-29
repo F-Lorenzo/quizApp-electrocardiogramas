@@ -37,7 +37,6 @@ function MyStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-
       <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
       <Stack.Screen name="Manual" component={Manual} options={{ headerShown: false }} />
       <Stack.Screen

@@ -19,7 +19,7 @@ import MultipleChoice from "../assets/images/multiple-choice.png";
 import concideracionesClinicas from "../assets/images/consideraciones_clinicas.png";
 import ejerciciosConcideraciones from "../db/ejerciciosTest.json";
 import { useSelector } from "react-redux";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import { logout } from "../api/services/user.service";
 
 function Perfil({ navigation }) {
@@ -63,15 +63,27 @@ function Perfil({ navigation }) {
             <View
               style={{
                 flex: 1,
+                flexDirection: "row",
                 width: "100%",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
+                justifyContent: "space-between",
+                marginTop: 10,
+                padding: 10,
               }}>
-              <TouchableOpacity onPress={signOut}>
-                <Text style={Styles.textoSalir}>
-                  <AntDesign name="logout" size={13} color="white" /> Cerrar sesión
-                </Text>
-              </TouchableOpacity>
+              <View>
+                <TouchableOpacity onPress={() => navigation.navigate("Administracion")}>
+                  <Text style={Styles.texto}>
+                    <MaterialIcons name="admin-panel-settings" size={13} color="white" />{" "}
+                    Administración
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity onPress={signOut}>
+                  <Text style={Styles.texto}>
+                    <AntDesign name="logout" size={13} color="white" /> Cerrar sesión
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
             <View style={Styles.perfilHeader}>
               <Image style={Styles.imagePerfil} source={usuario} />
@@ -212,12 +224,6 @@ const Styles = StyleSheet.create({
     color: "#fff",
     fontFamily: "MontserratRegular",
     fontSize: 12,
-  },
-  textoSalir: {
-    color: "#fff",
-    fontFamily: "MontserratRegular",
-    fontSize: 12,
-    paddingRight: 10,
   },
   datos: {
     justifyContent: "center",
