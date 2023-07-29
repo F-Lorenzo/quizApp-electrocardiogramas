@@ -2,6 +2,7 @@ import { getFirestore, collection, query, where, getDocs } from "firebase/firest
 import { app } from "../../config/firebase.config";
 
 const db = getFirestore(app);
+const exercises = [];
 
 export const getExercises = () => {
   return new Promise(async (resolve, reject) => {
@@ -10,12 +11,9 @@ export const getExercises = () => {
       const exerciseSnap = await getDocs(exerciseDoc);
 
       if (exerciseSnap.docs.length) {
-        const exercises = [];
         exerciseSnap.docs.forEach((element) => exercises.push(element.data()));
-        resolve(exercises);
-      } else {
-        resolve(null);
       }
+      resolve(exercises);
     } catch (error) {
       reject(error);
     }
