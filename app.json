@@ -14,9 +14,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["assets/*"],
+    "assetBundlePatterns": [
+      "assets/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.quizApp"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +33,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4e286c5e-c942-4b25-ba92-ca62bc697e59"
+        "projectId": "5e961575-58a6-41be-921e-d97c415d0970"
       }
     }
   }
