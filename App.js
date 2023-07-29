@@ -16,7 +16,6 @@ import Perfil from "./screens/Perfil";
 import Estadisticas from "./screens/Estadisticas";
 import RegistrarUsuario from "./screens/RegistrarUsuario";
 import Login from "./screens/Login";
-import Administracion from "./screens/Administracion";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import { auth } from "./config/firebase.config";
@@ -38,11 +37,6 @@ function MyStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-      <Stack.Screen
-        name="Administracion"
-        component={Administracion}
-        options={{ headerShown: false }}
-      />
       <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
       <Stack.Screen name="Manual" component={Manual} options={{ headerShown: false }} />
       <Stack.Screen
