@@ -56,7 +56,7 @@ function RegistrarUsuario({ navigation }) {
           firstName: firstName,
           lastName: lastName,
           email: email,
-          type: UserTypes.USUARIO,
+          password: password,
         };
         const userCreated = await createAccount(email, password, newuser);
         if (userCreated) {

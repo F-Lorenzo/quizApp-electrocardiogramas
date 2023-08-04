@@ -28,6 +28,9 @@ function Inicio({ navigation }) {
     loadFont();
   }, []);
 
+  useEffect(() => {
+    console.log("User store is", user);
+  }, [user]);
   if (!fontLoaded) {
     return <Text> font don't charge</Text>;
   }

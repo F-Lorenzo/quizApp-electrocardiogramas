@@ -14,8 +14,6 @@ import {
 import Header from "../components/Header";
 import usuario from "../assets/images/usuario.png";
 import { authenticate } from "../api/services/user.service";
-import store from "../redux/store";
-import { updateUser } from "../redux/reducers/user.reducer";
 import Toast from "react-native-root-toast";
 
 function Login({ navigation }) {
@@ -50,7 +48,6 @@ function Login({ navigation }) {
         setLoading(true);
         const userAuthenticated = await authenticate(email, password);
         if (userAuthenticated) {
-          store.dispatch(updateUser(userAuthenticated));
           Toast.show("Conectado", {
             duration: 1000,
             position: 50,

@@ -17,11 +17,11 @@ import Estadisticas from "./screens/Estadisticas";
 import RegistrarUsuario from "./screens/RegistrarUsuario";
 import Login from "./screens/Login";
 import { Provider } from "react-redux";
-import store from "./redux/store";
 import { auth } from "./config/firebase.config";
 import { findUserById } from "./api/services/user.service";
 import { updateUser } from "./redux/reducers/user.reducer";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { store } from "./store";
 
 const Stack = createNativeStackNavigator();
 
@@ -97,12 +97,12 @@ export default function App() {
   }, []);
 
   return (
-    <RootSiblingParent>
-      <Provider store={store}>
+    <Provider store={store}>
+      <RootSiblingParent>
         <NavigationContainer>
           <MyStack />
         </NavigationContainer>
-      </Provider>
-    </RootSiblingParent>
+      </RootSiblingParent>
+    </Provider>
   );
 }
