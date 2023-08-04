@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import ejerciciosTest from "../db/ejerciciosTest.json";
 import Ejercicios from "../assets/images/ejercicios.png";
 import actividades from "../assets/images/actividades.png";
@@ -24,6 +17,7 @@ import destacadosActivo from "../assets/images/ejercicios-destacados-activo.png"
 import resueltosActivo from "../assets/images/ejercicios-ok-activo.png";
 import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
+import { getExercises } from "../api/services/exercise.service";
 
 function MultipleChoice({ navigation }) {
   const [todos, setTodos] = useState(true);
@@ -32,8 +26,18 @@ function MultipleChoice({ navigation }) {
   const [destacados, setDestacados] = useState(false);
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
-  const [ejercicios, setEjercicios] = useState(ejerciciosTest);
-  const [ejerciciosAux, setEjerciciosAux ] = useState(ejerciciosTest);
+  const [ejercicios, setEjercicios] = useState([]);
+  const [filteredExercices, setFilteredExercices] = useState([]);
+
+  useEffect(() => {
+    loadExercices();
+  }, []);
+
+  const loadExercices = async () => {
+    const exercises = await getExercises("Choice");
+    setEjercicios(exercises);
+    setFilteredExercices(exercises);
+  };
 
   const resetFilters = () => {
     setTodos(false);
@@ -42,32 +46,24 @@ function MultipleChoice({ navigation }) {
     setDestacados(false);
     setResueltos(false);
     setMalResueltos(false);
-  }
+  };
 
   const activeHandlerTodos = () => {
     resetFilters();
     setTodos(!todos);
     if (todos === false) {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
-      setEjerciciosAux(ejercicio);
+      setFilteredExercices(ejercicios);
     } else {
-      let ejercicio = [];
-      setEjercicios(ejercicio);
-      setEjerciciosAux(ejercicio);
+      setFilteredExercices([]);
     }
   };
   const activeHandlerNoRealizados = () => {
     resetFilters();
     setNoRealizados(!noRealizados);
     if (noRealizados === false) {
-      let ejercicio = ejerciciosAux.filter(
-        (ejercicio) => ejercicio.realizado === false
-      );
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === false);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -75,13 +71,9 @@ function MultipleChoice({ navigation }) {
     resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejerciciosAux.filter(
-        (ejercicio) => ejercicio.realizado === true
-      );
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -89,13 +81,9 @@ function MultipleChoice({ navigation }) {
     resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejerciciosAux.filter(
-        (ejercicio) => ejercicio.destacado === true
-      );
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -103,13 +91,9 @@ function MultipleChoice({ navigation }) {
     resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejerciciosAux.filter(
-        (ejercicio) => ejercicio.bienResuelto === true
-      );
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -117,13 +101,9 @@ function MultipleChoice({ navigation }) {
     resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejerciciosAux.filter(
-        (ejercicio) => ejercicio.malResuelto === true
-      );
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -134,13 +114,9 @@ function MultipleChoice({ navigation }) {
         flexDirection: "column",
         height: "100%",
         backgroundColor: "#616161",
-      }}
-    >
+      }}>
       <Header />
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Menu")}
-        style={Styles.backToMenu}
-      >
+      <TouchableOpacity onPress={() => navigation.navigate("Menu")} style={Styles.backToMenu}>
         <Image style={Styles.imageActividades} source={actividades} />
       </TouchableOpacity>
       <View
@@ -149,68 +125,49 @@ function MultipleChoice({ navigation }) {
           flexDirection: "column",
           height: "80%",
           justifyContent: "center",
-        }}
-      >
+        }}>
         <View style={Styles.title}>
           <Image style={Styles.image} source={multipleChoice} />
           <Text style={Styles.text}>Multiple choice</Text>
         </View>
         <View style={Styles.filtersContainer}>
           <View style={Styles.typeFilters}>
-            <TouchableOpacity
-              onPress={activeHandlerTodos}
-              style={Styles.typeButton}
-            >
+            <TouchableOpacity onPress={activeHandlerTodos} style={Styles.typeButton}>
               {todos === true ? (
                 <Image style={Styles.imagesType} source={todosActivo} />
               ) : (
                 <Image style={Styles.imagesType} source={todosImg} />
               )}
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={activeHandlerNoRealizados}
-              style={Styles.typeButton}
-            >
+            <TouchableOpacity onPress={activeHandlerNoRealizados} style={Styles.typeButton}>
               {noRealizados === true ? (
                 <Image style={Styles.imagesType} source={noRealizadosActivo} />
               ) : (
                 <Image style={Styles.imagesType} source={noRealizadosImg} />
               )}
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={activeHandlerRealizados}
-              style={Styles.typeButton}
-            >
+            <TouchableOpacity onPress={activeHandlerRealizados} style={Styles.typeButton}>
               {realizados === true ? (
                 <Image style={Styles.imagesType} source={realizadosActivo} />
               ) : (
                 <Image style={Styles.imagesType} source={realizadosImg} />
               )}
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={activeHandlerDestacados}
-              style={Styles.typeButton}
-            >
+            <TouchableOpacity onPress={activeHandlerDestacados} style={Styles.typeButton}>
               {destacados === true ? (
                 <Image style={Styles.imagesType} source={destacadosActivo} />
               ) : (
                 <Image style={Styles.imagesType} source={destacadosImg} />
               )}
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={activeHandlerResueltos}
-              style={Styles.typeButton}
-            >
+            <TouchableOpacity onPress={activeHandlerResueltos} style={Styles.typeButton}>
               {resueltos === true ? (
                 <Image style={Styles.imagesType} source={resueltosActivo} />
               ) : (
                 <Image style={Styles.imagesType} source={resueltosImg} />
               )}
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={activeHandlerMalResueltos}
-              style={Styles.typeButton}
-            >
+            <TouchableOpacity onPress={activeHandlerMalResueltos} style={Styles.typeButton}>
               {malResueltos === true ? (
                 <Image style={Styles.imagesType} source={malResueltosImg} />
               ) : (
@@ -225,10 +182,9 @@ function MultipleChoice({ navigation }) {
             marginLeft: 15,
             marginRight: 15,
             backgroundColor: "#3b3a3a",
-          }}
-        >
+          }}>
           <FlatList
-            data={ejercicios}
+            data={filteredExercices}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() =>
@@ -236,8 +192,7 @@ function MultipleChoice({ navigation }) {
                     key: item.key,
                   })
                 }
-                style={Styles.ejerciciosContainer}
-              >
+                style={Styles.ejerciciosContainer}>
                 <Text style={Styles.text}>{item.key}</Text>
                 <TouchableOpacity style={Styles.candado}>
                   <Image style={Styles.imageCandado} source={candado} />
