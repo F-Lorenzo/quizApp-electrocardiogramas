@@ -26,9 +26,8 @@ function ConcideracionesClinicas({ navigation }) {
   const [destacados, setDestacados] = useState(false);
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
-  const [ejercicios, setEjercicios] = useState(ejerciciosTest);
+  const [ejercicios, setEjercicios] = useState([]);
   const [filteredExercices, setFilteredExercices] = useState([]);
-  const [ejerciciosAux, setEjerciciosAux] = useState(ejerciciosTest);
 
   useEffect(() => {
     loadExercices();
@@ -38,7 +37,6 @@ function ConcideracionesClinicas({ navigation }) {
     const exercises = await getExercises("ConsideracionesClinicas");
     setEjercicios(exercises);
     setFilteredExercices(exercises);
-    console.log(ejercicios);
   };
 
   const resetFilters = () => {
@@ -66,8 +64,6 @@ function ConcideracionesClinicas({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === false);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -78,8 +74,6 @@ function ConcideracionesClinicas({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -90,8 +84,6 @@ function ConcideracionesClinicas({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -102,8 +94,6 @@ function ConcideracionesClinicas({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -114,8 +104,6 @@ function ConcideracionesClinicas({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };

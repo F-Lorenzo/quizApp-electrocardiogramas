@@ -27,7 +27,6 @@ function CompleteCasilleros({ navigation }) {
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState([]);
   const [filteredExercices, setFilteredExercices] = useState([]);
-  const [ejerciciosAux, setEjerciciosAux] = useState(ejerciciosTest);
 
   useEffect(() => {
     loadExercices();
@@ -64,8 +63,6 @@ function CompleteCasilleros({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === false);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -76,8 +73,6 @@ function CompleteCasilleros({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -88,8 +83,6 @@ function CompleteCasilleros({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -100,8 +93,6 @@ function CompleteCasilleros({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };
@@ -112,8 +103,6 @@ function CompleteCasilleros({ navigation }) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
       setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      //setEjercicios(ejerciciosAux);
       activeHandlerTodos();
     }
   };

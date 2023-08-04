@@ -36,9 +36,8 @@ function InterpretacionElectro({ navigation }) {
   const [destacados, setDestacados] = useState(false);
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
-  const [ejercicios, setEjercicios] = useState(ejerciciosTest);
+  const [ejercicios, setEjercicios] = useState([]);
   const [filteredExercices, setFilteredExercices] = useState([]);
-  const [ejerciciosAux, setEjerciciosAux] = useState(ejerciciosTest);
   const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
@@ -59,7 +58,6 @@ function InterpretacionElectro({ navigation }) {
     const exercises = await getExercises("Interpretacion");
     setEjercicios(exercises);
     setFilteredExercices(exercises);
-    console.log(ejercicios);
   };
 
   if (!fontLoaded) {
@@ -95,7 +93,6 @@ function InterpretacionElectro({ navigation }) {
     if (!level1) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "1");
       setFilteredExercices(ejercicio);
-      setEjerciciosAux(ejercicio);
     } else {
       activeHandlerTodos();
     }
@@ -107,7 +104,6 @@ function InterpretacionElectro({ navigation }) {
     if (!level2) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "2");
       setFilteredExercices(ejercicio);
-      setEjerciciosAux(ejercicio);
     } else {
       activeHandlerTodos();
     }
@@ -119,7 +115,6 @@ function InterpretacionElectro({ navigation }) {
     if (!level3) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "3");
       setFilteredExercices(ejercicio);
-      setEjerciciosAux(ejercicio);
     } else {
       activeHandlerTodos();
     }
