@@ -24,6 +24,7 @@ import destacadosActivo from "../assets/images/ejercicios-destacados-activo.png"
 import resueltosActivo from "../assets/images/ejercicios-ok-activo.png";
 import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
+import { getExercises } from "../api/services/exercise.service";
 
 function InterpretacionElectro({ navigation }) {
   const [level1, setLevel1] = useState(false);
@@ -36,6 +37,7 @@ function InterpretacionElectro({ navigation }) {
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState(ejerciciosTest);
+  const [filteredExercices, setFilteredExercices] = useState([]);
   const [ejerciciosAux, setEjerciciosAux] = useState(ejerciciosTest);
   const [fontLoaded, setFontLoaded] = useState(false);
 
@@ -54,8 +56,10 @@ function InterpretacionElectro({ navigation }) {
   }, []);
 
   const loadExercices = async () => {
-    const exercices = await getExercises("InterpretacionElectro");
-    console.log(exercices);
+    const exercises = await getExercises("Interpretacion");
+    setEjercicios(exercises);
+    setFilteredExercices(exercises);
+    console.log(ejercicios);
   };
 
   if (!fontLoaded) {
@@ -77,6 +81,7 @@ function InterpretacionElectro({ navigation }) {
   };
 
   const resetFilters = () => {
+    setTodos(false);
     setNoRealizados(false);
     setRealizados(false);
     setDestacados(false);
@@ -88,8 +93,8 @@ function InterpretacionElectro({ navigation }) {
     resetAllFilters();
     setLevel1(!level1);
     if (!level1) {
-      let ejercicio = ejerciciosTest.filter((ejercicio) => ejercicio.nivel === "1");
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "1");
+      setFilteredExercices(ejercicio);
       setEjerciciosAux(ejercicio);
     } else {
       activeHandlerTodos();
@@ -100,8 +105,8 @@ function InterpretacionElectro({ navigation }) {
     resetAllFilters();
     setLevel2(!level2);
     if (!level2) {
-      let ejercicio = ejerciciosTest.filter((ejercicio) => ejercicio.nivel === "2");
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "2");
+      setFilteredExercices(ejercicio);
       setEjerciciosAux(ejercicio);
     } else {
       activeHandlerTodos();
@@ -112,8 +117,8 @@ function InterpretacionElectro({ navigation }) {
     resetAllFilters();
     setLevel3(!level3);
     if (!level3) {
-      let ejercicio = ejerciciosTest.filter((ejercicio) => ejercicio.nivel === "3");
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "3");
+      setFilteredExercices(ejercicio);
       setEjerciciosAux(ejercicio);
     } else {
       activeHandlerTodos();
@@ -124,68 +129,59 @@ function InterpretacionElectro({ navigation }) {
     resetAllFilters();
     setTodos(!todos);
     if (todos === false) {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
-      setEjerciciosAux(ejercicio);
+      setFilteredExercices(ejercicios);
     } else {
-      let ejercicio = [];
-      setEjercicios(ejercicio);
-      setEjerciciosAux(ejercicio);
+      setFilteredExercices([]);
     }
   };
   const activeHandlerNoRealizados = () => {
     resetFilters();
     setNoRealizados(!noRealizados);
     if (noRealizados === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.realizado === false);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === false);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
   const activeHandlerRealizados = () => {
     resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.realizado === true);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
   const activeHandlerDestacados = () => {
     resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.destacado === true);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
   const activeHandlerResueltos = () => {
     resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.bienResuelto === true);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
   const activeHandlerMalResueltos = () => {
     resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.malResuelto === true);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
+      setFilteredExercices(ejercicio);
     } else {
-      //let ejercicio = ejerciciosTest;
-      setEjercicios(ejerciciosAux);
+      activeHandlerTodos();
     }
   };
 
@@ -288,7 +284,7 @@ function InterpretacionElectro({ navigation }) {
             backgroundColor: "#3b3a3a",
           }}>
           <FlatList
-            data={ejercicios}
+            data={filteredExercices}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() =>

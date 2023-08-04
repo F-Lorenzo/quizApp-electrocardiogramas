@@ -17,6 +17,7 @@ import destacadosActivo from "../assets/images/ejercicios-destacados-activo.png"
 import resueltosActivo from "../assets/images/ejercicios-ok-activo.png";
 import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
+import { getExercises } from "../api/services/exercise.service";
 
 function ConcideracionesClinicas({ navigation }) {
   const [todos, setTodos] = useState(true);
@@ -26,6 +27,7 @@ function ConcideracionesClinicas({ navigation }) {
   const [resueltos, setResueltos] = useState(false);
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState(ejerciciosTest);
+  const [filteredExercices, setFilteredExercices] = useState([]);
   const [ejerciciosAux, setEjerciciosAux] = useState(ejerciciosTest);
 
   useEffect(() => {
@@ -33,8 +35,10 @@ function ConcideracionesClinicas({ navigation }) {
   }, []);
 
   const loadExercices = async () => {
-    const exercices = await getExercises("ConsideracionesClinicas");
-    console.log(exercices);
+    const exercises = await getExercises("ConsideracionesClinicas");
+    setEjercicios(exercises);
+    setFilteredExercices(exercises);
+    console.log(ejercicios);
   };
 
   const resetFilters = () => {
@@ -50,21 +54,17 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setTodos(!todos);
     if (todos === false) {
-      let ejercicio = ejerciciosTest;
-      setEjercicios(ejercicio);
-      setEjerciciosAux(ejercicio);
+      setFilteredExercices(ejercicios);
     } else {
-      let ejercicio = [];
-      setEjercicios(ejercicio);
-      setEjerciciosAux(ejercicio);
+      setFilteredExercices([]);
     }
   };
   const activeHandlerNoRealizados = () => {
     resetFilters();
     setNoRealizados(!noRealizados);
     if (noRealizados === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.realizado === false);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === false);
+      setFilteredExercices(ejercicio);
     } else {
       //let ejercicio = ejerciciosTest;
       //setEjercicios(ejerciciosAux);
@@ -75,8 +75,8 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.realizado === true);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
+      setFilteredExercices(ejercicio);
     } else {
       //let ejercicio = ejerciciosTest;
       //setEjercicios(ejerciciosAux);
@@ -87,8 +87,8 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.destacado === true);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
+      setFilteredExercices(ejercicio);
     } else {
       //let ejercicio = ejerciciosTest;
       //setEjercicios(ejerciciosAux);
@@ -99,8 +99,8 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.bienResuelto === true);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
+      setFilteredExercices(ejercicio);
     } else {
       //let ejercicio = ejerciciosTest;
       //setEjercicios(ejerciciosAux);
@@ -111,8 +111,8 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejerciciosAux.filter((ejercicio) => ejercicio.malResuelto === true);
-      setEjercicios(ejercicio);
+      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
+      setFilteredExercices(ejercicio);
     } else {
       //let ejercicio = ejerciciosTest;
       //setEjercicios(ejerciciosAux);
@@ -196,7 +196,7 @@ function ConcideracionesClinicas({ navigation }) {
             backgroundColor: "#3b3a3a",
           }}>
           <FlatList
-            data={ejercicios}
+            data={filteredExercices}
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() =>

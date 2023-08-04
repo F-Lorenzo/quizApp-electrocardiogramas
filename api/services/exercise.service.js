@@ -1,4 +1,4 @@
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import { app } from "../../config/firebase.config";
 
 const db = getFirestore(app);
@@ -6,7 +6,11 @@ const db = getFirestore(app);
 export const getExercises = (exerciceType) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const exerciseDoc = query(collection(db, "Exercises"), where("type", "==", exerciceType));
+      const exerciseDoc = query(
+        collection(db, "Exercises"),
+        where("type", "==", exerciceType),
+        orderBy("key", "asc")
+      );
       const exerciseSnap = await getDocs(exerciseDoc);
 
       const exercises = [];
