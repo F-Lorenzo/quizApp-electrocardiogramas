@@ -18,6 +18,7 @@ import realizadosImg from "../assets/images/ejercicios-realizados.png";
 import destacadosImg from "../assets/images/ejercicios-destacados.png";
 import resueltosImg from "../assets/images/ejercicios-ok.png";
 import malResueltosImg from "../assets/images/ejercicios-mal-hechos.png";
+import malResueltosActivo from "../assets/images/ejercicios-mal-hechos-activo.png";
 import noRealizadosActivo from "../assets/images/ejercicios-sin-realizar-activo.png";
 import realizadosActivo from "../assets/images/ejercicios-realizados-activo.png";
 import destacadosActivo from "../assets/images/ejercicios-destacados-activo.png";
@@ -130,7 +131,7 @@ function InterpretacionElectro({ navigation }) {
     }
   };
   const activeHandlerNoRealizados = () => {
-    resetFilters();
+    resetAllFilters();
     setNoRealizados(!noRealizados);
     if (noRealizados === false) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === false);
@@ -140,7 +141,7 @@ function InterpretacionElectro({ navigation }) {
     }
   };
   const activeHandlerRealizados = () => {
-    resetFilters();
+    resetAllFilters();
     setRealizados(!realizados);
     if (realizados === false) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
@@ -150,7 +151,7 @@ function InterpretacionElectro({ navigation }) {
     }
   };
   const activeHandlerDestacados = () => {
-    resetFilters();
+    resetAllFilters();
     setDestacados(!destacados);
     if (destacados === false) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
@@ -160,7 +161,7 @@ function InterpretacionElectro({ navigation }) {
     }
   };
   const activeHandlerResueltos = () => {
-    resetFilters();
+    resetAllFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
@@ -170,7 +171,7 @@ function InterpretacionElectro({ navigation }) {
     }
   };
   const activeHandlerMalResueltos = () => {
-    resetFilters();
+    resetAllFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
       let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
@@ -264,7 +265,7 @@ function InterpretacionElectro({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity onPress={activeHandlerMalResueltos} style={Styles.typeButton}>
               {malResueltos === true ? (
-                <Image style={Styles.imagesType} source={malResueltosImg} />
+                <Image style={Styles.imagesType} source={malResueltosActivo} />
               ) : (
                 <Image style={Styles.imagesType} source={malResueltosImg} />
               )}
@@ -284,7 +285,7 @@ function InterpretacionElectro({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("PlantillaInterpretacion", {
-                    key: item.key,
+                    item: item,
                   })
                 }
                 style={Styles.ejerciciosContainer}>

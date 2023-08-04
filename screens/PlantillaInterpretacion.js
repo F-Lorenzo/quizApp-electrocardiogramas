@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
-import {
-  Montserrat_400Regular,
-  Montserrat_500Medium,
-} from "@expo-google-fonts/montserrat";
+import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
 import {
   View,
   Text,
@@ -17,23 +14,28 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import ejerciciosTest from "../db/ejerciciosTestInterpretacion.json";
 import ConsignaInterpretacion from "../components/ConsignaInterpretacion";
 import flecha from "../assets/images/flecha-hacia-abajo-para-navegar.png";
-import realizado from "../assets/images/ejercicios-realizados.png";
-import destacado from "../assets/images/ejercicios-destacados.png";
-import correcto from "../assets/images/ejercicios-ok.png";
-import incorrecto from "../assets/images/ejercicios-mal-hechos.png";
+import realizadoImg from "../assets/images/ejercicios-realizados.png";
+import destacadoImg from "../assets/images/ejercicios-destacados.png";
+import correctoImg from "../assets/images/ejercicios-ok.png";
+import incorrectoImg from "../assets/images/ejercicios-mal-hechos.png";
 import realizadoActivo from "../assets/images/ejercicios-realizados-activo.png";
 import destacadoActivo from "../assets/images/ejercicios-destacados-activo.png";
 import correctoActivo from "../assets/images/ejercicios-ok-activo.png";
-// import incorrectoActivo from "../assets/images/ejercicios-mal-hechos.png";
+import incorrectoActivo from "../assets/images/ejercicios-mal-hechos-activo.png";
 import electrocardiogramaTest from "../assets/images/electrocardiogramaTest.png";
 import LogoApp from "../assets/images/LogoApp.png";
 import actividades from "../assets/images/actividades.png";
 import ejercicios from "../assets/images/ejercicios.png";
+import { updateExercise } from "../api/services/exercise.service";
 
 function PlantillaInterpretacion({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
   const [respuesta, setRespuesta] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [realizado, setRealizado] = useState(false);
+  const [destacado, setDestacado] = useState(false);
+  const [bienResuelto, setBienResuelto] = useState(true);
+  const [malResuelto, setMalResuelto] = useState(false);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -56,19 +58,40 @@ function PlantillaInterpretacion({ route, navigation }) {
   if (!fontLoaded) {
     return <Text> font don't charge</Text>;
   }
-  const { key } = route.params;
-  const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === key);
+  const { item } = route.params;
+  // const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === key);
 
-  const handlerRealizado = () => {};
+  const handlerRealizado = () => {
+    item.realizado = !item.realizado;
+    setRealizado(!realizado);
+    updateExercise(item);
+  };
+
+  const handlerDestacado = () => {
+    item.destacado = !item.destacado;
+    setDestacado(!destacado);
+    updateExercise(item);
+  };
+
+  const handlerBienResuelto = () => {
+    item.bienResuelto = !item.bienResuelto;
+    setBienResuelto(!bienResuelto);
+    updateExercise(item);
+  };
+
+  const handlerMalResuelto = () => {
+    item.malResuelto = !item.malResuelto;
+    setMalResuelto(!malResuelto);
+    updateExercise(item);
+  };
+
   const handleConsigna = () => {
     setConsignaLoaded(!consignaLoaded);
   };
   return (
     <View style={Styles.container}>
       <View style={Styles.nav}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("InterpretacionElectro")}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("InterpretacionElectro")}>
           <Image style={Styles.imageNav} source={ejercicios} />
         </TouchableOpacity>
         <View style={Styles.linea}></View>
@@ -88,58 +111,53 @@ function PlantillaInterpretacion({ route, navigation }) {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                }}
-              >
+                }}>
                 <Text
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
                     fontSize: 12,
-                  }}
-                >
+                  }}>
                   Describa en el siguiente elctrocardiograma segun consigna
                 </Text>
                 <Image source={flecha} />
               </View>
             ) : (
-              <ConsignaInterpretacion
-                consigna={ejercicio.consigna}
-                style={Styles.consignaExtendida}
-              />
+              <ConsignaInterpretacion consigna={item.consigna} style={Styles.consignaExtendida} />
             )}
           </TouchableOpacity>
           <View style={Styles.rightBlock}>
             <View style={Styles.title}>
-              <Text style={Styles.titleTextMain}>N{ejercicio.nivel}-</Text>
-              <Text style={Styles.titleTextEjercicio}>{ejercicio.key}</Text>
+              <Text style={Styles.titleTextMain}>N{item.nivel}-</Text>
+              <Text style={Styles.titleTextEjercicio}>{item.key}</Text>
             </View>
             <View style={Styles.state}>
               <TouchableOpacity onPress={handlerRealizado}>
-                {ejercicio.realizado === true ? (
+                {realizado === true ? (
                   <Image style={Styles.stateImage} source={realizadoActivo} />
                 ) : (
-                  <Image style={Styles.stateImage} source={realizado} />
+                  <Image style={Styles.stateImage} source={realizadoImg} />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity>
-                {ejercicio.destacado === true ? (
+              <TouchableOpacity onPress={handlerDestacado}>
+                {destacado === true ? (
                   <Image style={Styles.stateImage} source={destacadoActivo} />
                 ) : (
-                  <Image style={Styles.stateImage} source={destacado} />
+                  <Image style={Styles.stateImage} source={destacadoImg} />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity>
-                {ejercicio.correcto === true ? (
+              <TouchableOpacity onPress={handlerBienResuelto}>
+                {bienResuelto === true ? (
                   <Image style={Styles.stateImage} source={correctoActivo} />
                 ) : (
-                  <Image style={Styles.stateImage} source={correcto} />
+                  <Image style={Styles.stateImage} source={correctoImg} />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity>
-                {ejercicio.incorrecto === true ? (
-                  <Image style={Styles.stateImage} source={incorrecto} />
+              <TouchableOpacity onPress={handlerMalResuelto}>
+                {malResuelto === true ? (
+                  <Image style={Styles.stateImage} source={incorrectoActivo} />
                 ) : (
-                  <Image style={Styles.stateImage} source={incorrecto} />
+                  <Image style={Styles.stateImage} source={incorrectoImg} />
                 )}
               </TouchableOpacity>
             </View>
@@ -147,24 +165,17 @@ function PlantillaInterpretacion({ route, navigation }) {
         </View>
         <ScrollView style={Styles.ejercicio}>
           <View style={Styles.imagenEjercicioContainer}>
-            <Image
-              style={Styles.imagenEjercicio}
-              source={electrocardiogramaTest}
-            />
+            <Image style={Styles.imagenEjercicio} source={electrocardiogramaTest} />
           </View>
           <View style={Styles.respuestaContainer}>
             <Text style={Styles.respuestaText}>Su respuesta:</Text>
-            <TextInput
-              multiline={true}
-              style={Styles.respuestaInput}
-            ></TextInput>
+            <TextInput multiline={true} style={Styles.respuestaInput}></TextInput>
           </View>
           <TouchableOpacity
             style={Styles.respuestaButton}
             onPress={() => {
               setRespuesta(!respuesta);
-            }}
-          >
+            }}>
             {respuesta === false ? (
               <Text
                 style={{
@@ -173,8 +184,7 @@ function PlantillaInterpretacion({ route, navigation }) {
                   fontSize: 14,
                   margin: "2%",
                   height: 80,
-                }}
-              >
+                }}>
                 VER RESPUESTA CORRECTA
               </Text>
             ) : (
@@ -184,8 +194,7 @@ function PlantillaInterpretacion({ route, navigation }) {
                   fontFamily: "MontserratRegular",
                   fontSize: 14,
                   margin: "2%",
-                }}
-              >
+                }}>
                 OCULTAR RESPUESTA CORRECTA
               </Text>
             )}
@@ -193,9 +202,9 @@ function PlantillaInterpretacion({ route, navigation }) {
           {respuesta && (
             <View style={Styles.respuestaFinal}>
               <View style={Styles.parametros}>
-                <Text style={Styles.parametro}>{ejercicio.ritmo}</Text>
-                <Text style={Styles.parametro}>{ejercicio.frecuencia}</Text>
-                <Text style={Styles.parametro}>{ejercicio.eje}</Text>
+                <Text style={Styles.parametro}>{item.ritmo}</Text>
+                <Text style={Styles.parametro}>{item.frecuencia}</Text>
+                <Text style={Styles.parametro}>{item.eje}</Text>
               </View>
               <View style={Styles.comentario}>
                 <Text
@@ -203,8 +212,7 @@ function PlantillaInterpretacion({ route, navigation }) {
                     color: "#fff",
                     fontFamily: "MontserratRegular",
                     fontSize: 12,
-                  }}
-                >
+                  }}>
                   COMENTARIO
                 </Text>
                 <Text
@@ -212,9 +220,8 @@ function PlantillaInterpretacion({ route, navigation }) {
                     color: "#fff",
                     fontFamily: "MontserratRegular",
                     fontSize: 12,
-                  }}
-                >
-                  {ejercicio.comentario}
+                  }}>
+                  {item.comentario}
                 </Text>
               </View>
             </View>

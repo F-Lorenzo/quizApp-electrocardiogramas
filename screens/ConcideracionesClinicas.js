@@ -11,6 +11,7 @@ import realizadosImg from "../assets/images/ejercicios-realizados.png";
 import destacadosImg from "../assets/images/ejercicios-destacados.png";
 import resueltosImg from "../assets/images/ejercicios-ok.png";
 import malResueltosImg from "../assets/images/ejercicios-mal-hechos.png";
+import malResueltosActivo from "../assets/images/ejercicios-mal-hechos-activo.png";
 import noRealizadosActivo from "../assets/images/ejercicios-sin-realizar-activo.png";
 import realizadosActivo from "../assets/images/ejercicios-realizados-activo.png";
 import destacadosActivo from "../assets/images/ejercicios-destacados-activo.png";
@@ -169,7 +170,7 @@ function ConcideracionesClinicas({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity onPress={activeHandlerMalResueltos} style={Styles.typeButton}>
               {malResueltos === true ? (
-                <Image style={Styles.imagesType} source={malResueltosImg} />
+                <Image style={Styles.imagesType} source={malResueltosActivo} />
               ) : (
                 <Image style={Styles.imagesType} source={malResueltosImg} />
               )}
@@ -189,7 +190,7 @@ function ConcideracionesClinicas({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("PlantillaConcideraciones", {
-                    key: item.key,
+                    item: item,
                   })
                 }
                 style={Styles.ejerciciosContainer}>

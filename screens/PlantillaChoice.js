@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
-import {
-  Montserrat_400Regular,
-  Montserrat_500Medium,
-} from "@expo-google-fonts/montserrat";
+import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
 import {
   View,
   Text,
@@ -17,28 +14,29 @@ import * as ScreenOrientation from "expo-screen-orientation";
 import ejerciciosTest from "../db/ejerciciosTestChoice.json";
 import ConsignaChoice from "../components/ConsignaChoice";
 import flecha from "../assets/images/flecha-hacia-abajo-para-navegar.png";
-import realizado from "../assets/images/ejercicios-realizados.png";
-import destacado from "../assets/images/ejercicios-destacados.png";
-import correcto from "../assets/images/ejercicios-ok.png";
-import incorrecto from "../assets/images/ejercicios-mal-hechos.png";
+import realizadoImg from "../assets/images/ejercicios-realizados.png";
+import destacadoImg from "../assets/images/ejercicios-destacados.png";
+import correctoImg from "../assets/images/ejercicios-ok.png";
+import incorrectoImg from "../assets/images/ejercicios-mal-hechos.png";
 import realizadoActivo from "../assets/images/ejercicios-realizados-activo.png";
 import destacadoActivo from "../assets/images/ejercicios-destacados-activo.png";
 import correctoActivo from "../assets/images/ejercicios-ok-activo.png";
-// import incorrectoActivo from "../assets/images/ejercicios-mal-hechos.png";
+import incorrectoActivo from "../assets/images/ejercicios-mal-hechos-activo.png";
 import electrocardiogramaTest from "../assets/images/electrocardiogramaTest.png";
 import LogoApp from "../assets/images/LogoApp.png";
 import actividades from "../assets/images/actividades.png";
 import ejercicios from "../assets/images/ejercicios.png";
+import { updateExercise } from "../api/services/exercise.service";
 
 function PlantillaChoice({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [backgroundColor1, setBackgroudColor1] = useState(
-    "rgba(71, 71, 71, 0.5)"
-  );
-  const [backgroundColor2, setBackgroudColor2] = useState(
-    "rgba(135, 135, 135, 0.5)"
-  );
+  const [backgroundColor1, setBackgroudColor1] = useState("rgba(71, 71, 71, 0.5)");
+  const [backgroundColor2, setBackgroudColor2] = useState("rgba(135, 135, 135, 0.5)");
+  const [realizado, setRealizado] = useState(true);
+  const [destacado, setDestacado] = useState(false);
+  const [bienResuelto, setBienResuelto] = useState(true);
+  const [malResuelto, setMalResuelto] = useState(false);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -61,11 +59,34 @@ function PlantillaChoice({ route, navigation }) {
   if (!fontLoaded) {
     return <Text> font don't charge</Text>;
   }
-  const { key } = route.params;
-  const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === key);
-  const respuestas = ejercicio.consigna;
+  const { item } = route.params;
+  // const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === key);
+  const respuestas = item.consigna;
 
-  const handlerRealizado = () => {};
+  const handlerRealizado = () => {
+    item.realizado = !item.realizado;
+    setRealizado(!realizado);
+    updateExercise(item);
+  };
+
+  const handlerDestacado = () => {
+    item.destacado = !item.destacado;
+    setDestacado(!destacado);
+    updateExercise(item);
+  };
+
+  const handlerBienResuelto = () => {
+    item.bienResuelto = !item.bienResuelto;
+    setBienResuelto(!bienResuelto);
+    updateExercise(item);
+  };
+
+  const handlerMalResuelto = () => {
+    item.malResuelto = !item.malResuelto;
+    setMalResuelto(!malResuelto);
+    updateExercise(item);
+  };
+
   const handleConsigna = () => {
     setConsignaLoaded(!consignaLoaded);
   };
@@ -93,15 +114,13 @@ function PlantillaChoice({ route, navigation }) {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                }}
-              >
+                }}>
                 <Text
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
                     fontSize: 12,
-                  }}
-                >
+                  }}>
                   Elija la respuesta correcta
                 </Text>
                 <Image source={flecha} />
@@ -121,14 +140,12 @@ function PlantillaChoice({ route, navigation }) {
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     A -
                   </Text>
                   <Text style={Styles.respuestas}>{respuestas.a.texto}</Text>
@@ -143,14 +160,12 @@ function PlantillaChoice({ route, navigation }) {
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     B -
                   </Text>
                   <Text style={Styles.respuestas}> {respuestas.b.texto}</Text>
@@ -168,14 +183,12 @@ function PlantillaChoice({ route, navigation }) {
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     C -
                   </Text>
                   <Text style={Styles.respuestas}> {respuestas.c.texto}</Text>
@@ -190,14 +203,12 @@ function PlantillaChoice({ route, navigation }) {
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     D -
                   </Text>
                   <Text style={Styles.respuestas}>{respuestas.d.texto}</Text>
@@ -215,14 +226,12 @@ function PlantillaChoice({ route, navigation }) {
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     E -
                   </Text>
                   <Text style={Styles.respuestas}> {respuestas.e.texto}</Text>
@@ -233,35 +242,35 @@ function PlantillaChoice({ route, navigation }) {
           <View style={Styles.rightBlock}>
             <View style={Styles.title}>
               <Text style={Styles.titleTextMain}>MC-</Text>
-              <Text style={Styles.titleTextEjercicio}>{ejercicio.key}</Text>
+              <Text style={Styles.titleTextEjercicio}>{item.key}</Text>
             </View>
             <View style={Styles.state}>
               <TouchableOpacity onPress={handlerRealizado}>
-                {ejercicio.realizado === true ? (
+                {realizado === true ? (
                   <Image style={Styles.stateImage} source={realizadoActivo} />
                 ) : (
-                  <Image style={Styles.stateImage} source={realizado} />
+                  <Image style={Styles.stateImage} source={realizadoImg} />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity>
-                {ejercicio.destacado === true ? (
+              <TouchableOpacity onPress={handlerDestacado}>
+                {destacado === true ? (
                   <Image style={Styles.stateImage} source={destacadoActivo} />
                 ) : (
-                  <Image style={Styles.stateImage} source={destacado} />
+                  <Image style={Styles.stateImage} source={destacadoImg} />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity>
-                {ejercicio.correcto === true ? (
+              <TouchableOpacity onPress={handlerBienResuelto}>
+                {bienResuelto === true ? (
                   <Image style={Styles.stateImage} source={correctoActivo} />
                 ) : (
-                  <Image style={Styles.stateImage} source={correcto} />
+                  <Image style={Styles.stateImage} source={correctoImg} />
                 )}
               </TouchableOpacity>
-              <TouchableOpacity>
-                {ejercicio.incorrecto === true ? (
-                  <Image style={Styles.stateImage} source={incorrecto} />
+              <TouchableOpacity onPress={handlerMalResuelto}>
+                {malResuelto === true ? (
+                  <Image style={Styles.stateImage} source={incorrectoActivo} />
                 ) : (
-                  <Image style={Styles.stateImage} source={incorrecto} />
+                  <Image style={Styles.stateImage} source={incorrectoImg} />
                 )}
               </TouchableOpacity>
             </View>
@@ -269,10 +278,7 @@ function PlantillaChoice({ route, navigation }) {
         </View>
         <View style={Styles.ejercicio}>
           <View style={Styles.imagenEjercicioContainer}>
-            <Image
-              style={Styles.imagenEjercicio}
-              source={electrocardiogramaTest}
-            />
+            <Image style={Styles.imagenEjercicio} source={electrocardiogramaTest} />
           </View>
         </View>
       </View>
