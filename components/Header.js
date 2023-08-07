@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Pressable } from "react-native";
 import LogoApp from "../assets/images/LogoApp.png";
+import { useNavigation } from "@react-navigation/native";
 
-function Header({ navigation }) {
+function Header() {
+  const navigation = useNavigation();
   return (
-    <View onPress={() => navigation.navigate("Inicio")} style={Styles.container}>
-      <Image style={Styles.image} source={LogoApp} />
-    </View>
+    <Pressable onPress={() => navigation.navigate("Inicio")}>
+      <View style={Styles.container}>
+        <Image style={Styles.image} source={LogoApp} />
+      </View>
+    </Pressable>
   );
 }
 

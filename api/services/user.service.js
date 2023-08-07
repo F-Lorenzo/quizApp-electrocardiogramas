@@ -1,7 +1,10 @@
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import {
-  addDoc,
-  getDoc,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updatePassword,
+  updateEmail,
+} from "firebase/auth";
+import {
   getFirestore,
   updateDoc,
   doc,
@@ -9,10 +12,9 @@ import {
   query,
   where,
   getDocs,
+  setDoc,
 } from "firebase/firestore";
 import { app, auth } from "../../config/firebase.config";
-import store from "../../redux/store";
-import { updateUser } from "../../redux/reducers/user.reducer";
 
 const db = getFirestore(app);
 
@@ -21,9 +23,15 @@ export const authenticate = (email, pwd) => {
     try {
       const authenticated = await signInWithEmailAndPassword(auth, email, pwd);
       if (authenticated.user) {
-        const user = findUserById(authenticated.user.uid);
+        const findUser = await findUserById(authenticated.user.uid);
 
-        if (user) {
+        if (findUser) {
+          const user = {
+            firstName: findUser.firstName,
+            lastName: findUser.lastName,
+            pwd: pwd,
+            email: email,
+          };
           resolve(user);
         } else {
           await logout();
@@ -60,9 +68,18 @@ export const update = (user) => {
       await updateDoc(userRef, {
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email,
-        type: user.type,
       });
+
+      if (user.newEmail.length != 0 && user.originalEmail !== user.newEmail) {
+        await updateEmail(auth.currentUser, user.newEmail);
+        await updateDoc(userRef, {
+          email: user.newEmail,
+        });
+      }
+
+      if (user.newPassword.length != 0 && user.originalPassword !== user.newPassword) {
+        await updatePassword(auth.currentUser, user.newPassword);
+      }
 
       resolve(true);
     } catch (error) {
@@ -74,17 +91,13 @@ export const update = (user) => {
 const createExtraInformation = (user) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const userSnapshot = await addDoc(collection(db, "Users"), {
+      await setDoc(doc(db, "Users", user.id), {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        type: user.type,
       });
-
-      if (userSnapshot.id) {
-        resolve(true);
-      }
+      resolve(true);
     } catch (error) {
       reject(error);
     }
@@ -112,7 +125,6 @@ export const logout = () => {
   return new Promise(async (resolve, reject) => {
     try {
       await auth.signOut();
-      store.dispatch(updateUser(null));
       resolve(true);
     } catch (error) {
       reject(error);

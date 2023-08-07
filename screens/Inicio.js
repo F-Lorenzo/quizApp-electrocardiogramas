@@ -6,8 +6,8 @@ import LogoApp from "../assets/images/LogoApp.png";
 import usuario from "../assets/images/usuario.png";
 import manual from "../assets/images/manual.png";
 import actividades from "../assets/images/actividades.png";
-import { useSelector } from "react-redux";
 import Toast from "react-native-root-toast";
+import { useSelector } from "react-redux";
 
 function Inicio({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);

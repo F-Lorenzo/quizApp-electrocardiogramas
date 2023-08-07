@@ -16,12 +16,11 @@ import Perfil from "./screens/Perfil";
 import Estadisticas from "./screens/Estadisticas";
 import RegistrarUsuario from "./screens/RegistrarUsuario";
 import Login from "./screens/Login";
-import { Provider } from "react-redux";
-import store from "./redux/store";
+import { useDispatch } from "react-redux";
 import { auth } from "./config/firebase.config";
 import { findUserById } from "./api/services/user.service";
-import { updateUser } from "./redux/reducers/user.reducer";
 import { RootSiblingParent } from "react-native-root-siblings";
+import { updateUserState } from "./store/user/slice";
 
 const Stack = createNativeStackNavigator();
 
@@ -84,25 +83,37 @@ function MyStack() {
 }
 
 export default function App() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    auth.onAuthStateChanged(async (userSigned) => {
-      if (userSigned) {
-        const tokenResult = await userSigned.getIdTokenResult();
-        if (tokenResult.token) {
-          const user = await findUserById(userSigned.uid);
-          store.dispatch(updateUser(user));
+    auth.onAuthStateChanged(
+      async (userSigned) => {
+        if (userSigned) {
+          const tokenResult = await userSigned.getIdTokenResult();
+          if (tokenResult.token) {
+            const user = await findUserById(userSigned.uid);
+            dispatch(
+              updateUserState({
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+              })
+            );
+          }
         }
+      },
+      (error) => {
+        console.log(error);
       }
-    });
+    );
   }, []);
 
   return (
     <RootSiblingParent>
-      <Provider store={store}>
-        <NavigationContainer>
-          <MyStack />
-        </NavigationContainer>
-      </Provider>
+      <NavigationContainer>
+        <MyStack />
+      </NavigationContainer>
     </RootSiblingParent>
   );
 }
