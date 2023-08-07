@@ -77,14 +77,8 @@ function Perfil({ navigation }) {
       setLoading(true);
       if (email.length != 0 || password.length != 0) {
         setShowModal(true);
-        // if (user.newEmail.length != 0 || user.newPassword.length != 0) {
-        //   await reauthenticateWithCredential(
-        //     auth.currentUser,
-        //     EmailAuthProvider.credential(user.originalEmail, user.originalPassword)
-        //   );
-        // }
       } else {
-        //saveUserData();
+        saveUserData();
       }
     } catch (error) {
       if (error === "auth/weak-password") {
@@ -132,6 +126,8 @@ function Perfil({ navigation }) {
             email: userInfoUpd.newEmail.length ? userInfoUpd.newEmail : user.email,
           })
         );
+
+        setShowChangePwd(false);
       }
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
@@ -145,9 +141,20 @@ function Perfil({ navigation }) {
           backgroundColor: "#ef4444",
         });
       }
+      if (error.code === "auth/weak-password") {
+        Toast.show("La contraseña debe tener más de 6 caracteres.", {
+          duration: Toast.durations.SHORT,
+          position: 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          backgroundColor: "#ef4444",
+        });
+      }
+      console.log(error);
     } finally {
       setShowModal(false);
-      setShowChangePwd(false);
     }
   };
 
