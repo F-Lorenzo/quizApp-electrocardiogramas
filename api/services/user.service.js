@@ -3,14 +3,8 @@ import {
   createUserWithEmailAndPassword,
   updatePassword,
   updateEmail,
-  reauthenticateWithCredential,
-  EmailAuthProvider,
-  reauthenticateWithPopup,
-  signInWithPopup,
 } from "firebase/auth";
 import {
-  addDoc,
-  getDoc,
   getFirestore,
   updateDoc,
   doc,
@@ -21,8 +15,6 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { app, auth } from "../../config/firebase.config";
-import store from "../../redux/store";
-import { updateUser } from "../../redux/reducers/user.reducer";
 
 const db = getFirestore(app);
 
@@ -37,8 +29,8 @@ export const authenticate = (email, pwd) => {
           const user = {
             firstName: findUser.firstName,
             lastName: findUser.lastName,
-            userPwd: pwd,
-            userEmail: email,
+            pwd: pwd,
+            email: email,
           };
           resolve(user);
         } else {
@@ -76,17 +68,16 @@ export const update = (user) => {
       await updateDoc(userRef, {
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.newEmail,
       });
 
-      console.log(user.originalPassword);
+      if (user.newEmail.length != 0 && user.originalEmail !== user.newEmail) {
+        await updateEmail(auth.currentUser, user.newEmail);
+        await updateDoc(userRef, {
+          email: user.newEmail,
+        });
+      }
 
-      await reauthenticateWithCredential(
-        auth.currentUser,
-        EmailAuthProvider.credential(user.originalEmail, user.originalPassword)
-      );
-      await updateEmail(auth.currentUser, user.newEmail);
-      if (user.newPassword.length != 0) {
+      if (user.newPassword.length != 0 && user.originalPassword !== user.newPassword) {
         await updatePassword(auth.currentUser, user.newPassword);
       }
 
@@ -134,7 +125,6 @@ export const logout = () => {
   return new Promise(async (resolve, reject) => {
     try {
       await auth.signOut();
-      store.dispatch(updateUser(null));
       resolve(true);
     } catch (error) {
       reject(error);

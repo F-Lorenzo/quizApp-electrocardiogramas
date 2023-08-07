@@ -14,10 +14,9 @@ import {
 import Header from "../components/Header";
 import usuario from "../assets/images/usuario.png";
 import { createAccount } from "../api/services/user.service";
-import { UserTypes } from "../common/utils/userType.enum";
-import store from "../redux/store";
-import { updateUser } from "../redux/reducers/user.reducer";
 import Toast from "react-native-root-toast";
+import { updateUserState } from "../store/user/slice";
+import { useDispatch } from "react-redux";
 
 function RegistrarUsuario({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -27,6 +26,8 @@ function RegistrarUsuario({ navigation }) {
   const [lastName, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const loadFont = async () => {
@@ -61,7 +62,14 @@ function RegistrarUsuario({ navigation }) {
         const userCreated = await createAccount(email, password, newuser);
         if (userCreated) {
           newuser.id = userCreated;
-          store.dispatch(updateUser(newuser));
+          dispatch(
+            updateUserState({
+              id: newuser.id,
+              firstName: newuser.firstName,
+              lastName: newuser.lastName,
+              email: email,
+            })
+          );
           Toast.show("Cuenta creada con éxito", {
             duration: Toast.durations.SHORT,
             position: 50,

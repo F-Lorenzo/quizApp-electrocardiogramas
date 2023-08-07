@@ -15,6 +15,8 @@ import Header from "../components/Header";
 import usuario from "../assets/images/usuario.png";
 import { authenticate } from "../api/services/user.service";
 import Toast from "react-native-root-toast";
+import { updateUserState } from "../store/user/slice";
+import { useDispatch } from "react-redux";
 
 function Login({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -22,6 +24,8 @@ function Login({ navigation }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const loadFont = async () => {
@@ -48,6 +52,14 @@ function Login({ navigation }) {
         setLoading(true);
         const userAuthenticated = await authenticate(email, password);
         if (userAuthenticated) {
+          dispatch(
+            updateUserState({
+              id: userAuthenticated.id,
+              firstName: userAuthenticated.firstName,
+              lastName: userAuthenticated.lastName,
+              email: email,
+            })
+          );
           Toast.show("Conectado", {
             duration: 1000,
             position: 50,
