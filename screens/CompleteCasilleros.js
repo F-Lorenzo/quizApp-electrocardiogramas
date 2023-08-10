@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import ejerciciosTest from "../db/ejerciciosTest.json";
 import actividades from "../assets/images/actividades.png";
 import candado from "../assets/images/candado.png";
@@ -17,6 +25,7 @@ import resueltosActivo from "../assets/images/ejercicios-ok-activo.png";
 import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
 import { getExercises } from "../api/services/exercise.service";
+import { useSelector } from "react-redux";
 
 function CompleteCasilleros({ navigation }) {
   const [todos, setTodos] = useState(true);
@@ -182,19 +191,25 @@ function CompleteCasilleros({ navigation }) {
             marginRight: 15,
             backgroundColor: "#3b3a3a",
           }}>
-          <FlatList
-            data={filteredExercices}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => navigation.navigate("plantillaCompletar", { key: item.key })}
-                style={Styles.ejerciciosContainer}>
-                <Text style={Styles.text}>{item.key}</Text>
-                <TouchableOpacity style={Styles.candado}>
-                  <Image style={Styles.imageCandado} source={candado} />
+          {filteredExercices.length ? (
+            <FlatList
+              data={filteredExercices}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("plantillaCompletar", { exercise: item })}
+                  style={Styles.ejerciciosContainer}>
+                  <Text style={Styles.text}>{item.key}</Text>
+                  <TouchableOpacity style={Styles.candado}>
+                    <Image style={Styles.imageCandado} source={candado} />
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            )}
-          />
+              )}
+            />
+          ) : (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <ActivityIndicator />
+            </View>
+          )}
         </View>
       </View>
     </View>

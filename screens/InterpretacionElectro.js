@@ -64,8 +64,6 @@ function InterpretacionElectro({ navigation }) {
     return <Text> font don't charge</Text>;
   }
 
-  console.log(ejercicios, "ejercicios");
-
   const resetAllFilters = () => {
     setLevel1(false);
     setLevel2(false);
@@ -96,7 +94,6 @@ function InterpretacionElectro({ navigation }) {
     } else {
       activeHandlerTodos();
     }
-    console.log(ejercicios, "1");
   };
   const activeHandlerLevel2 = () => {
     resetAllFilters();
@@ -107,7 +104,6 @@ function InterpretacionElectro({ navigation }) {
     } else {
       activeHandlerTodos();
     }
-    console.log(ejercicios, "2");
   };
   const activeHandlerLevel3 = () => {
     resetAllFilters();
@@ -118,7 +114,6 @@ function InterpretacionElectro({ navigation }) {
     } else {
       activeHandlerTodos();
     }
-    console.log(ejercicios, "3");
   };
   const activeHandlerTodos = () => {
     resetAllFilters();

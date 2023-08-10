@@ -98,6 +98,7 @@ export default function App() {
                 firstName: user.firstName,
                 lastName: user.lastName,
                 email: user.email,
+                exercises: user.exercises ? user.exercises : [],
               })
             );
           }

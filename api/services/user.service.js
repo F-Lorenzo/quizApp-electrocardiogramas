@@ -24,13 +24,13 @@ export const authenticate = (email, pwd) => {
       const authenticated = await signInWithEmailAndPassword(auth, email, pwd);
       if (authenticated.user) {
         const findUser = await findUserById(authenticated.user.uid);
-
         if (findUser) {
           const user = {
             firstName: findUser.firstName,
             lastName: findUser.lastName,
             pwd: pwd,
             email: email,
+            exercises: findUser.exercises ? findUser.exercises : [],
           };
           resolve(user);
         } else {

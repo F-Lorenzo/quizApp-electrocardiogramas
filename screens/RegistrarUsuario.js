@@ -68,6 +68,7 @@ function RegistrarUsuario({ navigation }) {
               firstName: newuser.firstName,
               lastName: newuser.lastName,
               email: email,
+              exercises: [],
             })
           );
           Toast.show("Cuenta creada con éxito", {
