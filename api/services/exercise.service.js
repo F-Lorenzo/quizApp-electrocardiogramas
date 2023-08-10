@@ -43,34 +43,34 @@ export const getExercises = (exerciceType) => {
 export const createUserExercise = (user, status, exercise) => {
   return new Promise(async (resolve, reject) => {
     try {
-      switch (status) {
-        case "destacado": {
-          createDestacadoExercise();
-        }
-        case "correcto": {
-          const userExercises = await createCorrectoExercise(user, exercise);
-          resolve(userExercises);
-        }
-        case "incorrecto": {
-          createIncorrectoExercise();
-        }
-        case "realizado": {
-          createRealizadoExercise();
-        }
-        default:
-          reject("No se ha proporcionado un tipo de ejercicio valido");
-      }
+      const userExercises = await createExercise(user, status, exercise);
+      resolve(userExercises);
     } catch (error) {
       reject(error);
     }
   });
 };
 
-const createCorrectoExercise = async (user, exercise) => {
+export const updateExercise = async (userId, exercises) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log(exercises);
+      await updateDoc(doc(db, "Users", userId), {
+        exercises: exercises,
+      });
+
+      resolve(true);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+const createExercise = async (user, status, exercise) => {
   return new Promise(async (resolve, reject) => {
     try {
       const exerci = {
-        status: "correcto",
+        status: status,
         type: exercise.type,
         key: exercise.key,
         respuestas: exercise.respuestas,

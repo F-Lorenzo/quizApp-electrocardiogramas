@@ -279,7 +279,7 @@ function InterpretacionElectro({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("PlantillaInterpretacion", {
-                    key: item.key,
+                    exercise: item,
                   })
                 }
                 style={Styles.ejerciciosContainer}>
