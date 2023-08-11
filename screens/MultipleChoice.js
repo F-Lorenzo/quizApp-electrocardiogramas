@@ -189,7 +189,7 @@ function MultipleChoice({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("PlantillaChoice", {
-                    key: item.key,
+                    exercise: item,
                   })
                 }
                 style={Styles.ejerciciosContainer}>

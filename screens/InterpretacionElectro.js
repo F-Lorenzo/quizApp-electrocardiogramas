@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
 import { Montserrat_400Regular } from "@expo-google-fonts/montserrat";
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import ejerciciosTest from "../db/ejerciciosTest.json";
 import Ejercicios from "../assets/images/ejercicios.png";
 import actividades from "../assets/images/actividades.png";
@@ -273,23 +281,29 @@ function InterpretacionElectro({ navigation }) {
             marginRight: 15,
             backgroundColor: "#3b3a3a",
           }}>
-          <FlatList
-            data={filteredExercices}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("PlantillaInterpretacion", {
-                    exercise: item,
-                  })
-                }
-                style={Styles.ejerciciosContainer}>
-                <Text style={Styles.numbers}>{item.key}</Text>
-                <TouchableOpacity style={Styles.candado}>
-                  <Image style={Styles.imageCandado} source={candado} />
+          {filteredExercices.length ? (
+            <FlatList
+              data={filteredExercices}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("PlantillaInterpretacion", {
+                      exercise: item,
+                    })
+                  }
+                  style={Styles.ejerciciosContainer}>
+                  <Text style={Styles.numbers}>{item.key}</Text>
+                  <TouchableOpacity style={Styles.candado}>
+                    <Image style={Styles.imageCandado} source={candado} />
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            )}
-          />
+              )}
+            />
+          ) : (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <ActivityIndicator />
+            </View>
+          )}
         </View>
       </View>
     </View>

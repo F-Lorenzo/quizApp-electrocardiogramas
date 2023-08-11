@@ -217,7 +217,7 @@ function PlantillaCompletar({ route, navigation }) {
                 <Text style={Styles.titleTextEjercicio}>{exercise.key}</Text>
               </View>
               <View style={Styles.state}>
-                <TouchableOpacity onPress={() => handlerCompleteExercise("realizado")}>
+                <TouchableOpacity disabled>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
                   user.exercises[exerciseCompletedIdx].status === "realizado" ? (

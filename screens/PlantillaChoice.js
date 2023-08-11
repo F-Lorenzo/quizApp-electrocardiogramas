@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
-import {
-  Montserrat_400Regular,
-  Montserrat_500Medium,
-} from "@expo-google-fonts/montserrat";
+import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
 import {
   View,
   Text,
@@ -24,21 +21,32 @@ import incorrecto from "../assets/images/ejercicios-mal-hechos.png";
 import realizadoActivo from "../assets/images/ejercicios-realizados-activo.png";
 import destacadoActivo from "../assets/images/ejercicios-destacados-activo.png";
 import correctoActivo from "../assets/images/ejercicios-ok-activo.png";
-// import incorrectoActivo from "../assets/images/ejercicios-mal-hechos.png";
+import incorrectoActivo from "../assets/images/ejercicios-mal-hechos-activo.png";
 import electrocardiogramaTest from "../assets/images/electrocardiogramaTest.png";
 import LogoApp from "../assets/images/LogoApp.png";
 import actividades from "../assets/images/actividades.png";
 import ejercicios from "../assets/images/ejercicios.png";
+import { useDispatch, useSelector } from "react-redux";
+import { checkExerciseCompleted } from "../utils/exercisesUtils";
+import { createUserExercise, updateExercise } from "../api/services/exercise.service";
+import { updateUserState } from "../store/user/slice";
+import Toast from "react-native-root-toast";
 
 function PlantillaChoice({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [backgroundColor1, setBackgroudColor1] = useState(
-    "rgba(71, 71, 71, 0.5)"
-  );
-  const [backgroundColor2, setBackgroudColor2] = useState(
-    "rgba(135, 135, 135, 0.5)"
-  );
+  const [backgroundColor1, setBackgroudColor1] = useState("rgba(71, 71, 71, 0.5)");
+  const [backgroundColor2, setBackgroudColor2] = useState("rgba(135, 135, 135, 0.5)");
+
+  const [loading, setLoading] = useState(false);
+  const [exerciseCompletedIdx, setExerciseCompletedIdx] = useState(-1);
+  const [selectedResponse, setSelectedResponse] = useState(null);
+
+  const { exercise } = route.params;
+  const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === exercise.key);
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const respuestas = ejercicio.consigna;
 
   useEffect(() => {
     const loadFont = async () => {
@@ -58,18 +66,108 @@ function PlantillaChoice({ route, navigation }) {
       ScreenOrientation.unlockAsync();
     };
   }, []);
+
+  useEffect(() => {
+    loadStatusExercise();
+  }, [user]);
+
+  const loadStatusExercise = async () => {
+    try {
+      const idxExercise = await checkExerciseCompleted(user, exercise.key, "Choice");
+      if (idxExercise !== -1) {
+        setExerciseCompletedIdx(idxExercise);
+        setSelectedResponse(user.exercises[idxExercise].respuestas.opcionElegida);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   if (!fontLoaded) {
     return <Text> font don't charge</Text>;
   }
-  const { key } = route.params;
-  const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === key);
-  const respuestas = ejercicio.consigna;
 
-  const handlerRealizado = () => {};
+  const handlerCompleteExercise = async (status) => {
+    try {
+      setLoading(true);
+      let userExercises = [];
+      if (exerciseCompletedIdx === -1) {
+        const newExercise = {
+          type: "Choice",
+          key: exercise.key,
+          respuestas: {
+            opcionElegida: selectedResponse,
+          },
+        };
+        userExercises = await createUserExercise(user, status, newExercise);
+      } else {
+        userExercises = user.exercises.map((exerc) => {
+          if (exerc.key === exercise.key && exerc.type === "Choice") {
+            return {
+              ...exerc,
+              status: status,
+              respuestas: {
+                opcionElegida: selectedResponse,
+              },
+            };
+          }
+          return exerc;
+        });
+        await updateExercise(user.id, userExercises);
+      }
+      dispatch(
+        updateUserState({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user,
+          exercises: userExercises,
+        })
+      );
+      Toast.show("Has resuelto el ejercicio", {
+        duration: 1000,
+        position: 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        opacity: 1,
+        backgroundColor: "#15803d",
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleConsigna = () => {
     setConsignaLoaded(!consignaLoaded);
   };
 
+  handlerSelectOption = (option) => {
+    setSelectedResponse(option);
+    switch (option) {
+      case "a":
+        setBackgroudColor1(respuestas.a.correcta === true ? "#29ba13" : "#c27c04");
+        break;
+
+      case "b":
+        setBackgroudColor1(respuestas.b.correcta === true ? "#29ba13" : "#c27c04");
+        break;
+
+      case "c":
+        setBackgroudColor1(respuestas.c.correcta === true ? "#29ba13" : "#c27c04");
+        break;
+
+      case "d":
+        setBackgroudColor1(respuestas.d.correcta === true ? "#29ba13" : "#c27c04");
+        break;
+
+      case "e":
+        setBackgroudColor1(respuestas.e.correcta === true ? "#29ba13" : "#c27c04");
+        break;
+    }
+  };
   return (
     <View style={Styles.container}>
       <View style={Styles.nav}>
@@ -93,15 +191,13 @@ function PlantillaChoice({ route, navigation }) {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                }}
-              >
+                }}>
                 <Text
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
                     fontSize: 12,
-                  }}
-                >
+                  }}>
                   Elija la respuesta correcta
                 </Text>
                 <Image source={flecha} />
@@ -109,120 +205,121 @@ function PlantillaChoice({ route, navigation }) {
             ) : (
               <View style={Styles.consignaExtendida}>
                 <TouchableOpacity
-                  // onPress={setBackgroudColor1(
-                  //   respuestas.a.correcta === "true" ? "#29ba13" : "#c27c04"
-                  // )}
+                  onPress={() => handlerSelectOption("a")}
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
-                    backgroundColor: backgroundColor1,
+                    backgroundColor:
+                      selectedResponse === "a" && respuestas.a.correcta === true
+                        ? "#29ba13"
+                        : "#c27c04",
                     height: 60,
                     justifyContent: "center",
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     A -
                   </Text>
                   <Text style={Styles.respuestas}>{respuestas.a.texto}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  onPress={() => handlerSelectOption("b")}
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
-                    backgroundColor: backgroundColor2,
+                    backgroundColor:
+                      selectedResponse === "b" && respuestas.b.correcta == true
+                        ? "#29ba13"
+                        : "#c27c04",
                     height: 60,
                     justifyContent: "center",
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     B -
                   </Text>
                   <Text style={Styles.respuestas}> {respuestas.b.texto}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  // onPress={setBackgroudColor1(
-                  //   respuestas.c.correcta === true ? "#29ba13" : "#c27c04"
-                  // )}
+                  onPress={() => handlerSelectOption("c")}
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
-                    backgroundColor: backgroundColor1,
+                    backgroundColor:
+                      selectedResponse === "c" && respuestas.c.correcta == true
+                        ? "#29ba13"
+                        : "#c27c04",
                     height: 60,
                     justifyContent: "center",
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     C -
                   </Text>
                   <Text style={Styles.respuestas}> {respuestas.c.texto}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
+                  onPress={() => handlerSelectOption("d")}
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
-                    backgroundColor: backgroundColor2,
+                    backgroundColor:
+                      selectedResponse === "d" && respuestas.d.correcta == true
+                        ? "#29ba13"
+                        : "#c27c04",
                     height: 60,
                     justifyContent: "center",
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     D -
                   </Text>
                   <Text style={Styles.respuestas}>{respuestas.d.texto}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  // onPress={setBackgroudColor1(
-                  //   respuestas.e.correcta === true ? "#29ba13" : "#c27c04"
-                  // )}
+                  onPress={() => handlerSelectOption("e")}
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
-                    backgroundColor: backgroundColor1,
+                    backgroundColor:
+                      selectedResponse === "e" && respuestas.e.correcta == true
+                        ? "#29ba13"
+                        : "#c27c04",
                     height: 60,
                     justifyContent: "center",
                     flexDirection: "row",
                     padding: 10,
                     alignItems: "center",
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
-                    }}
-                  >
+                    }}>
                     E -
                   </Text>
                   <Text style={Styles.respuestas}> {respuestas.e.texto}</Text>
@@ -236,8 +333,8 @@ function PlantillaChoice({ route, navigation }) {
               <Text style={Styles.titleTextEjercicio}>{ejercicio.key}</Text>
             </View>
             <View style={Styles.state}>
-              <TouchableOpacity onPress={handlerRealizado}>
-                {ejercicio.realizado === true ? (
+              <TouchableOpacity disabled>
+                {selectedResponse === true ? (
                   <Image style={Styles.stateImage} source={realizadoActivo} />
                 ) : (
                   <Image style={Styles.stateImage} source={realizado} />
@@ -269,10 +366,7 @@ function PlantillaChoice({ route, navigation }) {
         </View>
         <View style={Styles.ejercicio}>
           <View style={Styles.imagenEjercicioContainer}>
-            <Image
-              style={Styles.imagenEjercicio}
-              source={electrocardiogramaTest}
-            />
+            <Image style={Styles.imagenEjercicio} source={electrocardiogramaTest} />
           </View>
         </View>
       </View>
