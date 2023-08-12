@@ -150,7 +150,6 @@ function PlantillaCompletar({ route, navigation }) {
           exercises: userExercises,
         })
       );
-      console.log(user.exercises);
       Toast.show("Has resuelto el ejercicio", {
         duration: 1000,
         position: 50,

@@ -76,7 +76,7 @@ const createExercise = async (user, status, exercise) => {
         respuestas: exercise.respuestas,
       };
 
-      if (exercise.type !== "Completar") {
+      if (exercise.type !== "Completar" && exercise.type !== "Choice") {
         exerci.level = exercise.level;
       }
 

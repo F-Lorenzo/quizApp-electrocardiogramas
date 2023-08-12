@@ -62,7 +62,9 @@ function Menu({ navigation }) {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handlerShowAlert} style={Styles.container1}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("MultipleChoice")}
+        style={Styles.container1}>
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={MultipleChoice} />
           <Text style={Styles.text}>Multiple choice</Text>
