@@ -85,6 +85,17 @@ function RegistrarUsuario({ navigation }) {
       }
     } catch (error) {
       console.log(error);
+      if (error.code === "auth/weak-password") {
+        Toast.show("La contraseña debe contener más de 6 caracteres", {
+          duration: Toast.durations.SHORT,
+          position: 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          backgroundColor: "#ef4444",
+        });
+      }
     } finally {
       setCreatingAcc(false);
     }
