@@ -79,8 +79,16 @@ function Inicio({ navigation }) {
       </View>
       <View style={Styles.footer}>
         <Image style={Styles.imageFooter} source={LogoApp} />
-        <View>
-          <Text style={{ fontFamily: "MontserratRegular" }}>@copyRight</Text>
+        <View style={{ padding: 5 }}>
+          <Text style={{ fontFamily: "MontserratRegular", paddingBottom: 5 }}>
+            Dr. Vanderluis Claudio
+          </Text>
+          <Text style={{ fontFamily: "MontserratRegular", paddingBottom: 5 }}>
+            Dr. Hugo Emilio Delgado
+          </Text>
+          <Text style={{ fontFamily: "MontserratRegular", paddingBottom: 5 }}>
+            Dr. Ramón Alberto Carrizo
+          </Text>
         </View>
       </View>
     </View>
@@ -124,9 +132,11 @@ const Styles = StyleSheet.create({
   },
   actividadesText: { color: "white" },
   footer: {
-    height: 80,
+    height: 90,
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
   },
   imageHeader: {
     width: 100,

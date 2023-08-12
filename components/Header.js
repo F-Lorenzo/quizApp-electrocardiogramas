@@ -16,12 +16,12 @@ function Header() {
 
 const Styles = StyleSheet.create({
   container: {
-    paddingTop: 15,
+    paddingTop: 20,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "lightgrey",
     flexDirection: "row",
-    height: 80,
+    height: 90,
   },
   image: {
     width: 50,

@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
 import { Montserrat_400Regular } from "@expo-google-fonts/montserrat";
-import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import ejerciciosTest from "../db/ejerciciosTest.json";
 import Ejercicios from "../assets/images/ejercicios.png";
 import actividades from "../assets/images/actividades.png";
@@ -64,8 +72,6 @@ function InterpretacionElectro({ navigation }) {
     return <Text> font don't charge</Text>;
   }
 
-  console.log(ejercicios, "ejercicios");
-
   const resetAllFilters = () => {
     setLevel1(false);
     setLevel2(false);
@@ -96,7 +102,6 @@ function InterpretacionElectro({ navigation }) {
     } else {
       activeHandlerTodos();
     }
-    console.log(ejercicios, "1");
   };
   const activeHandlerLevel2 = () => {
     resetAllFilters();
@@ -107,7 +112,6 @@ function InterpretacionElectro({ navigation }) {
     } else {
       activeHandlerTodos();
     }
-    console.log(ejercicios, "2");
   };
   const activeHandlerLevel3 = () => {
     resetAllFilters();
@@ -118,7 +122,6 @@ function InterpretacionElectro({ navigation }) {
     } else {
       activeHandlerTodos();
     }
-    console.log(ejercicios, "3");
   };
   const activeHandlerTodos = () => {
     resetAllFilters();
@@ -278,23 +281,29 @@ function InterpretacionElectro({ navigation }) {
             marginRight: 15,
             backgroundColor: "#3b3a3a",
           }}>
-          <FlatList
-            data={filteredExercices}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("PlantillaInterpretacion", {
-                    key: item.key,
-                  })
-                }
-                style={Styles.ejerciciosContainer}>
-                <Text style={Styles.numbers}>{item.key}</Text>
-                <TouchableOpacity style={Styles.candado}>
-                  <Image style={Styles.imageCandado} source={candado} />
+          {filteredExercices.length ? (
+            <FlatList
+              data={filteredExercices}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("PlantillaInterpretacion", {
+                      exercise: item,
+                    })
+                  }
+                  style={Styles.ejerciciosContainer}>
+                  <Text style={Styles.numbers}>{item.key}</Text>
+                  <TouchableOpacity style={Styles.candado}>
+                    <Image style={Styles.imageCandado} source={candado} />
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            )}
-          />
+              )}
+            />
+          ) : (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <ActivityIndicator />
+            </View>
+          )}
         </View>
       </View>
     </View>

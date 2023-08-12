@@ -7,6 +7,7 @@ import Completar from "../assets/images/completar.png";
 import MultipleChoice from "../assets/images/multiple-choice.png";
 import concideracionesClinicas from "../assets/images/consideraciones_clinicas.png";
 import Header from "../components/Header";
+import Toast from "react-native-root-toast";
 
 function Menu({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -26,14 +27,26 @@ function Menu({ navigation }) {
   if (!fontLoaded) {
     return <Text> font don't charge</Text>;
   }
+
+  const handlerShowAlert = () => {
+    Toast.show("Implementación de funcionalidades en desarrollo para este tipo de ejercicio", {
+      duration: Toast.durations.LONG,
+      position: 50,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      opacity: 1,
+      backgroundColor: "#ef4444",
+    });
+  };
+
   return (
     <View style={{ flex: 1, flexDirection: "column" }}>
       <Header style={{ paddignTop: 10 }} />
 
       <TouchableOpacity
         style={Styles.container1}
-        onPress={() => navigation.navigate("InterpretacionElectro")}
-      >
+        onPress={() => navigation.navigate("InterpretacionElectro")}>
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={Ejercicios} />
           <Text style={Styles.text}>Interpretacion de electrocardiograma</Text>
@@ -42,8 +55,7 @@ function Menu({ navigation }) {
 
       <TouchableOpacity
         onPress={() => navigation.navigate("CompleteCasilleros")}
-        style={Styles.container2}
-      >
+        style={Styles.container2}>
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={Completar} />
           <Text style={Styles.text}>Complete los Casilleros</Text>
@@ -52,18 +64,14 @@ function Menu({ navigation }) {
 
       <TouchableOpacity
         onPress={() => navigation.navigate("MultipleChoice")}
-        style={Styles.container1}
-      >
+        style={Styles.container1}>
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={MultipleChoice} />
           <Text style={Styles.text}>Multiple choice</Text>
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate("ConcideracionesClinicas")}
-        style={Styles.container2}
-      >
+      <TouchableOpacity onPress={handlerShowAlert} style={Styles.container2}>
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={concideracionesClinicas} />
           <Text style={Styles.text}>Consideraciones Clinicas</Text>

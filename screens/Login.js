@@ -58,6 +58,7 @@ function Login({ navigation }) {
               firstName: userAuthenticated.firstName,
               lastName: userAuthenticated.lastName,
               email: email,
+              exercises: userAuthenticated.exercises ? userAuthenticated.exercises : [],
             })
           );
           Toast.show("Conectado", {

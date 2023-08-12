@@ -81,7 +81,7 @@ function Perfil({ navigation }) {
         saveUserData();
       }
     } catch (error) {
-      if (error === "auth/weak-password") {
+      if (error.code === "auth/weak-password") {
         Toast.show("La contraseña debe contener más de 6 caracteres", {
           duration: Toast.durations.SHORT,
           position: 50,

@@ -14,7 +14,6 @@ export const getManualPDF = () => {
       const uri = await getDownloadURL(starsRef);
 
       const fileInfo = await FileSystem.getInfoAsync(FileSystem.documentDirectory + "manual.pdf");
-      console.log(fileInfo)
       if (!fileInfo.exists) {
         const downloadedUri = await FileSystem.downloadAsync(
           uri,
