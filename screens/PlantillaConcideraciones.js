@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import * as Font from "expo-font";
-import {
-  Montserrat_400Regular,
-  Montserrat_500Medium,
-} from "@expo-google-fonts/montserrat";
+import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
 import {
   View,
   Text,
@@ -50,7 +47,7 @@ function PlantillaConcideraciones({ route, navigation }) {
     loadFont();
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     return () => {
-      ScreenOrientation.unlockAsync();
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);
     };
   }, []);
   if (!fontLoaded) {
@@ -66,9 +63,7 @@ function PlantillaConcideraciones({ route, navigation }) {
   return (
     <View style={Styles.container}>
       <View style={Styles.nav}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("ConcideracionesClinicas")}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("ConcideracionesClinicas")}>
           <Image style={Styles.imageNav} source={ejercicios} />
         </TouchableOpacity>
         <View style={Styles.linea}></View>
@@ -88,15 +83,13 @@ function PlantillaConcideraciones({ route, navigation }) {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                }}
-              >
+                }}>
                 <Text
                   style={{
                     color: "#fff",
                     fontFamily: "MontserratRegular",
                     fontSize: 12,
-                  }}
-                >
+                  }}>
                   Describa en el siguiente elctrocardiograma segun consigna
                 </Text>
                 <Image source={flecha} />
@@ -147,24 +140,17 @@ function PlantillaConcideraciones({ route, navigation }) {
         </View>
         <ScrollView style={Styles.ejercicio}>
           <View style={Styles.imagenEjercicioContainer}>
-            <Image
-              style={Styles.imagenEjercicio}
-              source={electrocardiogramaTest}
-            />
+            <Image style={Styles.imagenEjercicio} source={electrocardiogramaTest} />
           </View>
           <View style={Styles.respuestaContainer}>
             <Text style={Styles.respuestaText}>Su respuesta:</Text>
-            <TextInput
-              multiline={true}
-              style={Styles.respuestaInput}
-            ></TextInput>
+            <TextInput multiline={true} style={Styles.respuestaInput}></TextInput>
           </View>
           <TouchableOpacity
             style={Styles.respuestaButton}
             onPress={() => {
               setRespuesta(!respuesta);
-            }}
-          >
+            }}>
             {respuesta === false ? (
               <Text
                 style={{
@@ -173,8 +159,7 @@ function PlantillaConcideraciones({ route, navigation }) {
                   fontSize: 14,
                   margin: "2%",
                   height: 80,
-                }}
-              >
+                }}>
                 VER RESPUESTA CORRECTA
               </Text>
             ) : (
@@ -184,15 +169,12 @@ function PlantillaConcideraciones({ route, navigation }) {
                   fontFamily: "MontserratRegular",
                   fontSize: 14,
                   margin: "2%",
-                }}
-              >
+                }}>
                 OCULTAR RESPUESTA CORRECTA
               </Text>
             )}
           </TouchableOpacity>
-          {respuesta && (
-            <Text style={Styles.respuestaFinal}>{ejercicio.respuesta}</Text>
-          )}
+          {respuesta && <Text style={Styles.respuestaFinal}>{ejercicio.respuesta}</Text>}
         </ScrollView>
       </View>
     </View>
