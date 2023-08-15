@@ -26,6 +26,7 @@ import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
 import { getExercises } from "../api/services/exercise.service";
 import { useSelector } from "react-redux";
+import Toast from "react-native-root-toast";
 
 function CompleteCasilleros({ navigation }) {
   const [todos, setTodos] = useState(true);
@@ -42,9 +43,22 @@ function CompleteCasilleros({ navigation }) {
   }, []);
 
   const loadExercices = async () => {
-    const exercises = await getExercises("Completar");
-    setEjercicios(exercises);
-    setFilteredExercices(exercises);
+    try {
+      const exercises = await getExercises("Completar");
+      setEjercicios(exercises);
+      setFilteredExercices(exercises);
+    } catch (error) {
+      console.log(error);
+      Toast.show("Algo salió mal, estamos intentando solucionarlo", {
+        duration: Toast.durations.SHORT,
+        position: 50,
+        shadow: true,
+        animation: true,
+        hideOnPress: true,
+        opacity: 1,
+        backgroundColor: "#ef4444",
+      });
+    }
   };
 
   const resetFilters = () => {
