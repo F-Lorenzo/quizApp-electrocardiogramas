@@ -97,6 +97,13 @@ function PlantillaCompletar({ route, navigation }) {
     return <Text> font don't charge</Text>;
   }
 
+  const getMsgAlertStatus = (status) => {
+    return exerciseCompletedIdx !== -1 &&
+      user.exercises[exerciseCompletedIdx].status.includes(status)
+      ? `Has desmarcado la opción "${status}" del ejercicio`
+      : `Has marcado la opción "${status}" en el ejercicio`;
+  };
+
   const handlerCompleteExercise = async (status) => {
     try {
       setLoading(true);
@@ -118,12 +125,29 @@ function PlantillaCompletar({ route, navigation }) {
           },
         };
         userExercises = await createUserExercise(user, status, newExercise);
+        Toast.show(`Has marcado el ejercicio como "${status}"`, {
+          duration: 2000,
+          position: 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          backgroundColor: "#15803d",
+        });
       } else {
         userExercises = user.exercises.map((exerc) => {
           if (exerc.key === exercise.key && exerc.type === "Completar") {
+            let newStatus = [...exerc.status];
+
+            if (newStatus.includes(status)) {
+              newStatus = newStatus.filter((s) => s !== status);
+            } else {
+              newStatus.push(status);
+            }
+
             return {
               ...exerc,
-              status: status,
+              status: newStatus,
               respuestas: {
                 ejeElectrico: eje,
                 frecuencia: frecuencia,
@@ -140,6 +164,15 @@ function PlantillaCompletar({ route, navigation }) {
           return exerc;
         });
         await updateExercise(user.id, userExercises);
+        Toast.show(`${getMsgAlertStatus(status)}`, {
+          duration: 2000,
+          position: 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          backgroundColor: "#15803d",
+        });
       }
       dispatch(
         updateUserState({
@@ -150,15 +183,6 @@ function PlantillaCompletar({ route, navigation }) {
           exercises: userExercises,
         })
       );
-      Toast.show("Has resuelto el ejercicio", {
-        duration: 1000,
-        position: 50,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        opacity: 1,
-        backgroundColor: "#15803d",
-      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -216,10 +240,10 @@ function PlantillaCompletar({ route, navigation }) {
                 <Text style={Styles.titleTextEjercicio}>{exercise.key}</Text>
               </View>
               <View style={Styles.state}>
-                <TouchableOpacity disabled>
+                <TouchableOpacity onPress={() => handlerCompleteExercise("realizado")}>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].status === "realizado" ? (
+                  user.exercises[exerciseCompletedIdx].status.includes("realizado") ? (
                     <Image style={Styles.stateImage} source={realizadoActivo} />
                   ) : (
                     <Image style={Styles.stateImage} source={realizado} />
@@ -228,7 +252,7 @@ function PlantillaCompletar({ route, navigation }) {
                 <TouchableOpacity onPress={() => handlerCompleteExercise("destacado")}>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].status === "destacado" ? (
+                  user.exercises[exerciseCompletedIdx].status.includes("destacado") ? (
                     <Image style={Styles.stateImage} source={destacadoActivo} />
                   ) : (
                     <Image style={Styles.stateImage} source={destacado} />
@@ -237,7 +261,7 @@ function PlantillaCompletar({ route, navigation }) {
                 <TouchableOpacity onPress={() => handlerCompleteExercise("correcto")}>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].status === "correcto" ? (
+                  user.exercises[exerciseCompletedIdx].status.includes("correcto") ? (
                     <Image style={Styles.stateImage} source={correctoActivo} />
                   ) : (
                     <Image style={Styles.stateImage} source={correcto} />
@@ -246,7 +270,7 @@ function PlantillaCompletar({ route, navigation }) {
                 <TouchableOpacity onPress={() => handlerCompleteExercise("incorrecto")}>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].status === "incorrecto" ? (
+                  user.exercises[exerciseCompletedIdx].status.includes("incorrecto") ? (
                     <Image style={Styles.stateImage} source={incorrectoActivo} />
                   ) : (
                     <Image style={Styles.stateImage} source={incorrecto} />

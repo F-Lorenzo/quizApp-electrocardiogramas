@@ -70,7 +70,7 @@ const createExercise = async (user, status, exercise) => {
   return new Promise(async (resolve, reject) => {
     try {
       const exerci = {
-        status: status,
+        status: [status],
         type: exercise.type,
         key: exercise.key,
         respuestas: exercise.respuestas,
