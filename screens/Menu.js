@@ -71,7 +71,9 @@ function Menu({ navigation }) {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handlerShowAlert} style={Styles.container2}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("ConcideracionesClinicas")}
+        style={Styles.container2}>
         <View style={Styles.buttonContainer}>
           <Image style={Styles.image} source={concideracionesClinicas} />
           <Text style={Styles.text}>Consideraciones Clinicas</Text>

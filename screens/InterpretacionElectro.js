@@ -343,7 +343,7 @@ const Styles = StyleSheet.create({
     height: 80,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    width: "90%",
   },
   filtersContainer: {
     marginTop: 20,
