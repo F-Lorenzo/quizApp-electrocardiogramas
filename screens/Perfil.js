@@ -27,6 +27,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUserState } from "../store/user/slice";
 import { EmailAuthProvider, reauthenticateWithCredential } from "firebase/auth";
 import { auth } from "../config/firebase.config";
+import {
+  COMPLETAR,
+  CONSIDERACIONES,
+  INTERPRETACION,
+  MULTIPLE_CHOICE,
+} from "../config/exercisesType";
 
 function Perfil({ navigation }) {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -336,6 +342,7 @@ function Perfil({ navigation }) {
                 style={Styles.container}
                 onPress={() =>
                   navigation.navigate("Estadisticas", {
+                    type: INTERPRETACION,
                     img: Ejercicios,
                     title: "Interpretacion de electrocardiograma",
                     ejercicios: ejerciciosConcideraciones,
@@ -350,6 +357,7 @@ function Perfil({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("Estadisticas", {
+                    type: COMPLETAR,
                     img: Completar,
                     title: "Complete los Casilleros",
                     ejercicios: ejerciciosConcideraciones,
@@ -365,6 +373,7 @@ function Perfil({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("Estadisticas", {
+                    type: MULTIPLE_CHOICE,
                     img: MultipleChoice,
                     title: "Multiple choice",
                     ejercicios: ejerciciosConcideraciones,
@@ -380,6 +389,7 @@ function Perfil({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("Estadisticas", {
+                    type: CONSIDERACIONES,
                     img: concideracionesClinicas,
                     title: "Consideraciones Clinicas",
                     ejercicios: ejerciciosConcideraciones,

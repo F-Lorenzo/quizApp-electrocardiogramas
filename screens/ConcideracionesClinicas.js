@@ -19,6 +19,8 @@ import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
 import { getExercises } from "../api/services/exercise.service";
 import Toast from "react-native-root-toast";
+import { useSelector } from "react-redux";
+import { CONSIDERACIONES } from "../config/exercisesType";
 
 function ConcideracionesClinicas({ navigation }) {
   const [todos, setTodos] = useState(true);
@@ -29,6 +31,7 @@ function ConcideracionesClinicas({ navigation }) {
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState([]);
   const [filteredExercices, setFilteredExercices] = useState([]);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     loadExercices();
@@ -36,7 +39,7 @@ function ConcideracionesClinicas({ navigation }) {
 
   const loadExercices = async () => {
     try {
-      const exercises = await getExercises("ConsideracionesClinicas");
+      const exercises = await getExercises("Consideraciones");
       setEjercicios(exercises);
       setFilteredExercices(exercises);
     } catch (error) {
@@ -85,7 +88,9 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("realizado") && ejercicio.type === CONSIDERACIONES
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -95,7 +100,9 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("destacados") && ejercicio.type === CONSIDERACIONES
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -105,7 +112,9 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("correcto") && ejercicio.type === CONSIDERACIONES
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -115,7 +124,9 @@ function ConcideracionesClinicas({ navigation }) {
     resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("incorrecto") && ejercicio.type === CONSIDERACIONES
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -197,23 +208,29 @@ function ConcideracionesClinicas({ navigation }) {
             marginRight: 15,
             backgroundColor: "#3b3a3a",
           }}>
-          <FlatList
-            data={filteredExercices}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("PlantillaConcideraciones", {
-                    key: item.key,
-                  })
-                }
-                style={Styles.ejerciciosContainer}>
-                <Text style={Styles.text}>{item.key}</Text>
-                <TouchableOpacity style={Styles.candado}>
-                  <Image style={Styles.imageCandado} source={candado} />
+          {filteredExercices.length ? (
+            <FlatList
+              data={filteredExercices}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("PlantillaConcideraciones", {
+                      exercise: item,
+                    })
+                  }
+                  style={Styles.ejerciciosContainer}>
+                  <Text style={Styles.text}>{item.key}</Text>
+                  <TouchableOpacity style={Styles.candado}>
+                    <Image style={Styles.imageCandado} source={candado} />
+                  </TouchableOpacity>
                 </TouchableOpacity>
-              </TouchableOpacity>
-            )}
-          />
+              )}
+            />
+          ) : (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <Text>No hay información para mostrar</Text>
+            </View>
+          )}
         </View>
       </View>
     </View>

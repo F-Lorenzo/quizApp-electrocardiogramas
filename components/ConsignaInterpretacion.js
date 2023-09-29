@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Font from "expo-font";
-import {
-  Montserrat_400Regular,
-  Montserrat_500Medium,
-} from "@expo-google-fonts/montserrat";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { Montserrat_400Regular, Montserrat_500Medium } from "@expo-google-fonts/montserrat";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 
 function ConsignaInterpretacion({ consigna }) {
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -29,9 +26,7 @@ function ConsignaInterpretacion({ consigna }) {
   }
   return (
     <View style={Styles.consignaExtendida}>
-      <Text style={{ color: "#fff", fontFamily: "MontserratRegular" }}>
-        {consigna}
-      </Text>
+      <Text style={{ color: "#fff", fontFamily: "MontserratRegular" }}>{consigna}</Text>
     </View>
   );
 }

@@ -27,6 +27,8 @@ import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
 import { getExercises } from "../api/services/exercise.service";
 import Toast from "react-native-root-toast";
+import { MULTIPLE_CHOICE } from "../config/exercisesType";
+import { useSelector } from "react-redux";
 
 function MultipleChoice({ navigation }) {
   const [todos, setTodos] = useState(true);
@@ -37,6 +39,7 @@ function MultipleChoice({ navigation }) {
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState([]);
   const [filteredExercices, setFilteredExercices] = useState([]);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     loadExercices();
@@ -44,7 +47,8 @@ function MultipleChoice({ navigation }) {
 
   const loadExercices = async () => {
     try {
-      const exercises = await getExercises("Choice");
+      const exercises = await getExercises(MULTIPLE_CHOICE);
+      console.log(exercises);
       setEjercicios(exercises);
       setFilteredExercices(exercises);
     } catch (error) {
@@ -93,7 +97,9 @@ function MultipleChoice({ navigation }) {
     resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("realizado") && ejercicio.type === MULTIPLE_CHOICE
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -103,7 +109,9 @@ function MultipleChoice({ navigation }) {
     resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("destacados") && ejercicio.type === MULTIPLE_CHOICE
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -113,7 +121,9 @@ function MultipleChoice({ navigation }) {
     resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("correcto") && ejercicio.type === MULTIPLE_CHOICE
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -123,7 +133,9 @@ function MultipleChoice({ navigation }) {
     resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("incorrecto") && ejercicio.type === MULTIPLE_CHOICE
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -225,7 +237,7 @@ function MultipleChoice({ navigation }) {
             />
           ) : (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-              <ActivityIndicator />
+              <Text>No hay información para mostrar</Text>
             </View>
           )}
         </View>

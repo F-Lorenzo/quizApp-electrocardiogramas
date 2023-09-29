@@ -28,10 +28,15 @@ import LogoApp from "../assets/images/LogoApp.png";
 import actividades from "../assets/images/actividades.png";
 import ejercicios from "../assets/images/ejercicios.png";
 import { checkExerciseCompleted } from "../utils/exercisesUtils";
-import { createUserExercise, updateExercise } from "../api/services/exercise.service";
+import {
+  createUserExercise,
+  getImageExercise,
+  updateExercise,
+} from "../api/services/exercise.service";
 import Toast from "react-native-root-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserState } from "../store/user/slice";
+import { INTERPRETACION } from "../config/exercisesType";
 
 function PlantillaInterpretacion({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
@@ -43,7 +48,6 @@ function PlantillaInterpretacion({ route, navigation }) {
   const [comentarios, setComentarios] = useState("");
 
   const { exercise } = route.params;
-  const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === exercise.key);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -72,7 +76,7 @@ function PlantillaInterpretacion({ route, navigation }) {
 
   const loadStatusExercise = async () => {
     try {
-      const idxExercise = await checkExerciseCompleted(user, exercise.key, "Interpretacion");
+      const idxExercise = await checkExerciseCompleted(user, exercise.key, INTERPRETACION);
       if (idxExercise !== -1) {
         setExerciseCompletedIdx(idxExercise);
         setComentarios(user.exercises[idxExercise].respuestas.comentarios);
@@ -86,13 +90,20 @@ function PlantillaInterpretacion({ route, navigation }) {
     return <Text> font don't charge</Text>;
   }
 
+  const getMsgAlertStatus = (status) => {
+    return exerciseCompletedIdx !== -1 &&
+      user.exercises[exerciseCompletedIdx].status.includes(status)
+      ? `Has desmarcado la opción "${status}" del ejercicio`
+      : `Has marcado la opción "${status}" en el ejercicio`;
+  };
+
   const handlerCompleteExercise = async (status) => {
     try {
       setLoading(true);
       let userExercises = [];
       if (exerciseCompletedIdx === -1) {
         const newExercise = {
-          type: "Interpretacion",
+          type: INTERPRETACION,
           key: exercise.key,
           respuestas: {
             comentarios: comentarios,
@@ -100,14 +111,45 @@ function PlantillaInterpretacion({ route, navigation }) {
           level: exercise.nivel,
         };
         userExercises = await createUserExercise(user, status, newExercise);
+        Toast.show(`Has marcado el ejercicio como "${status}"`, {
+          duration: 2000,
+          position: 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          backgroundColor: "#15803d",
+        });
       } else {
         userExercises = user.exercises.map((exerc) => {
-          if (exerc.key === exercise.key && exerc.type === "Interpretacion") {
-            return { ...exerc, status: status, respuestas: { comentarios: comentarios } };
+          if (exerc.key === exercise.key && exerc.type === INTERPRETACION) {
+            let newStatus = [...exerc.status];
+
+            if (newStatus.includes(status)) {
+              newStatus = newStatus.filter((s) => s !== status);
+            } else {
+              newStatus.push(status);
+            }
+
+            return {
+              ...exerc,
+              status: newStatus,
+              respuestas: { comentarios: comentarios },
+              level: exercise.nivel,
+            };
           }
           return exerc;
         });
         await updateExercise(user.id, userExercises);
+        Toast.show(`${getMsgAlertStatus(status)}`, {
+          duration: 2000,
+          position: 50,
+          shadow: true,
+          animation: true,
+          hideOnPress: true,
+          opacity: 1,
+          backgroundColor: "#15803d",
+        });
       }
       dispatch(
         updateUserState({
@@ -118,15 +160,6 @@ function PlantillaInterpretacion({ route, navigation }) {
           exercises: userExercises,
         })
       );
-      Toast.show("Has resuelto el ejercicio", {
-        duration: 1000,
-        position: 50,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        opacity: 1,
-        backgroundColor: "#15803d",
-      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -187,21 +220,21 @@ function PlantillaInterpretacion({ route, navigation }) {
                 </View>
               ) : (
                 <ConsignaInterpretacion
-                  consigna={ejercicio.consigna}
+                  consigna={exercise.consigna}
                   style={Styles.consignaExtendida}
                 />
               )}
             </TouchableOpacity>
             <View style={Styles.rightBlock}>
               <View style={Styles.title}>
-                <Text style={Styles.titleTextMain}>N{ejercicio.nivel}-</Text>
-                <Text style={Styles.titleTextEjercicio}>{ejercicio.key}</Text>
+                <Text style={Styles.titleTextMain}>N{exercise.nivel}-</Text>
+                <Text style={Styles.titleTextEjercicio}>{exercise.key}</Text>
               </View>
               <View style={Styles.state}>
-                <TouchableOpacity disabled>
+                <TouchableOpacity onPress={() => handlerCompleteExercise("realizado")}>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].status === "realizado" ? (
+                  user.exercises[exerciseCompletedIdx].status.includes("realizado") ? (
                     <Image style={Styles.stateImage} source={realizadoActivo} />
                   ) : (
                     <Image style={Styles.stateImage} source={realizado} />
@@ -210,7 +243,7 @@ function PlantillaInterpretacion({ route, navigation }) {
                 <TouchableOpacity onPress={() => handlerCompleteExercise("destacado")}>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].status === "destacado" ? (
+                  user.exercises[exerciseCompletedIdx].status.includes("destacado") ? (
                     <Image style={Styles.stateImage} source={destacadoActivo} />
                   ) : (
                     <Image style={Styles.stateImage} source={destacado} />
@@ -219,7 +252,7 @@ function PlantillaInterpretacion({ route, navigation }) {
                 <TouchableOpacity onPress={() => handlerCompleteExercise("correcto")}>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].status === "correcto" ? (
+                  user.exercises[exerciseCompletedIdx].status.includes("correcto") ? (
                     <Image style={Styles.stateImage} source={correctoActivo} />
                   ) : (
                     <Image style={Styles.stateImage} source={correcto} />
@@ -228,7 +261,7 @@ function PlantillaInterpretacion({ route, navigation }) {
                 <TouchableOpacity onPress={() => handlerCompleteExercise("incorrecto")}>
                   {user.exercises.length > 0 &&
                   exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].status === "incorrecto" ? (
+                  user.exercises[exerciseCompletedIdx].status.includes("incorrecto") ? (
                     <Image style={Styles.stateImage} source={incorrectoActivo} />
                   ) : (
                     <Image style={Styles.stateImage} source={incorrecto} />
@@ -239,7 +272,11 @@ function PlantillaInterpretacion({ route, navigation }) {
           </View>
           <ScrollView style={Styles.ejercicio}>
             <View style={Styles.imagenEjercicioContainer}>
-              <Image style={Styles.imagenEjercicio} source={electrocardiogramaTest} />
+              {exercise.imagen ? (
+                <Image style={Styles.imagenEjercicio} source={{ uri: exercise.imagen }} />
+              ) : (
+                <ActivityIndicator />
+              )}
             </View>
             <View style={Styles.respuestaContainer}>
               <Text style={Styles.respuestaText}>Su respuesta:</Text>
@@ -248,8 +285,9 @@ function PlantillaInterpretacion({ route, navigation }) {
                 style={Styles.respuestaInput}
                 onChangeText={(text) => setComentarios(text)}
                 defaultValue={
-                  exerciseCompletedIdx !== -1 &&
-                  user.exercises[exerciseCompletedIdx].respuestas.comentarios
+                  exerciseCompletedIdx !== -1
+                    ? user.exercises[exerciseCompletedIdx].respuestas.comentarios
+                    : ""
                 }></TextInput>
             </View>
             <TouchableOpacity
@@ -283,9 +321,18 @@ function PlantillaInterpretacion({ route, navigation }) {
             {respuesta && (
               <View style={Styles.respuestaFinal}>
                 <View style={Styles.parametros}>
-                  <Text style={Styles.parametro}>{ejercicio.ritmo}</Text>
-                  <Text style={Styles.parametro}>{ejercicio.frecuencia}</Text>
-                  <Text style={Styles.parametro}>{ejercicio.eje}</Text>
+                  <Text style={Styles.parametro} va>
+                    {exercise.respuesta.comentarios.split(",")[0]}
+                    <Text>{"\n"}</Text>
+                  </Text>
+                  <Text style={Styles.parametro}>
+                    {exercise.respuesta.comentarios.split(",")[1]}
+                    <Text>{"\n"}</Text>
+                  </Text>
+                  <Text style={Styles.parametro}>
+                    {exercise.respuesta.comentarios.split(",")[2]}
+                    <Text>{"\n"}</Text>
+                  </Text>
                 </View>
                 <View style={Styles.comentario}>
                   <Text
@@ -302,7 +349,7 @@ function PlantillaInterpretacion({ route, navigation }) {
                       fontFamily: "MontserratRegular",
                       fontSize: 12,
                     }}>
-                    {ejercicio.comentario}
+                    {exercise.descripcion}
                   </Text>
                 </View>
               </View>
@@ -431,13 +478,11 @@ const Styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#66a303",
     justifyContent: "space-around",
-    alignItems: "center",
   },
   comentario: {
     width: "60%",
     fontFamily: "MontserratRegular",
     color: "#fff",
-    justifyContent: "center",
     alignItems: "center",
     padding: 10,
   },
