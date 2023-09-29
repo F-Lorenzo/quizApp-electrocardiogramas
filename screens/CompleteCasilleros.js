@@ -18,6 +18,7 @@ import realizadosImg from "../assets/images/ejercicios-realizados.png";
 import destacadosImg from "../assets/images/ejercicios-destacados.png";
 import resueltosImg from "../assets/images/ejercicios-ok.png";
 import malResueltosImg from "../assets/images/ejercicios-mal-hechos.png";
+import malResueltosImgActivo from "../assets/images/ejercicios-mal-hechos-activo.png";
 import noRealizadosActivo from "../assets/images/ejercicios-sin-realizar-activo.png";
 import realizadosActivo from "../assets/images/ejercicios-realizados-activo.png";
 import destacadosActivo from "../assets/images/ejercicios-destacados-activo.png";
@@ -27,6 +28,7 @@ import Header from "../components/Header";
 import { getExercises } from "../api/services/exercise.service";
 import { useSelector } from "react-redux";
 import Toast from "react-native-root-toast";
+import { COMPLETAR } from "../config/exercisesType";
 
 function CompleteCasilleros({ navigation }) {
   const [todos, setTodos] = useState(true);
@@ -37,6 +39,7 @@ function CompleteCasilleros({ navigation }) {
   const [malResueltos, setMalResueltos] = useState(false);
   const [ejercicios, setEjercicios] = useState([]);
   const [filteredExercices, setFilteredExercices] = useState([]);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     loadExercices();
@@ -44,7 +47,7 @@ function CompleteCasilleros({ navigation }) {
 
   const loadExercices = async () => {
     try {
-      const exercises = await getExercises("Completar");
+      const exercises = await getExercises(COMPLETAR);
       setEjercicios(exercises);
       setFilteredExercices(exercises);
     } catch (error) {
@@ -73,11 +76,7 @@ function CompleteCasilleros({ navigation }) {
   const activeHandlerTodos = () => {
     resetFilters();
     setTodos(!todos);
-    if (todos === false) {
-      setFilteredExercices(ejercicios);
-    } else {
-      setFilteredExercices([]);
-    }
+    setFilteredExercices(ejercicios);
   };
   const activeHandlerNoRealizados = () => {
     resetFilters();
@@ -93,7 +92,9 @@ function CompleteCasilleros({ navigation }) {
     resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("realizado") && ejercicio.type === COMPLETAR
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -103,7 +104,9 @@ function CompleteCasilleros({ navigation }) {
     resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("destacado") && ejercicio.type === COMPLETAR
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -113,7 +116,9 @@ function CompleteCasilleros({ navigation }) {
     resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("correcto") && ejercicio.type === COMPLETAR
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -123,7 +128,9 @@ function CompleteCasilleros({ navigation }) {
     resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("incorrecto") && ejercicio.type === COMPLETAR
+      );
       setFilteredExercices(ejercicio);
     } else {
       activeHandlerTodos();
@@ -191,7 +198,7 @@ function CompleteCasilleros({ navigation }) {
             </TouchableOpacity>
             <TouchableOpacity onPress={activeHandlerMalResueltos} style={Styles.typeButton}>
               {malResueltos === true ? (
-                <Image style={Styles.imagesType} source={malResueltosImg} />
+                <Image style={Styles.imagesType} source={malResueltosImgActivo} />
               ) : (
                 <Image style={Styles.imagesType} source={malResueltosImg} />
               )}
@@ -221,7 +228,7 @@ function CompleteCasilleros({ navigation }) {
             />
           ) : (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-              <ActivityIndicator />
+              <Text>No hay información para mostrar</Text>
             </View>
           )}
         </View>

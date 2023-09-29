@@ -32,6 +32,7 @@ import { checkExerciseCompleted } from "../utils/exercisesUtils";
 import { createUserExercise, updateExercise } from "../api/services/exercise.service";
 import { updateUserState } from "../store/user/slice";
 import Toast from "react-native-root-toast";
+import { MULTIPLE_CHOICE } from "../config/exercisesType";
 
 function PlantillaChoice({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
@@ -45,10 +46,9 @@ function PlantillaChoice({ route, navigation }) {
   const [answerWasSent, setAnswerWasSent] = useState(false);
 
   const { exercise } = route.params;
-  const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === exercise.key);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const respuestas = ejercicio.consigna;
+  console.log(exercise);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -75,7 +75,7 @@ function PlantillaChoice({ route, navigation }) {
 
   const loadStatusExercise = async () => {
     try {
-      const idxExercise = await checkExerciseCompleted(user, exercise.key, "Choice");
+      const idxExercise = await checkExerciseCompleted(user, exercise.key, MULTIPLE_CHOICE);
       if (idxExercise !== -1) {
         setExerciseCompletedIdx(idxExercise);
         setSelectedResponse(user.exercises[idxExercise].respuestas.opcionElegida);
@@ -97,14 +97,31 @@ function PlantillaChoice({ route, navigation }) {
       setLoading(true);
       let userExercises = [];
       if (option) {
-        const newExercise = {
-          type: "Choice",
-          key: exercise.key,
-          respuestas: {
-            opcionElegida: option,
-          },
-        };
-        userExercises = await createUserExercise(user, status, newExercise);
+        console.log(selectedResponse);
+        if (!selectedResponse.length || selectedResponse === "") {
+          const newExercise = {
+            type: MULTIPLE_CHOICE,
+            key: exercise.key,
+            respuestas: {
+              opcionElegida: option,
+            },
+          };
+          userExercises = await createUserExercise(user, status, newExercise);
+        } else {
+          userExercises = user.exercises.map((exerc) => {
+            if (exerc.key === exercise.key && exerc.type === MULTIPLE_CHOICE) {
+              return {
+                ...exerc,
+                status: exerc.status,
+                respuestas: {
+                  opcionElegida: option,
+                },
+              };
+            }
+            return exerc;
+          });
+          await updateExercise(user.id, userExercises);
+        }
         Toast.show(`Has marcado el ejercicio como "${status}"`, {
           duration: 2000,
           position: 50,
@@ -117,7 +134,7 @@ function PlantillaChoice({ route, navigation }) {
       } else {
         if (selectedResponse.length > 0) {
           userExercises = user.exercises.map((exerc) => {
-            if (exerc.key === exercise.key && exerc.type === "Choice") {
+            if (exerc.key === exercise.key && exerc.type === MULTIPLE_CHOICE) {
               let newStatus = [...exerc.status];
 
               if (newStatus.includes(status)) {
@@ -184,7 +201,7 @@ function PlantillaChoice({ route, navigation }) {
     setConsignaLoaded(!consignaLoaded);
   };
 
-  handlerSelectOption = async (option) => {
+  const handlerSelectOption = async (option) => {
     setSelectedResponse(option);
     handlerCompleteExercise(option, "realizado");
   };
@@ -240,14 +257,14 @@ function PlantillaChoice({ route, navigation }) {
               ) : (
                 <View style={Styles.consignaExtendida}>
                   <TouchableOpacity
-                    onPress={() => handlerSelectOption("a")}
+                    onPress={() => handlerSelectOption("A")}
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
                       backgroundColor:
-                        selectedResponse !== "a"
+                        selectedResponse !== "A"
                           ? "rgba(71, 71, 71, 0.5)"
-                          : respuestas.a.correcta == true
+                          : exercise.respuesta.opcion === "A"
                           ? "#29ba13"
                           : "#c27c04",
                       height: 60,
@@ -261,19 +278,19 @@ function PlantillaChoice({ route, navigation }) {
                         color: "#fff",
                         fontFamily: "MontserratRegular",
                       }}>
-                      A -
+                      A - {""}
                     </Text>
-                    <Text style={Styles.respuestas}>{respuestas.a.texto}</Text>
+                    <Text style={Styles.respuestas}>{exercise.consigna.A}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => handlerSelectOption("b")}
+                    onPress={() => handlerSelectOption("B")}
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
                       backgroundColor:
-                        selectedResponse !== "b"
+                        selectedResponse !== "B"
                           ? "rgba(71, 71, 71, 0.5)"
-                          : respuestas.b.correcta == true
+                          : exercise.respuesta.opcion === "B"
                           ? "#29ba13"
                           : "#c27c04",
                       height: 60,
@@ -289,17 +306,17 @@ function PlantillaChoice({ route, navigation }) {
                       }}>
                       B -
                     </Text>
-                    <Text style={Styles.respuestas}> {respuestas.b.texto}</Text>
+                    <Text style={Styles.respuestas}> {exercise.consigna.B}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => handlerSelectOption("c")}
+                    onPress={() => handlerSelectOption("C")}
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
                       backgroundColor:
-                        selectedResponse !== "c"
+                        selectedResponse !== "C"
                           ? "rgba(71, 71, 71, 0.5)"
-                          : respuestas.c.correcta == true
+                          : exercise.respuesta.opcion === "C"
                           ? "#29ba13"
                           : "#c27c04",
                       height: 60,
@@ -315,17 +332,17 @@ function PlantillaChoice({ route, navigation }) {
                       }}>
                       C -
                     </Text>
-                    <Text style={Styles.respuestas}> {respuestas.c.texto}</Text>
+                    <Text style={Styles.respuestas}> {exercise.consigna.C}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => handlerSelectOption("d")}
+                    onPress={() => handlerSelectOption("D")}
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
                       backgroundColor:
-                        selectedResponse !== "d"
+                        selectedResponse !== "D"
                           ? "rgba(71, 71, 71, 0.5)"
-                          : respuestas.d.correcta == true
+                          : exercise.respuesta.opcion === "D"
                           ? "#29ba13"
                           : "#c27c04",
                       height: 60,
@@ -341,17 +358,17 @@ function PlantillaChoice({ route, navigation }) {
                       }}>
                       D -
                     </Text>
-                    <Text style={Styles.respuestas}>{respuestas.d.texto}</Text>
+                    <Text style={Styles.respuestas}>{exercise.consigna.D}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => handlerSelectOption("e")}
+                    onPress={() => handlerSelectOption("E")}
                     style={{
                       color: "#fff",
                       fontFamily: "MontserratRegular",
                       backgroundColor:
-                        selectedResponse !== "e"
+                        selectedResponse !== "E"
                           ? "rgba(71, 71, 71, 0.5)"
-                          : respuestas.e.correcta == true
+                          : exercise.respuesta.opcion === "E"
                           ? "#29ba13"
                           : "#c27c04",
                       height: 60,
@@ -367,7 +384,7 @@ function PlantillaChoice({ route, navigation }) {
                       }}>
                       E -
                     </Text>
-                    <Text style={Styles.respuestas}> {respuestas.e.texto}</Text>
+                    <Text style={Styles.respuestas}> {exercise.consigna.E}</Text>
                   </TouchableOpacity>
                 </View>
               )}
@@ -375,7 +392,7 @@ function PlantillaChoice({ route, navigation }) {
             <View style={Styles.rightBlock}>
               <View style={Styles.title}>
                 <Text style={Styles.titleTextMain}>MC-</Text>
-                <Text style={Styles.titleTextEjercicio}>{ejercicio.key}</Text>
+                <Text style={Styles.titleTextEjercicio}>{exercise.key}</Text>
               </View>
               <View style={Styles.state}>
                 <TouchableOpacity disabled>
@@ -419,7 +436,13 @@ function PlantillaChoice({ route, navigation }) {
           </View>
           <View style={Styles.ejercicio}>
             <View style={Styles.imagenEjercicioContainer}>
-              <Image style={Styles.imagenEjercicio} source={electrocardiogramaTest} />
+              {exercise.imagen && (
+                <Image
+                  style={Styles.imagenEjercicio}
+                  source={{ uri: exercise.imagen }}
+                  resizeMode="stretch"
+                />
+              )}
             </View>
           </View>
         </View>

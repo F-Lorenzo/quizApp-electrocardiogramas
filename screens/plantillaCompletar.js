@@ -32,6 +32,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createUserExercise, updateExercise } from "../api/services/exercise.service";
 import { updateUserState } from "../store/user/slice";
 import Toast from "react-native-root-toast";
+import { COMPLETAR } from "../config/exercisesType";
 
 function PlantillaCompletar({ route, navigation }) {
   const [consignaLoaded, setConsignaLoaded] = useState(false);
@@ -41,11 +42,21 @@ function PlantillaCompletar({ route, navigation }) {
   const [exerciseCompletedIdx, setExerciseCompletedIdx] = useState(-1);
   const [ritmo, setRitmo] = useState("");
   const [frecuencia, setFrecuencia] = useState("");
+  const [ejeQrsCercano, setEjeQrsCercano] = useState("");
   const [eje, setEje] = useState("");
   const [monofocal1, setMonofocal1] = useState("");
   const [monofocal2, setMonofocal2] = useState("");
   const [necrosis, setNecrosis] = useState("");
   const [versusRotacion, setVersusRotacion] = useState("");
+  const [bloqueo, setBloqueo] = useState("");
+  const [deRama, setDeRama] = useState("");
+  const [extrasistolia, setExtrasistolia] = useState("");
+  const [bloqueoAVDe, setBloqueoAVDe] = useState("");
+  const [faltaProgresionR, setFaltaProgresionR] = useState("");
+  const [trastornoInespecificos, setTrastornoInespecificos] = useState("");
+  const [anteriorIzquierdo, setAnteriorIzquierdo] = useState("");
+  const [agrandamientoAuricula, setAgrandamientoAuricula] = useState("");
+  const [hemibloqueo, setHemibloqueo] = useState("");
 
   const { exercise } = route.params;
   const ejercicio = ejerciciosTest.find((ejercicio) => ejercicio.key === exercise.key);
@@ -63,7 +74,7 @@ function PlantillaCompletar({ route, navigation }) {
 
       setFontLoaded(true);
     };
-
+    console.log(exercise);
     loadFont();
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE);
     return () => {
@@ -77,16 +88,32 @@ function PlantillaCompletar({ route, navigation }) {
 
   const loadStatusExercise = async () => {
     try {
-      const idxExercise = await checkExerciseCompleted(user, exercise.key, "Completar");
+      const idxExercise = await checkExerciseCompleted(user, exercise.key, COMPLETAR);
       if (idxExercise !== -1) {
         setExerciseCompletedIdx(idxExercise);
         setRitmo(user.exercises[idxExercise].respuestas.ritmo);
         setFrecuencia(user.exercises[idxExercise].respuestas.frecuencia);
         setEje(user.exercises[idxExercise].respuestas.ejeElectrico);
-        setMonofocal1(user.exercises[idxExercise].respuestas.monofocal.texto1);
-        setMonofocal2(user.exercises[idxExercise].respuestas.monofocal.texto2);
+        if (user.exercises[idxExercise].respuestas.hasOwnProperty("monofocal")) {
+          setMonofocal1(user.exercises[idxExercise].respuestas.monofocal.texto1);
+          setMonofocal2(user.exercises[idxExercise].respuestas.monofocal.texto2);
+        }
         setNecrosis(user.exercises[idxExercise].respuestas.necrosis);
         setVersusRotacion(user.exercises[idxExercise].respuestas.versusRotacion);
+        setBloqueo(user.exercises[idxExercise].respuestas.bloqueo);
+        setDeRama(user.exercises[idxExercise].respuesta.de_rama);
+        setExtrasistolia(user.exercises[idxExercise].respuestas.extrasistolia);
+        setBloqueoAVDe(user.exercises[idxExercise].respuestas.bloque_av_de);
+        setFaltaProgresionR(
+          user.exercises[idxExercise].respuestas.falta_de_progresion_de_R_en_derivaciones
+        );
+        setTrastornoInespecificos(
+          user.exercises[idxExercise].respuestas.trastornos_inespecificos_de_la_repolarizacion
+        );
+        setAnteriorIzquierdo(user.exercises[idxExercise].respuestas.anterior_izquierdo);
+        setAgrandamientoAuricula(user.exercises[idxExercise].respuestas.agrandamiento_de_auricula);
+        setEjeQrsCercano(user.exercises[idxExercise].respuestas.eje_qrs_cercano_a);
+        setHemibloqueo(user.exercises[idxExercise].respuestas.hemibloqueo);
       }
     } catch (error) {
       console.log(error);
@@ -104,25 +131,68 @@ function PlantillaCompletar({ route, navigation }) {
       : `Has marcado la opción "${status}" en el ejercicio`;
   };
 
+  const fillRespuestas = () => {
+    let respuesta = {};
+    if (exercise.respuesta.hasOwnProperty("ritmo")) {
+      respuesta.ritmo = ritmo;
+    }
+    if (exercise.respuesta.hasOwnProperty("frecuencia")) {
+      respuesta.frecuencia = frecuencia;
+    }
+    if (exercise.respuesta.hasOwnProperty("bloqueo")) {
+      respuesta.bloqueo = bloqueo;
+    }
+    if (exercise.respuesta.hasOwnProperty("de_rama")) {
+      respuesta.de_rama = deRama;
+    }
+    if (exercise.respuesta.hasOwnProperty("eje")) {
+      respuesta.eje = eje;
+    }
+    if (exercise.respuesta.hasOwnProperty("hemibloqueo")) {
+      respuesta.hemibloqueo = hemibloqueo;
+    }
+    if (exercise.respuesta.hasOwnProperty("falta_de_progresion_de_R_en_derivaciones")) {
+      respuesta.falta_de_progresion_de_R_en_derivaciones = faltaProgresionR;
+    }
+    if (exercise.respuesta.hasOwnProperty("trastornos_inespecificos_de_la_repolarizacion")) {
+      respuesta.trastornos_inespecificos_de_la_repolarizacion = trastornoInespecificos;
+    }
+    if (exercise.respuesta.hasOwnProperty("eje_qrs_cercano_a")) {
+      respuesta.eje_qrs_cercano_a = ejeQrsCercano;
+    }
+    if (exercise.respuesta.hasOwnProperty("agrandamiento_de_auricula")) {
+      respuesta.agrandamiento_de_auricula = agrandamientoAuricula;
+    }
+    if (exercise.respuesta.hasOwnProperty("bloqueo_av_de")) {
+      respuesta.bloque_av_de = bloqueoAVDe;
+    }
+    if (exercise.respuesta.hasOwnProperty("monofocal")) {
+      respuesta.monofocal = { texto1: monofocal1, texto2: monofocal2 };
+    }
+    if (exercise.respuesta.hasOwnProperty("necrosis")) {
+      respuesta.necrosis = necrosis;
+    }
+    if (exercise.respuesta.hasOwnProperty("versus_rotacion")) {
+      respuesta.versus_rotacion = versusRotacion;
+    }
+    if (exercise.respuesta.hasOwnProperty("extrasistolia")) {
+      respuesta.extrasistolia = extrasistolia;
+    }
+    if (exercise.respuesta.hasOwnProperty("anterior_izquierdo")) {
+      respuesta.anterior_izquierdo = anteriorIzquierdo;
+    }
+    return respuesta;
+  };
+
   const handlerCompleteExercise = async (status) => {
     try {
       setLoading(true);
       let userExercises = [];
       if (exerciseCompletedIdx === -1) {
         const newExercise = {
-          type: "Completar",
+          type: COMPLETAR,
           key: exercise.key,
-          respuestas: {
-            ejeElectrico: eje,
-            frecuencia: frecuencia,
-            ritmo: ritmo,
-            monofocal: {
-              texto1: monofocal1,
-              texto2: monofocal2,
-            },
-            necrosis: necrosis,
-            versusRotacion: versusRotacion,
-          },
+          respuestas: fillRespuestas(),
         };
         userExercises = await createUserExercise(user, status, newExercise);
         Toast.show(`Has marcado el ejercicio como "${status}"`, {
@@ -136,7 +206,7 @@ function PlantillaCompletar({ route, navigation }) {
         });
       } else {
         userExercises = user.exercises.map((exerc) => {
-          if (exerc.key === exercise.key && exerc.type === "Completar") {
+          if (exerc.key === exercise.key && exerc.type === COMPLETAR) {
             let newStatus = [...exerc.status];
 
             if (newStatus.includes(status)) {
@@ -148,17 +218,7 @@ function PlantillaCompletar({ route, navigation }) {
             return {
               ...exerc,
               status: newStatus,
-              respuestas: {
-                ejeElectrico: eje,
-                frecuencia: frecuencia,
-                ritmo: ritmo,
-                monofocal: {
-                  texto1: monofocal1,
-                  texto2: monofocal2,
-                },
-                necrosis: necrosis,
-                versusRotacion: versusRotacion,
-              },
+              respuestas: fillRespuestas(),
             };
           }
           return exerc;
@@ -282,7 +342,13 @@ function PlantillaCompletar({ route, navigation }) {
 
           <ScrollView style={Styles.ejercicio}>
             <View style={Styles.imagenEjercicioContainer}>
-              <Image style={Styles.imagenEjercicio} source={electrocardiogramaTest} />
+              {exercise.imagen && (
+                <Image
+                  style={Styles.imagenEjercicio}
+                  source={{ uri: exercise.imagen }}
+                  resizeMode="stretch"
+                />
+              )}
             </View>
             <View style={Styles.respuestaContainer}>
               <View style={Styles.respuestaSubContainers}>
@@ -296,67 +362,214 @@ function PlantillaCompletar({ route, navigation }) {
                       : ""
                   }></TextInput>
               </View>
-              <View style={Styles.respuestaSubContainers}>
-                <Text style={Styles.respuestaText}>FC</Text>
-                <TextInput
-                  style={Styles.respuestaInput}
-                  onChangeText={(text) => setFrecuencia(text)}
-                  defaultValue={
-                    exerciseCompletedIdx !== -1
-                      ? user.exercises[exerciseCompletedIdx].respuestas.frecuencia
-                      : ""
-                  }></TextInput>
-              </View>
-              <View style={Styles.respuestaSubContainers}>
-                <Text style={Styles.respuestaText}>Eje QRS cercano a</Text>
-                <TextInput
-                  style={Styles.respuestaInput}
-                  onChangeText={(text) => setEje(text)}
-                  defaultValue={
-                    exerciseCompletedIdx !== -1
-                      ? user.exercises[exerciseCompletedIdx].respuestas.ejeElectrico
-                      : ""
-                  }></TextInput>
-              </View>
-              <View style={Styles.respuestaSubContainers}>
-                <TextInput
-                  style={Styles.respuestaInput}
-                  onChangeText={(text) => setMonofocal1(text)}
-                  defaultValue={
-                    exerciseCompletedIdx !== -1
-                      ? user.exercises[exerciseCompletedIdx].respuestas.monofocal.texto1
-                      : ""
-                  }></TextInput>
-                <TextInput
-                  style={Styles.respuestaInput}
-                  onChangeText={(text) => setMonofocal2(text)}
-                  defaultValue={
-                    exerciseCompletedIdx !== -1
-                      ? user.exercises[exerciseCompletedIdx].respuestas.monofocal.texto2
-                      : ""
-                  }></TextInput>
-                <Text style={Styles.respuestaText}>monofocal</Text>
-              </View>
-              <View style={Styles.respuestaSubContainers}>
-                <Text style={Styles.respuestaText}>Necrosis</Text>
-                <TextInput
-                  style={Styles.respuestaInput}
-                  onChangeText={(text) => setNecrosis(text)}
-                  defaultValue={
-                    exerciseCompletedIdx !== -1
-                      ? user.exercises[exerciseCompletedIdx].respuestas.necrosis
-                      : ""
-                  }></TextInput>
-                <Text style={Styles.respuestaText}>versus rotación</Text>
-                <TextInput
-                  style={Styles.respuestaInput}
-                  onChangeText={(text) => setVersusRotacion(text)}
-                  defaultValue={
-                    exerciseCompletedIdx !== -1
-                      ? user.exercises[exerciseCompletedIdx].respuestas.versusRotacion
-                      : ""
-                  }></TextInput>
-              </View>
+              {exercise.respuesta.frecuencia ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>FC</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setFrecuencia(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.frecuencia
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.bloqueo ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Bloqueo</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setBloqueo(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.bloqueo
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.de_rama ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>de rama</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setDeRama(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.de_rama
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.eje ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Eje</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setEje(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.eje
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.hemibloqueo ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Hemibloqueo</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setHemibloqueo(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.hemibloqueo
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.falta_de_progresion_de_R_en_derivaciones ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Falta de progresión de R en derivaciones</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setFaltaProgresionR(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas
+                            .falta_de_progresion_de_R_en_derivaciones
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.trastornos_inespecificos_de_la_repolarizacion ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>
+                    Trastornos inespecíficos de la repolarización
+                  </Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setTrastornoInespecificos(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas
+                            .trastornos_inespecificos_de_la_repolarizacion
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.eje_qrs_cercano_a ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Eje QRS cercano a</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setEje(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.eje_qrs_cercano_a
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.agrandamiento_de_auricula ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Agrandamiento de aurícula</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setAgrandamientoAuricula(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.agrandamiento_de_auricula
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.bloqueo_av_de ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Bloqueo AV de </Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setBloqueoAVDe(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.bloqueo_av_de
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.monofocal ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setMonofocal1(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.monofocal?.texto1
+                        : ""
+                    }></TextInput>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setMonofocal2(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.monofocal?.texto2
+                        : ""
+                    }></TextInput>
+                  <Text style={Styles.respuestaText}>monofocal</Text>
+                </View>
+              ) : null}
+              {exercise.respuesta.necrosis ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Necrosis</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setNecrosis(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.necrosis
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.versus_rotacion ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>versus rotación</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setVersusRotacion(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.versusRotacion
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.extrasistolia ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <Text style={Styles.respuestaText}>Extrasistolia</Text>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setExtrasistolia(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.extrasistolia
+                        : ""
+                    }></TextInput>
+                </View>
+              ) : null}
+              {exercise.respuesta.anterior_izquierdo ? (
+                <View style={Styles.respuestaSubContainers}>
+                  <TextInput
+                    style={Styles.respuestaInput}
+                    onChangeText={(text) => setAnteriorIzquierdo(text)}
+                    defaultValue={
+                      exerciseCompletedIdx !== -1
+                        ? user.exercises[exerciseCompletedIdx].respuestas.monofocal
+                            .anterior_izquierdo
+                        : ""
+                    }></TextInput>
+                  <Text style={Styles.respuestaText}>anterior izquierdo</Text>
+                </View>
+              ) : null}
             </View>
             <TouchableOpacity
               style={Styles.respuestaButton}
@@ -388,11 +601,75 @@ function PlantillaCompletar({ route, navigation }) {
             </TouchableOpacity>
             {respuesta && (
               <View style={Styles.respuestaFinalContainer}>
-                <Text style={Styles.respuestaFinal}>Ritmo {ejercicio.ritmo}</Text>
-                <Text style={Styles.respuestaFinal}>FC {ejercicio.frecuencia}</Text>
-                <Text style={Styles.respuestaFinal}>Eje QRS cercano a {ejercicio.eje}</Text>
-                <Text style={Styles.respuestaFinal}>Extrasistolia ventricular monofocal</Text>
-                <Text style={Styles.respuestaFinal}>Necrocis septal versus rotación horaria</Text>
+                <Text style={Styles.respuestaFinal}>Ritmo {exercise.respuesta.ritmo}</Text>
+                {exercise.respuesta.frecuencia && (
+                  <Text style={Styles.respuestaFinal}>FC {exercise.respuesta.frecuencia}</Text>
+                )}
+                {exercise.respuesta.bloqueo && (
+                  <Text style={Styles.respuestaFinal}>Bloqueo {exercise.respuesta.bloqueo}</Text>
+                )}
+                {exercise.respuesta.de_rama && (
+                  <Text style={Styles.respuestaFinal}>De rama {exercise.respuesta.de_rama}</Text>
+                )}
+                {exercise.respuesta.eje && (
+                  <Text style={Styles.respuestaFinal}>Eje {exercise.respuesta.eje}</Text>
+                )}
+                {exercise.respuesta.hemibloqueo && (
+                  <Text style={Styles.respuestaFinal}>
+                    Hemibloqueo {exercise.respuesta.hemibloqueo}
+                  </Text>
+                )}
+                {exercise.respuesta.falta_de_progresion_de_R_en_derivaciones && (
+                  <Text style={Styles.respuestaFinal}>
+                    Falta de progresión de R en derivaciones{" "}
+                    {exercise.respuesta.falta_de_progresion_de_R_en_derivaciones}
+                  </Text>
+                )}
+                {exercise.respuesta.trastornos_inespecificos_de_la_repolarizacion && (
+                  <Text style={Styles.respuestaFinal}>
+                    Trastornos inespecíficos de la repolarización{" "}
+                    {exercise.respuesta.trastornos_inespecificos_de_la_repolarizacion}
+                  </Text>
+                )}
+                {exercise.respuesta.eje_qrs_cercano_a && (
+                  <Text style={Styles.respuestaFinal}>
+                    Eje QRS cercano a {exercise.respuesta.eje_qrs_cercano_a}
+                  </Text>
+                )}
+                {exercise.respuesta.agrandamiento_de_auricula && (
+                  <Text style={Styles.respuestaFinal}>
+                    Agrandamiento de aurícula {exercise.respuesta.agrandamiento_de_auricula}
+                  </Text>
+                )}
+                {exercise.respuesta.bloque_av_de && (
+                  <Text style={Styles.respuestaFinal}>
+                    Bloqueo AV de {exercise.respuesta.bloqueo_av_de}
+                  </Text>
+                )}
+                {exercise.respuesta.monofocal && (
+                  <Text style={Styles.respuestaFinal}>
+                    {exercise.respuesta.monofocal.texto1} {exercise.respuesta.monofocal.texto2}{" "}
+                    Monofocal
+                  </Text>
+                )}
+                {exercise.respuesta.necrosis && (
+                  <Text style={Styles.respuestaFinal}>Necrosis {exercise.respuesta.necrosis}</Text>
+                )}
+                {exercise.respuesta.versus_rotacion && (
+                  <Text style={Styles.respuestaFinal}>
+                    Versus rotación {exercise.respuesta.versus_rotacion}
+                  </Text>
+                )}
+                {exercise.respuesta.extrasistolia && (
+                  <Text style={Styles.respuestaFinal}>
+                    Extrasistolia {exercise.respuesta.extrasistolia}
+                  </Text>
+                )}
+                {exercise.respuesta.anterior_izquierdo && (
+                  <Text style={Styles.respuestaFinal}>
+                    Anterior izquierdo {exercise.respuesta.anterior_izquierdo}
+                  </Text>
+                )}
               </View>
             )}
           </ScrollView>

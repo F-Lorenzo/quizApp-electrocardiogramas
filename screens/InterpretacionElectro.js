@@ -32,13 +32,17 @@ import destacadosActivo from "../assets/images/ejercicios-destacados-activo.png"
 import resueltosActivo from "../assets/images/ejercicios-ok-activo.png";
 import todosActivo from "../assets/images/ejercicios-todos-activo.png";
 import Header from "../components/Header";
-import { getExercises } from "../api/services/exercise.service";
+import {
+  getExercises,
+  getExercisesInterpretacion,
+  getInterpretaciones,
+} from "../api/services/exercise.service";
 import Toast from "react-native-root-toast";
+import { useSelector } from "react-redux";
+import { INTERPRETACION } from "../config/exercisesType";
 
 function InterpretacionElectro({ navigation }) {
-  const [level1, setLevel1] = useState(false);
-  const [level2, setLevel2] = useState(false);
-  const [level3, setLevel3] = useState(false);
+  const [level, setLevel] = useState(1);
   const [todos, setTodos] = useState(true);
   const [noRealizados, setNoRealizados] = useState(false);
   const [realizados, setRealizados] = useState(false);
@@ -48,6 +52,7 @@ function InterpretacionElectro({ navigation }) {
   const [ejercicios, setEjercicios] = useState([]);
   const [filteredExercices, setFilteredExercices] = useState([]);
   const [fontLoaded, setFontLoaded] = useState(false);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -65,7 +70,7 @@ function InterpretacionElectro({ navigation }) {
 
   const loadExercices = async () => {
     try {
-      const exercises = await getExercises("Interpretacion");
+      const exercises = await getExercisesInterpretacion(1);
       setEjercicios(exercises);
       setFilteredExercices(exercises);
     } catch (error) {
@@ -87,9 +92,7 @@ function InterpretacionElectro({ navigation }) {
   }
 
   const resetAllFilters = () => {
-    setLevel1(false);
-    setLevel2(false);
-    setLevel3(false);
+    setLevel(0);
     setTodos(false);
     setNoRealizados(false);
     setRealizados(false);
@@ -107,32 +110,35 @@ function InterpretacionElectro({ navigation }) {
     setMalResueltos(false);
   };
 
-  const activeHandlerLevel1 = () => {
+  const activeHandlerLevel1 = async () => {
     resetAllFilters();
-    setLevel1(!level1);
-    if (!level1) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "1");
-      setFilteredExercices(ejercicio);
+    setLevel(1);
+    if (level !== 0) {
+      const exercises = await getExercisesInterpretacion(1);
+      setEjercicios(exercises);
+      setFilteredExercices(exercises);
     } else {
       activeHandlerTodos();
     }
   };
-  const activeHandlerLevel2 = () => {
+  const activeHandlerLevel2 = async () => {
     resetAllFilters();
-    setLevel2(!level2);
-    if (!level2) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "2");
-      setFilteredExercices(ejercicio);
+    setLevel(2);
+    if (level !== 0) {
+      const exercises = await getExercisesInterpretacion(2);
+      setEjercicios(exercises);
+      setFilteredExercices(exercises);
     } else {
       activeHandlerTodos();
     }
   };
-  const activeHandlerLevel3 = () => {
+  const activeHandlerLevel3 = async () => {
     resetAllFilters();
-    setLevel3(!level3);
-    if (!level3) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.nivel === "3");
-      setFilteredExercices(ejercicio);
+    setLevel(3);
+    if (level !== 0) {
+      const exercises = await getExercisesInterpretacion(3);
+      setEjercicios(exercises);
+      setFilteredExercices(exercises);
     } else {
       activeHandlerTodos();
     }
@@ -140,11 +146,7 @@ function InterpretacionElectro({ navigation }) {
   const activeHandlerTodos = () => {
     resetAllFilters();
     setTodos(!todos);
-    if (todos === false) {
-      setFilteredExercices(ejercicios);
-    } else {
-      setFilteredExercices([]);
-    }
+    setFilteredExercices(ejercicios);
   };
   const activeHandlerNoRealizados = () => {
     resetFilters();
@@ -160,8 +162,10 @@ function InterpretacionElectro({ navigation }) {
     resetFilters();
     setRealizados(!realizados);
     if (realizados === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.realizado === true);
-      setFilteredExercices(ejercicio);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("realizado") && ejercicio.type === INTERPRETACION
+      );
+      setFilteredExercices(ejercicio ? ejercicio : []);
     } else {
       activeHandlerTodos();
     }
@@ -170,8 +174,10 @@ function InterpretacionElectro({ navigation }) {
     resetFilters();
     setDestacados(!destacados);
     if (destacados === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.destacado === true);
-      setFilteredExercices(ejercicio);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("destacado") && ejercicio.type === INTERPRETACION
+      );
+      setFilteredExercices(ejercicio ? ejercicio : []);
     } else {
       activeHandlerTodos();
     }
@@ -180,8 +186,10 @@ function InterpretacionElectro({ navigation }) {
     resetFilters();
     setResueltos(!resueltos);
     if (resueltos === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.bienResuelto === true);
-      setFilteredExercices(ejercicio);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("correcto") && ejercicio.type === INTERPRETACION
+      );
+      setFilteredExercices(ejercicio ? ejercicio : []);
     } else {
       activeHandlerTodos();
     }
@@ -190,8 +198,10 @@ function InterpretacionElectro({ navigation }) {
     resetFilters();
     setMalResueltos(!malResueltos);
     if (malResueltos === false) {
-      let ejercicio = ejercicios.filter((ejercicio) => ejercicio.malResuelto === true);
-      setFilteredExercices(ejercicio);
+      let ejercicio = user.exercises.filter(
+        (ejercicio) => ejercicio.status.includes("incorrecto") && ejercicio.type === INTERPRETACION
+      );
+      setFilteredExercices(ejercicio ? ejercicio : []);
     } else {
       activeHandlerTodos();
     }
@@ -222,21 +232,21 @@ function InterpretacionElectro({ navigation }) {
         <View style={Styles.filtersContainer}>
           <View style={Styles.levelFilters}>
             <TouchableOpacity onPress={activeHandlerLevel1} style={Styles.levelButton}>
-              {level1 === true ? (
+              {level === 1 ? (
                 <Image style={Styles.imageLevel} source={level1Activo} />
               ) : (
                 <Image style={Styles.imageLevel} source={level1Img} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={activeHandlerLevel2} style={Styles.levelButton}>
-              {level2 === true ? (
+              {level === 2 ? (
                 <Image style={Styles.imageLevel} source={level2Activo} />
               ) : (
                 <Image style={Styles.imageLevel} source={level2Img} />
               )}
             </TouchableOpacity>
             <TouchableOpacity onPress={activeHandlerLevel3} style={Styles.levelButton}>
-              {level3 === true ? (
+              {level === 3 ? (
                 <Image style={Styles.imageLevel} source={level3Activo} />
               ) : (
                 <Image style={Styles.imageLevel} source={level3Img} />
@@ -315,7 +325,7 @@ function InterpretacionElectro({ navigation }) {
             />
           ) : (
             <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-              <ActivityIndicator />
+              <Text>No hay información para mostrar</Text>
             </View>
           )}
         </View>

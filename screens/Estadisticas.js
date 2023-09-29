@@ -7,10 +7,12 @@ import realizadosActivo from "../assets/images/ejercicios-realizados-activo.png"
 import destacadosActivo from "../assets/images/ejercicios-destacados-activo.png";
 import resueltosActivo from "../assets/images/ejercicios-ok-activo.png";
 import todosActivo from "../assets/images/ejercicios-todos-activo.png";
+import { useSelector } from "react-redux";
 
 function Estadisticas({ navigation, route }) {
   const [fontLoaded, setFontLoaded] = useState(false);
-  const { title, img } = route.params;
+  const { title, img, type } = route.params;
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const loadFont = async () => {
@@ -37,7 +39,19 @@ function Estadisticas({ navigation, route }) {
         <Image style={Styles.imgs} source={noRealizadosActivo} />
         <Image style={Styles.imgs} source={realizadosActivo} />
         <Image style={Styles.imgs} source={destacadosActivo} />
-        <Image style={Styles.imgs} source={resueltosActivo} />
+        <View>
+          <Text
+            style={{
+              textAlign: "center",
+              fontWeight: "bold",
+              fontSize: 20,
+              marginBottom: 10,
+              color: "white",
+            }}>
+            {user.exercises.filter((exercise) => exercise.type === type).length}
+          </Text>
+          <Image style={Styles.imgs} source={resueltosActivo} />
+        </View>
         <Image style={Styles.imgs} source={todosActivo} />
       </View>
       <View style={Styles.decoracion}></View>
